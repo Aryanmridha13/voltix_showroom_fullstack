@@ -64,12 +64,13 @@ def custom_exception_handler(exc, context):
         details = None
 
     response.data = {
-        "success": false,
+        "success": False,
         "error": {
             "code": error_code,
             "message": message,
             "details": details
         }
     }
+
 
     return response

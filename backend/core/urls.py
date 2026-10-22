@@ -22,6 +22,7 @@ urlpatterns = [
 
     # Core Domain API Routers
     path('api/v1/', include('apps.common.urls', namespace='common')),
+    path('api/v1/auth/', include('apps.accounts.urls', namespace='accounts')),
 ]
 
 # Serve media files in local development
