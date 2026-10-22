@@ -18,6 +18,7 @@ import VehicleDetail from './pages/VehicleDetail';
 import Customizer from './pages/Customizer';
 import BookTestRide from './pages/BookTestRide';
 import MyBookings from './pages/MyBookings';
+import SparePartsCatalogue from './pages/SparePartsCatalogue';
 
 export default function App() {
   return (
@@ -52,19 +53,8 @@ export default function App() {
                     }
                   />
 
-                  {/* Spare Parts (Phase 16) */}
-                  <Route
-                    path="/parts"
-                    element={
-                      <PlaceholderPage
-                        title="Spare Parts & Inventory"
-                        phase="Phase 16 Milestone"
-                        description="Genuine OEM parts inventory, stock availability indicators, compatibility filter, and order inquiry."
-                        actionText="Back to Home"
-                        actionLink="/"
-                      />
-                    }
-                  />
+                  {/* Spare Parts Catalogue */}
+                  <Route path="/parts" element={<SparePartsCatalogue />} />
 
                   {/* Admin Management Portal (Phase 17) */}
                   <Route
