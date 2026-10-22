@@ -133,8 +133,14 @@ export default function SparePartsCatalogue() {
         partsService.getParts(),
         partsService.getCategories(),
       ]);
-      setParts(partsData || []);
-      setCategories(catsData || []);
+      const items = Array.isArray(partsData)
+        ? partsData
+        : (partsData?.items || partsData?.data || []);
+      const cats = Array.isArray(catsData)
+        ? catsData
+        : (catsData?.data || []);
+      setParts(items);
+      setCategories(cats);
     } catch (err) {
       const msg = err.customMessage || 'Could not load genuine spare parts inventory.';
       setError(msg);
@@ -196,7 +202,8 @@ export default function SparePartsCatalogue() {
 
   // Filter & Sort Logic
   const filteredParts = useMemo(() => {
-    let result = [...parts];
+    const items = Array.isArray(parts) ? parts : [];
+    let result = [...items];
 
     if (searchQuery.trim()) {
       const q = searchQuery.toLowerCase().trim();
@@ -354,10 +361,10 @@ export default function SparePartsCatalogue() {
                 : 'bg-white text-neutral-700 hover:text-neutral-950 border border-neutral-300 shadow-xs'
             }`}
           >
-            All Categories ({parts.length})
+            All Categories ({(Array.isArray(parts) ? parts : []).length})
           </button>
           {categories.map((cat) => {
-            const count = parts.filter((p) => p.category_slug === cat.slug).length;
+            const count = (Array.isArray(parts) ? parts : []).filter((p) => p.category_slug === cat.slug).length;
             const isSelected = selectedCategory === cat.slug;
             return (
               <button

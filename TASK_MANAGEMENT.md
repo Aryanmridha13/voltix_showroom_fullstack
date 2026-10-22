@@ -365,6 +365,14 @@
        - Enriched title size to `text-[15px]` and description to `text-xs sm:text-[13px]` with `leading-relaxed`.
        - Increased grid padding to `py-10` with `gap-6 sm:gap-7`.
 
+  6. **Spare Parts Catalogue ErrorBoundary Resolution:**
+     - **Root Cause Identified:** Backend `/api/v1/parts/items/` returns standard payload `{ success, message, data: [...] }`. In `partsService.js`, `getParts()` previously returned an object `{ items, meta }` instead of the data array, causing `SparePartsCatalogue.jsx` (`let result = [...parts]`) to throw a runtime `TypeError: parts is not iterable`, triggering React's `ErrorBoundary`.
+     - **Fix Applied:**
+       - Updated `partsService.js` to unwrap and return the array `Array.isArray(payload) ? payload : (payload?.data || payload?.results || [])`.
+       - Implemented defensive array safeguards in `SparePartsCatalogue.jsx` (`Array.isArray(parts) ? parts : []`) across filtering, sorting, and category pill counts.
+       - Implemented missing `submitInquiry(payload)` method in `partsService.js` with reservation hold token generation (`HOLD-XXXXXX`).
+
+
 
 
 
