@@ -16,6 +16,8 @@ import PlaceholderPage from './pages/PlaceholderPage';
 import VehicleCatalogue from './pages/VehicleCatalogue';
 import VehicleDetail from './pages/VehicleDetail';
 import Customizer from './pages/Customizer';
+import BookTestRide from './pages/BookTestRide';
+import MyBookings from './pages/MyBookings';
 
 export default function App() {
   return (
@@ -39,30 +41,13 @@ export default function App() {
                   {/* 3D Customizer Studio */}
                   <Route path="/customizer" element={<Customizer />} />
 
-                  {/* Book Test Ride & Customer History (Phase 15) */}
-                  <Route
-                    path="/book-test-ride"
-                    element={
-                      <PlaceholderPage
-                        title="Experiential Test Ride Booking"
-                        phase="Phase 15 Milestone"
-                        description="45-minute test ride scheduling, automated slot availability calendar, and license verification."
-                        actionText="Back to Home"
-                        actionLink="/"
-                      />
-                    }
-                  />
+                  {/* Book Test Ride & Customer History */}
+                  <Route path="/book-test-ride" element={<BookTestRide />} />
                   <Route
                     path="/my-bookings"
                     element={
                       <ProtectedRoute allowedRoles={['CUSTOMER', 'ADMIN']}>
-                        <PlaceholderPage
-                          title="My Test Ride Bookings"
-                          phase="Phase 15 Milestone"
-                          description="Real-time ride status tracker, cancellation request workflow, and ride preparation checklist."
-                          actionText="Showroom Catalogue"
-                          actionLink="/vehicles"
-                        />
+                        <MyBookings />
                       </ProtectedRoute>
                     }
                   />
