@@ -105,7 +105,7 @@ export default function InteractiveTeslaStage() {
       ref={containerRef}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      className={`relative min-h-[92vh] flex flex-col justify-between p-6 sm:p-10 lg:p-14 overflow-hidden transition-colors duration-700 select-none ${
+      className={`relative min-h-[90vh] flex flex-col justify-between p-5 sm:p-8 lg:p-10 overflow-hidden transition-colors duration-700 select-none ${
         isDarkMode
           ? 'bg-[#030d08] text-white'
           : 'bg-[#f4f4f6] text-neutral-900'
@@ -160,7 +160,7 @@ export default function InteractiveTeslaStage() {
           2. 3D Moveable / Rotatable Vehicle Model
           3. Right-Side Vertical 4-Dot Step Indicator with Ring
           ========================================================================= */}
-      <div className="relative my-auto w-full flex items-center justify-center min-h-[360px] sm:min-h-[480px] lg:min-h-[540px] perspective-1200">
+      <div className="relative my-auto w-full flex items-center justify-center min-h-[320px] sm:min-h-[400px] lg:min-h-[460px] perspective-1200 py-2">
         {/* 1. Massive Background Typography (Reference Image 1: "MODEL THREE") */}
         <motion.div
           style={{
@@ -168,7 +168,7 @@ export default function InteractiveTeslaStage() {
             y: textTranslateY,
             rotateY: textRotateY,
           }}
-          className="absolute inset-0 flex items-center justify-center pointer-events-none z-0"
+          className="absolute inset-0 flex items-center justify-center pointer-events-none z-0 overflow-hidden"
         >
           <AnimatePresence mode="wait">
             <motion.h1
@@ -177,7 +177,8 @@ export default function InteractiveTeslaStage() {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 1.06, y: -20 }}
               transition={{ duration: 0.55, ease: 'easeOut' }}
-              className={`font-display font-black tracking-tight text-[15vw] sm:text-[18vw] lg:text-[19vw] leading-none uppercase select-none transition-colors duration-700 whitespace-nowrap ${
+              style={{ letterSpacing: '-0.025em', wordSpacing: 'normal' }}
+              className={`font-display font-black text-[12vw] sm:text-[14vw] lg:text-[15vw] leading-none uppercase select-none transition-colors duration-700 whitespace-nowrap ${
                 isDarkMode ? 'text-white/[0.08]' : 'text-neutral-900'
               }`}
             >
@@ -264,7 +265,7 @@ export default function InteractiveTeslaStage() {
           Left: Vertical Black Accent Line + Title + Paragraph
           Right: 3 Pill Buttons (COMPARE NOW, CONFIGURE, ORDER NOW)
           ========================================================================= */}
-      <div className="relative z-20 grid grid-cols-1 lg:grid-cols-12 gap-8 items-end pt-4">
+      <div className="relative z-20 grid grid-cols-1 lg:grid-cols-12 gap-8 items-end pt-4 pb-2">
         {/* Left: Editorial Paragraph with Vertical Line (Exact match to reference) */}
         <div className="lg:col-span-7 flex items-start gap-4 sm:gap-5">
           {/* Vertical Accent Line */}

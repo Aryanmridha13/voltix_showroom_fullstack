@@ -88,8 +88,8 @@
 /* Automotive Bold Typography & Spacing Utilities */
 .font-display {
   font-family: 'Anton', 'Syne', -apple-system, BlinkMacSystemFont, sans-serif;
-  letter-spacing: 0.04em;
-  word-spacing: 0.35em;
+  letter-spacing: -0.025em;
+  word-spacing: normal;
 }
 
 .font-section-title {
