@@ -57,11 +57,21 @@ def custom_exception_handler(exc, context):
         error_code = "METHOD_NOT_ALLOWED"
         message = f"Method {context['request'].method} not allowed for this endpoint."
 
-    # If the response.data is a dict containing a 'detail' string
+    # If the response.data is a dict containing a 'detail' string or field validation errors
     details = response.data
     if isinstance(details, dict) and 'detail' in details:
         message = str(details['detail'])
         details = None
+    elif isinstance(details, dict) and details:
+        # Extract first human-readable validation error for top-level message
+        first_key = next(iter(details))
+        first_val = details[first_key]
+        if isinstance(first_val, list) and len(first_val) > 0:
+            message = str(first_val[0])
+        elif isinstance(first_val, str):
+            message = str(first_val)
+    elif isinstance(details, list) and len(details) > 0:
+        message = str(details[0])
 
     response.data = {
         "success": False,

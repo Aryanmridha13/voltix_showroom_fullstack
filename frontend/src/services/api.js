@@ -102,7 +102,17 @@ api.interceptors.response.use(
     // Extract standardized error message
     const errorPayload = error.response?.data?.error;
     if (errorPayload) {
-      error.customMessage = errorPayload.message || 'An error occurred while processing your request.';
+      let msg = errorPayload.message;
+      if (errorPayload.details && typeof errorPayload.details === 'object') {
+        const firstKey = Object.keys(errorPayload.details)[0];
+        const val = errorPayload.details[firstKey];
+        if (Array.isArray(val) && val.length > 0) {
+          msg = val[0];
+        } else if (typeof val === 'string') {
+          msg = val;
+        }
+      }
+      error.customMessage = msg || 'An error occurred while processing your request.';
       error.customCode = errorPayload.code || 'UNKNOWN_ERROR';
       error.customDetails = errorPayload.details || null;
     } else {
