@@ -12,6 +12,7 @@ import {
   Tag,
   Zap,
 } from 'lucide-react';
+import { motion } from 'framer-motion';
 import vehicleService from '../services/vehicleService';
 import { useAlert } from '../context/AlertContext';
 
@@ -268,13 +269,22 @@ export default function VehicleCatalogue() {
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-          {vehicles.map((variant) => (
-            <div
+          {vehicles.map((variant, index) => (
+            <motion.div
               key={variant.id}
-              className="rounded-3xl glass-card overflow-hidden flex flex-col border border-slate-800/90 group"
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.45, delay: index * 0.06 }}
+              whileHover={{ y: -8, transition: { duration: 0.25 } }}
+              className="rounded-3xl glass-card overflow-hidden flex flex-col border border-emerald-950/80 group bg-[#04120a]/80 shadow-2xl relative"
             >
               {/* Image Container */}
               <div className="h-56 bg-gradient-to-b from-[#05140e] to-[#020b07] relative flex items-center justify-center p-6 overflow-hidden border-b border-emerald-950/60">
+                {/* Background Watermark Model Name (Tesla Reference 1 style) */}
+                <div className="absolute top-2 left-1/2 -translate-x-1/2 text-5xl font-black text-white/[0.04] uppercase tracking-tighter select-none pointer-events-none whitespace-nowrap z-0">
+                  {variant.model_name}
+                </div>
+
                 {/* Ambient Radial Lighting Glow */}
                 <div className="absolute inset-0 bg-gradient-to-t from-emerald-500/10 via-transparent to-transparent pointer-events-none" />
                 <div className="absolute w-40 h-40 rounded-full bg-emerald-500/15 blur-2xl group-hover:bg-lime-400/25 group-hover:scale-125 transition-all duration-700 pointer-events-none" />
@@ -384,7 +394,7 @@ export default function VehicleCatalogue() {
                   </Link>
                 </div>
               </div>
-            </div>
+            </motion.div>
           ))}
         </div>
       )}
