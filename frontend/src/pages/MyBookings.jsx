@@ -193,16 +193,12 @@ export default function MyBookings() {
                 <div className="flex items-center gap-4">
                   <div className="w-20 h-16 rounded-xl bg-slate-900 border border-slate-800 p-1 flex items-center justify-center shrink-0">
                     <img
-                      src={
-                        b.variant_image ||
-                        'https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=400&q=80'
-                      }
+                      src={b.variant_image || '/vehicles/scooter_blue.png'}
                       alt={b.variant_name}
-                      className="max-h-full object-contain"
+                      className="max-h-full object-contain drop-shadow"
                       onError={(e) => {
                         e.target.onerror = null;
-                        e.target.src =
-                          'https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=400&q=80';
+                        e.target.src = '/vehicles/scooter_blue.png';
                       }}
                     />
                   </div>

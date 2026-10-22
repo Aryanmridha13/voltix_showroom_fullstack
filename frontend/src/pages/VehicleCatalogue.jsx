@@ -274,24 +274,28 @@ export default function VehicleCatalogue() {
               className="rounded-3xl glass-card overflow-hidden flex flex-col border border-slate-800/90 group"
             >
               {/* Image Container */}
-              <div className="h-52 bg-slate-900/80 relative flex items-center justify-center p-6 overflow-hidden">
+              <div className="h-56 bg-gradient-to-b from-[#05140e] to-[#020b07] relative flex items-center justify-center p-6 overflow-hidden border-b border-emerald-950/60">
+                {/* Ambient Radial Lighting Glow */}
+                <div className="absolute inset-0 bg-gradient-to-t from-emerald-500/10 via-transparent to-transparent pointer-events-none" />
+                <div className="absolute w-40 h-40 rounded-full bg-emerald-500/15 blur-2xl group-hover:bg-lime-400/25 group-hover:scale-125 transition-all duration-700 pointer-events-none" />
+
                 <img
                   src={
                     variant.default_image ||
-                    'https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=800&q=80'
+                    '/vehicles/scooter_blue.png'
                   }
                   alt={`${variant.model_name} ${variant.name}`}
-                  className="max-h-full object-contain group-hover:scale-105 transition-transform duration-500"
+                  className="max-h-full w-auto object-contain drop-shadow-[0_12px_24px_rgba(0,0,0,0.85)] group-hover:scale-110 group-hover:-translate-y-1 transition-all duration-500 relative z-10"
                   onError={(e) => {
                     e.target.onerror = null;
-                    e.target.src = 'https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=800&q=80';
+                    e.target.src = '/vehicles/scooter_blue.png';
                   }}
                 />
-                <span className="absolute top-4 left-4 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-slate-950/80 text-emerald-300 border border-emerald-950/80 backdrop-blur-md">
+                <span className="absolute top-4 left-4 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-slate-950/80 text-emerald-300 border border-emerald-950/80 backdrop-blur-md z-20">
                   {variant.category_name}
                 </span>
                 {variant.original_price && (
-                  <span className="absolute top-4 right-4 px-2.5 py-1 rounded-full text-[11px] font-bold bg-lime-500/20 text-lime-300 border border-lime-500/30 backdrop-blur-md flex items-center gap-1">
+                  <span className="absolute top-4 right-4 px-2.5 py-1 rounded-full text-[11px] font-bold bg-lime-500/20 text-lime-300 border border-lime-500/30 backdrop-blur-md flex items-center gap-1 z-20">
                     <Tag className="w-3 h-3" /> Special Offer
                   </span>
                 )}

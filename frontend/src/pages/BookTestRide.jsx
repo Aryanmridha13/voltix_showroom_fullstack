@@ -262,16 +262,12 @@ export default function BookTestRide() {
                   >
                     <div className="w-14 h-12 bg-slate-900 rounded-xl overflow-hidden flex items-center justify-center p-1 shrink-0">
                       <img
-                        src={
-                          v.default_image ||
-                          'https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=400&q=80'
-                        }
+                        src={v.default_image || '/vehicles/scooter_blue.png'}
                         alt={v.name}
-                        className="max-h-full object-contain"
+                        className="max-h-full object-contain drop-shadow"
                         onError={(e) => {
                           e.target.onerror = null;
-                          e.target.src =
-                            'https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=400&q=80';
+                          e.target.src = '/vehicles/scooter_blue.png';
                         }}
                       />
                     </div>

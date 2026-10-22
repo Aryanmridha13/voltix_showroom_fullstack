@@ -48,8 +48,7 @@ export default function VehicleDetail() {
       setStats(statsData);
       setReviews(reviewsData);
       setActiveImage(
-        variantData?.default_image ||
-          'https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=1200&q=80'
+        variantData?.default_image || '/vehicles/scooter_blue.png'
       );
     } catch (err) {
       showError(err.customMessage || 'Failed to load vehicle details.');
@@ -150,18 +149,21 @@ export default function VehicleDetail() {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
         {/* Left: Image Display & Thumbnails */}
         <div className="lg:col-span-7 space-y-4">
-          <div className="rounded-3xl glass-card p-8 h-[400px] sm:h-[480px] flex items-center justify-center bg-slate-900/60 relative overflow-hidden">
+          <div className="rounded-3xl glass-card p-8 h-[400px] sm:h-[480px] flex items-center justify-center bg-gradient-to-b from-[#05140e] to-[#020b07] border border-emerald-950/80 relative overflow-hidden group">
+            {/* Ambient Radial Glow */}
+            <div className="absolute inset-0 bg-gradient-to-t from-emerald-500/10 via-transparent to-transparent pointer-events-none" />
+            <div className="absolute w-64 h-64 rounded-full bg-emerald-500/15 blur-3xl pointer-events-none" />
+
             <img
-              src={activeImage}
+              src={activeImage || '/vehicles/scooter_blue.png'}
               alt={`${variant.name} showcase`}
-              className="max-h-full object-contain hover:scale-105 transition-transform duration-500"
+              className="max-h-full w-auto object-contain drop-shadow-[0_20px_35px_rgba(0,0,0,0.9)] hover:scale-105 transition-transform duration-500 relative z-10"
               onError={(e) => {
                 e.target.onerror = null;
-                e.target.src =
-                  'https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=1200&q=80';
+                e.target.src = '/vehicles/scooter_blue.png';
               }}
             />
-            <div className="absolute top-4 left-4 px-3 py-1.5 rounded-full text-xs font-semibold bg-slate-950/80 text-cyan-300 border border-slate-800 backdrop-blur-md">
+            <div className="absolute top-4 left-4 px-3 py-1.5 rounded-full text-xs font-semibold bg-slate-950/80 text-emerald-300 border border-emerald-900/60 backdrop-blur-md z-20">
               {variant.model_details?.category_name || 'Electric Vehicle'}
             </div>
           </div>
@@ -173,11 +175,11 @@ export default function VehicleDetail() {
                 onClick={() => setActiveImage(variant.default_image)}
                 className={`w-20 h-16 rounded-xl glass-panel p-1.5 overflow-hidden border transition-all ${
                   activeImage === variant.default_image
-                    ? 'border-cyan-400 ring-2 ring-cyan-400/20'
+                    ? 'border-emerald-400 ring-2 ring-emerald-400/20'
                     : 'border-slate-800 opacity-60 hover:opacity-100'
                 }`}
               >
-                <img src={variant.default_image} alt="Thumbnail default" className="w-full h-full object-contain" />
+                <img src={variant.default_image || '/vehicles/scooter_blue.png'} alt="Thumbnail default" className="w-full h-full object-contain" />
               </button>
               {variant.gallery_images.map((img) => (
                 <button
@@ -185,7 +187,7 @@ export default function VehicleDetail() {
                   onClick={() => setActiveImage(img.image)}
                   className={`w-20 h-16 rounded-xl glass-panel p-1.5 overflow-hidden border transition-all ${
                     activeImage === img.image
-                      ? 'border-cyan-400 ring-2 ring-cyan-400/20'
+                      ? 'border-emerald-400 ring-2 ring-emerald-400/20'
                       : 'border-slate-800 opacity-60 hover:opacity-100'
                   }`}
                 >

@@ -195,23 +195,22 @@ export default function Customizer() {
               <img
                 src={
                   selectedOption?.image ||
-                  'https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=1200&q=80'
+                  '/vehicles/scooter_blue.png'
                 }
                 alt={selectedOption?.combination_name || 'Vehicle Customizer'}
-                className="max-h-full max-w-full object-contain relative z-10 transition-transform duration-500 group-hover:scale-105"
+                className="max-h-full max-w-full object-contain relative z-10 transition-transform duration-500 group-hover:scale-105 drop-shadow-[0_20px_35px_rgba(0,0,0,0.85)]"
                 onError={(e) => {
                   e.target.onerror = null;
-                  e.target.src =
-                    'https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=1200&q=80';
+                  e.target.src = '/vehicles/scooter_blue.png';
                 }}
               />
 
               {/* Badges on Canvas */}
               <div className="absolute top-4 left-4 flex flex-col gap-2 z-20">
-                <span className="px-3 py-1 rounded-full text-xs font-semibold bg-slate-950/80 text-cyan-300 border border-slate-800 backdrop-blur-md">
+                <span className="px-3 py-1 rounded-full text-xs font-semibold bg-slate-950/80 text-emerald-300 border border-emerald-950/80 backdrop-blur-md">
                   {optionsData?.model_name} {optionsData?.variant_name}
                 </span>
-                <span className="px-3 py-1 rounded-full text-xs font-semibold bg-slate-950/80 text-slate-300 border border-slate-800 backdrop-blur-md flex items-center gap-1.5">
+                <span className="px-3 py-1 rounded-full text-xs font-semibold bg-slate-950/80 text-slate-300 border border-emerald-950/80 backdrop-blur-md flex items-center gap-1.5">
                   <span
                     className="w-2.5 h-2.5 rounded-full inline-block"
                     style={{ backgroundColor: selectedOption?.primary_colour?.hex_code || '#fff' }}
