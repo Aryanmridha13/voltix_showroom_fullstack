@@ -227,20 +227,24 @@
      - *Fix in `frontend/src/services/api.js`:* Updated response interceptor to extract nested `errorPayload.details` into `error.customMessage`.
      - *Fix in `frontend/src/pages/Register.jsx`:* Added an inline duplicate account banner with an instant 1-click **"Sign In"** button.
      - *Fix in `frontend/src/pages/Login.jsx`:* Added 1-click demo login buttons for **Admin** and **Customer**.
+  5. **Transparent High-Resolution EV Scooter Cutouts:**
+     - Processed 3 user-provided real EV scooter photos (`scooter_grey.png`, `scooter_red.png`, `scooter_blue.png`) with advanced edge-connected BFS and alpha feathering, completely removing white studio backgrounds, enclosed chassis voids, and ground shadow smudges while keeping headlight reflections and tire treads 100% intact.
+     - Assigned images across all 11 variants in MySQL (`default_image` + `VehicleImage` gallery).
+     - Enhanced `VehicleCatalogue.jsx`, `VehicleDetail.jsx`, `Customizer.jsx`, `BookTestRide.jsx`, and `MyBookings.jsx` with ambient radial glows, deep drop shadows, and zero placeholder dependencies.
 - **Why it was implemented:**
-  - Guarantees seamless developer experience, prevents cryptic validation errors from confusing customers, and aligns the visual aesthetic with premium EV brands.
-- **Git Commit:** `9a4c2c0` on branch `feature/phase-18-system-hardening`.
+  - Delivers a showroom-grade visual experience with real high-resolution electric vehicles seamlessly floating over dark glassmorphic cards.
+- **Git Commit:** `4c8ce45` on branch `feature/phase-18-system-hardening`.
 
 ---
 
 ## 🛑 3. Current Stopping Point & Next Steps (Resume Checkpoint)
 
 > ### 📍 CURRENT STATUS: **Phase 18 COMPLETED** | Ready for **Phase 19**
-> - **Active Git Branch:** `feature/phase-18-system-hardening` (Commit: `9a4c2c0`)
+> - **Active Git Branch:** `feature/phase-18-system-hardening` (Commit: `4c8ce45`)
 > - **Working Tree:** Clean (all changes committed and verified)
 > - **Test Suite:** `70 / 70` Backend tests passing (`Ran 70 tests in 68.857s, OK`)
-> - **Frontend Build:** `dist/` built cleanly via Vite in `1.12s` (0 errors)
-> - **Last Action Performed:** Diagnosed and resolved the registration error shown in user's screenshot (`rohan123@gmail.com` duplicate handling + human-readable error extraction).
+> - **Frontend Build:** `dist/` built cleanly via Vite in `1.51s` (0 errors)
+> - **Last Action Performed:** Removed background from 3 uploaded EV scooter images, assigned transparent PNGs to vehicle cards in MySQL, and enhanced showroom card visual effects with dynamic radial glows.
 
 ### ⏩ What Happens When We Resume (Phase 19 & 20):
 1. **Phase 19: Production Build & Deployment Prep**
