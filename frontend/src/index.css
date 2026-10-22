@@ -90,3 +90,17 @@
   box-shadow: 0 6px 26px -2px rgba(132, 204, 22, 0.5);
   transform: translateY(-1px);
 }
+
+/* Automotive Bold Typography & 3D Stage Utilities */
+.font-display {
+  font-family: 'Anton', 'Syne', -apple-system, sans-serif;
+  letter-spacing: -0.02em;
+}
+
+.perspective-1200 {
+  perspective: 1200px;
+}
+
+.preserve-3d {
+  transform-style: preserve-3d;
+}
