@@ -15,6 +15,7 @@ import NotFound from './pages/NotFound';
 import PlaceholderPage from './pages/PlaceholderPage';
 import VehicleCatalogue from './pages/VehicleCatalogue';
 import VehicleDetail from './pages/VehicleDetail';
+import Customizer from './pages/Customizer';
 
 export default function App() {
   return (
@@ -35,19 +36,8 @@ export default function App() {
                   <Route path="/vehicles" element={<VehicleCatalogue />} />
                   <Route path="/vehicles/:id" element={<VehicleDetail />} />
 
-                  {/* 3D Customizer (Phase 14) */}
-                  <Route
-                    path="/customizer"
-                    element={
-                      <PlaceholderPage
-                        title="Dynamic 3D Vehicle Customizer"
-                        phase="Phase 14 Milestone"
-                        description="Real-time single/dual-tone palette switcher, live price recalculation engine, and trim preview."
-                        actionText="Book Test Ride"
-                        actionLink="/book-test-ride"
-                      />
-                    }
-                  />
+                  {/* 3D Customizer Studio */}
+                  <Route path="/customizer" element={<Customizer />} />
 
                   {/* Book Test Ride & Customer History (Phase 15) */}
                   <Route
