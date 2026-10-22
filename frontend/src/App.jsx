@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { AlertProvider } from './context/AlertContext';
 import { AuthProvider } from './context/AuthContext';
+import { ThemeProvider, useTheme } from './context/ThemeContext';
 
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
@@ -20,15 +21,19 @@ import MyBookings from './pages/MyBookings';
 import SparePartsCatalogue from './pages/SparePartsCatalogue';
 import AdminDashboard from './pages/AdminDashboard';
 
-export default function App() {
+function AppContent() {
+  const { isDarkMode } = useTheme();
+
   return (
-    <ErrorBoundary>
-      <AlertProvider>
-        <AuthProvider>
-          <BrowserRouter>
-            <div className="flex flex-col min-h-screen bg-[#f6f6f8] text-neutral-900 selection:bg-neutral-900 selection:text-white">
-              <Navbar />
-              <main className="flex-1">
+    <div
+      className={`flex flex-col min-h-screen transition-colors duration-500 ${
+        isDarkMode
+          ? 'bg-[#030d08] text-slate-100 selection:bg-emerald-500 selection:text-black'
+          : 'bg-[#f6f6f8] text-neutral-900 selection:bg-neutral-900 selection:text-white'
+      }`}
+    >
+      <Navbar />
+      <main className="flex-1">
                 <Routes>
                   {/* Public Core Routes */}
                   <Route path="/" element={<Home />} />
@@ -72,9 +77,21 @@ export default function App() {
               </main>
               <Footer />
             </div>
-          </BrowserRouter>
-        </AuthProvider>
-      </AlertProvider>
+  );
+}
+
+export default function App() {
+  return (
+    <ErrorBoundary>
+      <ThemeProvider>
+        <AlertProvider>
+          <AuthProvider>
+            <BrowserRouter>
+              <AppContent />
+            </BrowserRouter>
+          </AuthProvider>
+        </AlertProvider>
+      </ThemeProvider>
     </ErrorBoundary>
   );
 }

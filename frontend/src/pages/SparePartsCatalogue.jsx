@@ -26,26 +26,27 @@ import {
 import { partsService } from '../services/partsService';
 import { useAlert } from '../context/AlertContext';
 import { useAuth } from '../context/AuthContext';
+import { useTheme } from '../context/ThemeContext';
 
 // Dynamic category icon matcher
-const getCategoryIcon = (categoryName = '') => {
+const getCategoryIcon = (categoryName = '', isDark = false) => {
   const lower = categoryName.toLowerCase();
   if (lower.includes('batter') || lower.includes('charger')) {
-    return <Battery className="w-4 h-4 text-emerald-600" />;
+    return <Battery className="w-4 h-4 text-emerald-400" />;
   }
   if (lower.includes('brak')) {
-    return <Disc className="w-4 h-4 text-neutral-900" />;
+    return <Disc className={`w-4 h-4 ${isDark ? 'text-slate-300' : 'text-neutral-900'}`} />;
   }
   if (lower.includes('tyre') || lower.includes('wheel')) {
-    return <CircleGauge className="w-4 h-4 text-neutral-900" />;
+    return <CircleGauge className={`w-4 h-4 ${isDark ? 'text-slate-300' : 'text-neutral-900'}`} />;
   }
   if (lower.includes('motor') || lower.includes('controller')) {
-    return <Cpu className="w-4 h-4 text-emerald-700" />;
+    return <Cpu className="w-4 h-4 text-emerald-400" />;
   }
   if (lower.includes('electric') || lower.includes('light')) {
-    return <Zap className="w-4 h-4 text-neutral-900" />;
+    return <Zap className={`w-4 h-4 ${isDark ? 'text-slate-300' : 'text-neutral-900'}`} />;
   }
-  return <Wrench className="w-4 h-4 text-neutral-500" />;
+  return <Wrench className={`w-4 h-4 ${isDark ? 'text-slate-400' : 'text-neutral-500'}`} />;
 };
 
 // High-tech decorative SVG illustration fallback per category
@@ -53,7 +54,7 @@ const PartGraphic = ({ categoryName = '' }) => {
   const lower = categoryName.toLowerCase();
   if (lower.includes('batter') || lower.includes('charger')) {
     return (
-      <svg className="w-20 h-20 text-neutral-900/60 drop-shadow-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2">
+      <svg className="w-20 h-20 text-neutral-400/60 drop-shadow-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2">
         <rect x="2" y="7" width="16" height="12" rx="2" strokeDasharray="3 3" />
         <path d="M6 11v4M10 11v4M14 11v4" strokeWidth="2" strokeLinecap="round" />
         <path d="M18 10h2a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1h-2" fill="currentColor" fillOpacity="0.2" />
@@ -62,7 +63,7 @@ const PartGraphic = ({ categoryName = '' }) => {
   }
   if (lower.includes('brak')) {
     return (
-      <svg className="w-20 h-20 text-neutral-900/60 drop-shadow-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2">
+      <svg className="w-20 h-20 text-neutral-400/60 drop-shadow-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2">
         <circle cx="12" cy="12" r="9" strokeDasharray="4 2" />
         <circle cx="12" cy="12" r="4" strokeWidth="1.5" />
         <path d="M12 3v3M12 18v3M3 12h3M18 12h3" strokeLinecap="round" />
@@ -71,7 +72,7 @@ const PartGraphic = ({ categoryName = '' }) => {
   }
   if (lower.includes('tyre') || lower.includes('wheel')) {
     return (
-      <svg className="w-20 h-20 text-neutral-900/60 drop-shadow-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2">
+      <svg className="w-20 h-20 text-neutral-400/60 drop-shadow-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2">
         <circle cx="12" cy="12" r="10" />
         <circle cx="12" cy="12" r="5" strokeDasharray="2 2" />
         <path d="M12 2a10 10 0 0 1 10 10M12 22a10 10 0 0 1-10-10" strokeWidth="2" />
@@ -80,7 +81,7 @@ const PartGraphic = ({ categoryName = '' }) => {
   }
   if (lower.includes('motor') || lower.includes('controller')) {
     return (
-      <svg className="w-20 h-20 text-neutral-900/60 drop-shadow-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2">
+      <svg className="w-20 h-20 text-neutral-400/60 drop-shadow-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2">
         <rect x="4" y="4" width="16" height="16" rx="2" />
         <rect x="9" y="9" width="6" height="6" />
         <path d="M9 1v3M15 1v3M9 20v3M15 20v3M20 9h3M20 14h3M1 9h3M1 14h3" strokeLinecap="round" />
@@ -88,7 +89,7 @@ const PartGraphic = ({ categoryName = '' }) => {
     );
   }
   return (
-    <svg className="w-20 h-20 text-neutral-900/60 drop-shadow-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2">
+    <svg className="w-20 h-20 text-neutral-400/60 drop-shadow-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2">
       <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" />
     </svg>
   );
@@ -96,9 +97,10 @@ const PartGraphic = ({ categoryName = '' }) => {
 
 /**
  * SparePartsCatalogue Page
- * High-key White Studio Automotive Spare Parts & OEM Inventory.
+ * High-key White Studio / Cyber Dark Dual-Theme OEM Inventory.
  */
 export default function SparePartsCatalogue() {
+  const { isDarkMode } = useTheme();
   const { user } = useAuth();
   const { error: showAlertError, success: showAlertSuccess } = useAlert();
 
@@ -255,51 +257,75 @@ export default function SparePartsCatalogue() {
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-10">
       {/* Top Hero Section */}
       <div className="text-center max-w-3xl mx-auto space-y-4">
-        <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-neutral-900 text-white text-xs font-bold uppercase tracking-wider shadow-sm">
+        <div className={`inline-flex items-center gap-2 px-3.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider shadow-sm transition-colors ${
+          isDarkMode ? 'bg-[#06180f] text-emerald-300 border border-emerald-950/80' : 'bg-neutral-900 text-white'
+        }`}>
           <Sparkles className="w-3.5 h-3.5 text-emerald-400" />
           100% Genuine OEM Certified Inventory
         </div>
-        <h1 className="text-4xl sm:text-6xl font-section-title font-black tracking-section text-neutral-950 uppercase">
-          EV Spare Parts & <span className="text-emerald-700">Components</span>
+        <h1 className={`text-4xl sm:text-6xl font-section-title font-black tracking-section uppercase transition-colors ${
+          isDarkMode ? 'text-white' : 'text-neutral-950'
+        }`}>
+          EV Spare Parts & <span className={isDarkMode ? 'text-emerald-400' : 'text-emerald-700'}>Components</span>
         </h1>
-        <p className="text-neutral-500 text-sm font-medium leading-relaxed">
+        <p className={`text-sm font-medium leading-relaxed transition-colors ${
+          isDarkMode ? 'text-slate-400' : 'text-neutral-500'
+        }`}>
           High-density lithium battery modules, high-torque BLDC motors, smart digital clusters, and regenerative brake calipers engineered specifically for Voltix electric platforms.
         </p>
 
         {/* Quick Assurance Badges */}
-        <div className="mt-4 flex flex-wrap items-center justify-center gap-3 text-xs font-bold text-neutral-700">
-          <div className="flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-white border border-neutral-300 shadow-xs">
-            <ShieldCheck className="w-4 h-4 text-emerald-600" />
+        <div className="mt-4 flex flex-wrap items-center justify-center gap-3 text-xs font-bold">
+          <div className={`flex items-center gap-1.5 px-4 py-1.5 rounded-full border shadow-xs transition-colors ${
+            isDarkMode ? 'bg-[#06180f] border-emerald-950 text-slate-200' : 'bg-white border-neutral-300 text-neutral-700'
+          }`}>
+            <ShieldCheck className="w-4 h-4 text-emerald-400" />
             1-Year Factory Warranty
           </div>
-          <div className="flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-white border border-neutral-300 shadow-xs">
-            <Truck className="w-4 h-4 text-neutral-950" />
+          <div className={`flex items-center gap-1.5 px-4 py-1.5 rounded-full border shadow-xs transition-colors ${
+            isDarkMode ? 'bg-[#06180f] border-emerald-950 text-slate-200' : 'bg-white border-neutral-300 text-neutral-700'
+          }`}>
+            <Truck className={`w-4 h-4 ${isDarkMode ? 'text-slate-300' : 'text-neutral-950'}`} />
             Express Showroom Dispatch
           </div>
-          <div className="flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-white border border-neutral-300 shadow-xs">
-            <CheckCircle2 className="w-4 h-4 text-emerald-700" />
+          <div className={`flex items-center gap-1.5 px-4 py-1.5 rounded-full border shadow-xs transition-colors ${
+            isDarkMode ? 'bg-[#06180f] border-emerald-950 text-slate-200' : 'bg-white border-neutral-300 text-neutral-700'
+          }`}>
+            <CheckCircle2 className="w-4 h-4 text-emerald-400" />
             Original Voltix Fitment
           </div>
         </div>
       </div>
 
       {/* Filter & Search Bar Card */}
-      <div className="bg-white border border-neutral-200/90 rounded-3xl p-6 shadow-md space-y-5">
+      <div className={`border rounded-3xl p-6 shadow-md space-y-5 transition-colors ${
+        isDarkMode
+          ? 'bg-[#06180f] border-emerald-950/80 shadow-emerald-950/20'
+          : 'bg-white border-neutral-200/90'
+      }`}>
         <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
           {/* Search Input */}
           <div className="md:col-span-5 relative">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400" />
+            <Search className={`absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 ${
+              isDarkMode ? 'text-slate-400' : 'text-neutral-400'
+            }`} />
             <input
               type="text"
               placeholder="Search by part name, SKU (e.g. VOLT-BAT), or category..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-11 pr-4 py-2.5 bg-neutral-50 border border-neutral-300 rounded-full text-sm text-neutral-900 placeholder-neutral-400 focus:outline-none focus:border-neutral-900 shadow-xs transition-colors"
+              className={`w-full pl-11 pr-4 py-2.5 border rounded-full text-sm shadow-xs transition-colors focus:outline-none ${
+                isDarkMode
+                  ? 'bg-[#030d08] border-emerald-950 text-white placeholder-slate-500 focus:border-emerald-500'
+                  : 'bg-neutral-50 border-neutral-300 text-neutral-900 placeholder-neutral-400 focus:border-neutral-900'
+              }`}
             />
             {searchQuery && (
               <button
                 onClick={() => setSearchQuery('')}
-                className="absolute right-4 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-neutral-950 text-xs"
+                className={`absolute right-4 top-1/2 -translate-y-1/2 text-xs ${
+                  isDarkMode ? 'text-slate-400 hover:text-white' : 'text-neutral-400 hover:text-neutral-950'
+                }`}
               >
                 <X className="w-4 h-4" />
               </button>
@@ -312,29 +338,39 @@ export default function SparePartsCatalogue() {
               value={selectedStockStatus}
               onChange={(e) => setSelectedStockStatus(e.target.value)}
               aria-label="Filter by inventory status"
-              className="w-full px-4 py-2.5 bg-neutral-50 border border-neutral-300 rounded-full text-sm text-neutral-800 font-medium focus:outline-none focus:border-neutral-900 shadow-xs cursor-pointer"
+              className={`w-full px-4 py-2.5 border rounded-full text-sm font-medium shadow-xs cursor-pointer focus:outline-none transition-colors ${
+                isDarkMode
+                  ? 'bg-[#030d08] border-emerald-950 text-slate-200 focus:border-emerald-500'
+                  : 'bg-neutral-50 border-neutral-300 text-neutral-800 focus:border-neutral-900'
+              }`}
             >
-              <option value="">All Inventory Statuses</option>
-              <option value="IN_STOCK">In Stock</option>
-              <option value="LOW_STOCK">Low Stock (Alert)</option>
-              <option value="OUT_OF_STOCK">Out of Stock</option>
+              <option value="" className={isDarkMode ? 'bg-[#030d08]' : 'bg-white'}>All Inventory Statuses</option>
+              <option value="IN_STOCK" className={isDarkMode ? 'bg-[#030d08]' : 'bg-white'}>In Stock</option>
+              <option value="LOW_STOCK" className={isDarkMode ? 'bg-[#030d08]' : 'bg-white'}>Low Stock (Alert)</option>
+              <option value="OUT_OF_STOCK" className={isDarkMode ? 'bg-[#030d08]' : 'bg-white'}>Out of Stock</option>
             </select>
           </div>
 
           {/* Sort Selector */}
           <div className="md:col-span-3">
             <div className="relative">
-              <ArrowUpDown className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400" />
+              <ArrowUpDown className={`absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 ${
+                isDarkMode ? 'text-slate-400' : 'text-neutral-400'
+              }`} />
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value)}
                 aria-label="Sort parts order"
-                className="w-full pl-11 pr-4 py-2.5 bg-neutral-50 border border-neutral-300 rounded-full text-sm text-neutral-800 font-medium focus:outline-none focus:border-neutral-900 shadow-xs cursor-pointer"
+                className={`w-full pl-11 pr-4 py-2.5 border rounded-full text-sm font-medium shadow-xs cursor-pointer focus:outline-none transition-colors ${
+                  isDarkMode
+                    ? 'bg-[#030d08] border-emerald-950 text-slate-200 focus:border-emerald-500'
+                    : 'bg-neutral-50 border-neutral-300 text-neutral-800 focus:border-neutral-900'
+                }`}
               >
-                <option value="name">Sort: Name (A to Z)</option>
-                <option value="price_asc">Price: Low to High</option>
-                <option value="price_desc">Price: High to Low</option>
-                <option value="stock_desc">Highest Stock First</option>
+                <option value="name" className={isDarkMode ? 'bg-[#030d08]' : 'bg-white'}>Sort: Name (A to Z)</option>
+                <option value="price_asc" className={isDarkMode ? 'bg-[#030d08]' : 'bg-white'}>Price: Low to High</option>
+                <option value="price_desc" className={isDarkMode ? 'bg-[#030d08]' : 'bg-white'}>Price: High to Low</option>
+                <option value="stock_desc" className={isDarkMode ? 'bg-[#030d08]' : 'bg-white'}>Highest Stock First</option>
               </select>
             </div>
           </div>
@@ -344,7 +380,11 @@ export default function SparePartsCatalogue() {
             <button
               onClick={handleResetFilters}
               title="Reset all filters"
-              className="w-full h-full flex items-center justify-center p-2.5 bg-neutral-100 hover:bg-neutral-200 border border-neutral-300 text-neutral-800 rounded-full text-xs font-bold shadow-xs transition-colors"
+              className={`w-full h-full flex items-center justify-center p-2.5 border rounded-full text-xs font-bold shadow-xs transition-colors ${
+                isDarkMode
+                  ? 'bg-[#030d08] hover:bg-black border-emerald-950 text-slate-200'
+                  : 'bg-neutral-100 hover:bg-neutral-200 border-neutral-300 text-neutral-800'
+              }`}
             >
               <RotateCcw className="w-4 h-4" />
             </button>
@@ -352,13 +392,19 @@ export default function SparePartsCatalogue() {
         </div>
 
         {/* Category Horizontal Filter Pills */}
-        <div className="pt-4 border-t border-neutral-200 flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
+        <div className={`pt-4 border-t flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none ${
+          isDarkMode ? 'border-emerald-950/80' : 'border-neutral-200'
+        }`}>
           <button
             onClick={() => setSelectedCategory('')}
             className={`px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider whitespace-nowrap transition-all ${
               selectedCategory === ''
-                ? 'bg-neutral-950 text-white shadow-sm'
-                : 'bg-white text-neutral-700 hover:text-neutral-950 border border-neutral-300 shadow-xs'
+                ? isDarkMode
+                  ? 'bg-emerald-500 text-black shadow-sm font-extrabold'
+                  : 'bg-neutral-950 text-white shadow-sm'
+                : isDarkMode
+                  ? 'bg-[#030d08] text-slate-300 hover:text-white border border-emerald-950 shadow-xs'
+                  : 'bg-white text-neutral-700 hover:text-neutral-950 border border-neutral-300 shadow-xs'
             }`}
           >
             All Categories ({(Array.isArray(parts) ? parts : []).length})
@@ -372,12 +418,20 @@ export default function SparePartsCatalogue() {
                 onClick={() => setSelectedCategory(cat.slug)}
                 className={`px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider whitespace-nowrap flex items-center gap-1.5 transition-all ${
                   isSelected
-                    ? 'bg-neutral-950 text-white shadow-sm'
-                    : 'bg-white text-neutral-700 hover:text-neutral-950 border border-neutral-300 shadow-xs'
+                    ? isDarkMode
+                      ? 'bg-emerald-500 text-black shadow-sm font-extrabold'
+                      : 'bg-neutral-950 text-white shadow-sm'
+                    : isDarkMode
+                      ? 'bg-[#030d08] text-slate-300 hover:text-white border border-emerald-950 shadow-xs'
+                      : 'bg-white text-neutral-700 hover:text-neutral-950 border border-neutral-300 shadow-xs'
                 }`}
               >
                 {cat.name}
-                <span className={`text-[10px] px-1.5 py-0.2 rounded-full font-bold ${isSelected ? 'bg-white/20 text-white' : 'bg-neutral-100 text-neutral-600'}`}>
+                <span className={`text-[10px] px-1.5 py-0.2 rounded-full font-bold ${
+                  isSelected
+                    ? isDarkMode ? 'bg-black/20 text-black font-extrabold' : 'bg-white/20 text-white'
+                    : isDarkMode ? 'bg-black/40 text-slate-400' : 'bg-neutral-100 text-neutral-600'
+                }`}>
                   {count}
                 </span>
               </button>
@@ -421,31 +475,51 @@ export default function SparePartsCatalogue() {
               <div
                 key={part.id}
                 onClick={() => setSelectedPart(part)}
-                className="group relative bg-white hover:border-neutral-400 border border-neutral-200/90 rounded-3xl p-6 flex flex-col justify-between transition-all duration-300 shadow-md hover:shadow-2xl cursor-pointer overflow-hidden"
+                className={`group relative rounded-3xl p-6 flex flex-col justify-between transition-all duration-300 shadow-md hover:shadow-2xl cursor-pointer overflow-hidden border ${
+                  isDarkMode
+                    ? 'bg-[#06180f] border-emerald-950/80 shadow-emerald-950/20 hover:border-emerald-500/50'
+                    : 'bg-white border-neutral-200/90 hover:border-neutral-400'
+                }`}
               >
                 {/* Header: Category Badge & Stock Status */}
                 <div>
                   <div className="flex items-center justify-between gap-2 mb-4">
-                    <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-neutral-100 border border-neutral-200 text-xs font-bold text-neutral-800">
-                      {getCategoryIcon(part.category_name)}
+                    <div className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full border text-xs font-bold ${
+                      isDarkMode
+                        ? 'bg-[#030d08] border-emerald-950 text-slate-200'
+                        : 'bg-neutral-100 border-neutral-200 text-neutral-800'
+                    }`}>
+                      {getCategoryIcon(part.category_name, isDarkMode)}
                       <span>{part.category_name}</span>
                     </div>
 
                     {/* Stock Badge */}
                     {isInStock && (
-                      <span className="inline-flex items-center gap-1 px-3 py-0.5 rounded-full text-[11px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">
-                        <CheckCircle2 className="w-3 h-3" />
+                      <span className={`inline-flex items-center gap-1 px-3 py-0.5 rounded-full text-[11px] font-bold border ${
+                        isDarkMode
+                          ? 'bg-[#030d08] text-emerald-400 border-emerald-950'
+                          : 'bg-emerald-50 text-emerald-800 border border-emerald-200'
+                      }`}>
+                        <CheckCircle2 className="w-3 h-3 text-emerald-400" />
                         In Stock ({part.stock_quantity})
                       </span>
                     )}
                     {isLowStock && (
-                      <span className="inline-flex items-center gap-1 px-3 py-0.5 rounded-full text-[11px] font-bold bg-amber-50 text-amber-800 border border-amber-300 animate-pulse">
+                      <span className={`inline-flex items-center gap-1 px-3 py-0.5 rounded-full text-[11px] font-bold border animate-pulse ${
+                        isDarkMode
+                          ? 'bg-amber-950/40 text-amber-300 border-amber-900/50'
+                          : 'bg-amber-50 text-amber-800 border-amber-300'
+                      }`}>
                         <AlertTriangle className="w-3 h-3" />
                         Low Stock ({part.stock_quantity})
                       </span>
                     )}
                     {isOutOfStock && (
-                      <span className="inline-flex items-center gap-1 px-3 py-0.5 rounded-full text-[11px] font-bold bg-rose-50 text-rose-700 border border-rose-200">
+                      <span className={`inline-flex items-center gap-1 px-3 py-0.5 rounded-full text-[11px] font-bold border ${
+                        isDarkMode
+                          ? 'bg-rose-950/40 text-rose-300 border-rose-900/50'
+                          : 'bg-rose-50 text-rose-700 border-rose-200'
+                      }`}>
                         <XCircle className="w-3 h-3" />
                         Out of Stock
                       </span>
@@ -453,7 +527,11 @@ export default function SparePartsCatalogue() {
                   </div>
 
                   {/* Graphic Preview Container */}
-                  <div className="h-40 bg-gradient-to-b from-[#fafafa] to-[#f2f2f4] rounded-2xl border border-neutral-200/80 flex items-center justify-center p-4 mb-4 group-hover:border-neutral-300 transition-colors overflow-hidden">
+                  <div className={`h-40 rounded-2xl border flex items-center justify-center p-4 mb-4 transition-colors overflow-hidden ${
+                    isDarkMode
+                      ? 'bg-gradient-to-b from-[#020b05] to-[#04150c] border-emerald-950/80 group-hover:border-emerald-500/40'
+                      : 'bg-gradient-to-b from-[#fafafa] to-[#f2f2f4] border-neutral-200/80 group-hover:border-neutral-300'
+                  }`}>
                     {part.image ? (
                       <img
                         src={part.image}
@@ -468,36 +546,52 @@ export default function SparePartsCatalogue() {
                   </div>
 
                   {/* Part Name & SKU */}
-                  <h3 className="text-lg sm:text-xl font-card-title text-neutral-950 group-hover:text-emerald-700 transition-colors line-clamp-2 mb-1.5 uppercase tracking-card">
+                  <h3 className={`text-lg sm:text-xl font-card-title transition-colors line-clamp-2 mb-1.5 uppercase tracking-card ${
+                    isDarkMode
+                      ? 'text-white group-hover:text-emerald-400'
+                      : 'text-neutral-950 group-hover:text-emerald-700'
+                  }`}>
                     {part.name}
                   </h3>
 
                   {/* SKU with Copy Action */}
-                  <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-neutral-100 border border-neutral-200 text-[11px] font-mono font-bold text-neutral-700 mb-3 shadow-xs">
+                  <div className={`inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full border text-[11px] font-mono font-bold mb-3 shadow-xs ${
+                    isDarkMode
+                      ? 'bg-[#030d08] border-emerald-950 text-slate-300'
+                      : 'bg-neutral-100 border-neutral-200 text-neutral-700'
+                  }`}>
                     <span>SKU: {part.part_number}</span>
                     <button
                       onClick={(e) => handleCopySku(part.part_number, e)}
                       title="Copy SKU code"
-                      className="hover:text-black transition-colors p-0.5"
+                      className={`transition-colors p-0.5 ${isDarkMode ? 'hover:text-white' : 'hover:text-black'}`}
                     >
                       {copiedSku === part.part_number ? (
-                        <Check className="w-3 h-3 text-emerald-600" />
+                        <Check className="w-3 h-3 text-emerald-400" />
                       ) : (
                         <Copy className="w-3 h-3" />
                       )}
                     </button>
                   </div>
 
-                  <p className="text-neutral-500 text-xs line-clamp-2 mb-4 leading-relaxed font-medium">
+                  <p className={`text-xs line-clamp-2 mb-4 leading-relaxed font-medium transition-colors ${
+                    isDarkMode ? 'text-slate-400' : 'text-neutral-500'
+                  }`}>
                     {part.description}
                   </p>
                 </div>
 
                 {/* Card Bottom: Price & Quick Action */}
-                <div className="pt-3 border-t border-neutral-200 flex items-center justify-between">
+                <div className={`pt-3 border-t flex items-center justify-between ${
+                  isDarkMode ? 'border-emerald-950/80' : 'border-neutral-200'
+                }`}>
                   <div>
-                    <div className="text-[10px] uppercase font-bold text-neutral-400 tracking-wider">Showroom MRP</div>
-                    <div className="text-2xl font-display font-black text-neutral-950">
+                    <div className={`text-[10px] uppercase font-bold tracking-wider ${
+                      isDarkMode ? 'text-slate-400' : 'text-neutral-400'
+                    }`}>Showroom MRP</div>
+                    <div className={`text-2xl font-display font-black ${
+                      isDarkMode ? 'text-white' : 'text-neutral-950'
+                    }`}>
                       {formatCurrency(part.price)}
                     </div>
                   </div>
@@ -507,7 +601,11 @@ export default function SparePartsCatalogue() {
                       e.stopPropagation();
                       setSelectedPart(part);
                     }}
-                    className="px-4 py-2 rounded-full bg-neutral-950 hover:bg-neutral-800 text-white text-xs font-bold uppercase tracking-wider transition-all shadow-sm active:scale-95"
+                    className={`px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider transition-all shadow-sm active:scale-95 ${
+                      isDarkMode
+                        ? 'bg-emerald-500 hover:bg-emerald-400 text-black font-extrabold shadow-emerald-500/20'
+                        : 'bg-neutral-950 hover:bg-neutral-800 text-white'
+                    }`}
                   >
                     Inquire
                   </button>
@@ -520,15 +618,23 @@ export default function SparePartsCatalogue() {
 
       {/* Empty Search Result State */}
       {!loading && !error && filteredParts.length === 0 && (
-        <div className="bg-white border border-neutral-200 rounded-3xl p-12 text-center max-w-lg mx-auto shadow-sm">
-          <Wrench className="w-12 h-12 text-neutral-400 mx-auto mb-4" />
-          <h3 className="text-xl font-display font-black text-neutral-950 uppercase mb-2">No Spare Parts Match Your Criteria</h3>
-          <p className="text-xs text-neutral-500 mb-6 font-medium">
+        <div className={`border rounded-3xl p-12 text-center max-w-lg mx-auto shadow-sm ${
+          isDarkMode ? 'bg-[#06180f] border-emerald-950' : 'bg-white border-neutral-200'
+        }`}>
+          <Wrench className={`w-12 h-12 mx-auto mb-4 ${isDarkMode ? 'text-slate-500' : 'text-neutral-400'}`} />
+          <h3 className={`text-xl font-display font-black uppercase mb-2 ${isDarkMode ? 'text-white' : 'text-neutral-950'}`}>
+            No Spare Parts Match Your Criteria
+          </h3>
+          <p className={`text-xs mb-6 font-medium ${isDarkMode ? 'text-slate-400' : 'text-neutral-500'}`}>
             We couldn't find any OEM components matching "{searchQuery}" under the selected category or stock status filters.
           </p>
           <button
             onClick={handleResetFilters}
-            className="px-6 py-2.5 rounded-full bg-neutral-950 hover:bg-neutral-800 text-white font-bold text-xs uppercase tracking-wider transition-all shadow-sm"
+            className={`px-6 py-2.5 rounded-full font-bold text-xs uppercase tracking-wider transition-all shadow-sm ${
+              isDarkMode
+                ? 'bg-emerald-500 hover:bg-emerald-400 text-black'
+                : 'bg-neutral-950 hover:bg-neutral-800 text-white'
+            }`}
           >
             Clear All Filters
           </button>
@@ -537,13 +643,19 @@ export default function SparePartsCatalogue() {
 
       {/* Part Details & Inquiry / Hold Modal */}
       {selectedPart && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-neutral-950/60 backdrop-blur-sm animate-in fade-in duration-200">
-          <div className="relative w-full max-w-2xl bg-white border border-neutral-200 rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-200">
+          <div className={`relative w-full max-w-2xl border rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh] ${
+            isDarkMode ? 'bg-[#06180f] border-emerald-950 text-white' : 'bg-white border-neutral-200 text-neutral-900'
+          }`}>
             {/* Modal Header */}
-            <div className="px-6 py-4 border-b border-neutral-200 flex items-center justify-between bg-neutral-50">
+            <div className={`px-6 py-4 border-b flex items-center justify-between ${
+              isDarkMode ? 'border-emerald-950 bg-[#030d08]' : 'border-neutral-200 bg-neutral-50'
+            }`}>
               <div className="flex items-center gap-2">
-                {getCategoryIcon(selectedPart.category_name)}
-                <span className="text-xs font-bold text-neutral-600 uppercase tracking-wider">
+                {getCategoryIcon(selectedPart.category_name, isDarkMode)}
+                <span className={`text-xs font-bold uppercase tracking-wider ${
+                  isDarkMode ? 'text-emerald-400' : 'text-neutral-600'
+                }`}>
                   {selectedPart.category_name}
                 </span>
               </div>
@@ -552,7 +664,9 @@ export default function SparePartsCatalogue() {
                   setSelectedPart(null);
                   setInquirySuccess(null);
                 }}
-                className="text-neutral-500 hover:text-black p-1 rounded-full hover:bg-neutral-200 transition-colors"
+                className={`p-1 rounded-full transition-colors ${
+                  isDarkMode ? 'text-slate-400 hover:text-white hover:bg-white/10' : 'text-neutral-500 hover:text-black hover:bg-neutral-200'
+                }`}
               >
                 <X className="w-5 h-5" />
               </button>
@@ -563,12 +677,16 @@ export default function SparePartsCatalogue() {
               {/* Product overview header */}
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
-                  <h2 className="text-2xl font-display font-black text-neutral-950 uppercase mb-1">{selectedPart.name}</h2>
-                  <div className="flex items-center gap-2 text-xs font-mono font-bold text-neutral-600">
+                  <h2 className={`text-2xl font-display font-black uppercase mb-1 ${
+                    isDarkMode ? 'text-white' : 'text-neutral-950'
+                  }`}>{selectedPart.name}</h2>
+                  <div className={`flex items-center gap-2 text-xs font-mono font-bold ${
+                    isDarkMode ? 'text-slate-400' : 'text-neutral-600'
+                  }`}>
                     <span>SKU: {selectedPart.part_number}</span>
                     <button
                       onClick={(e) => handleCopySku(selectedPart.part_number, e)}
-                      className="text-neutral-900 hover:text-emerald-700"
+                      className={isDarkMode ? 'text-emerald-400 hover:text-emerald-300' : 'text-neutral-900 hover:text-emerald-700'}
                     >
                       <Copy className="w-3.5 h-3.5" />
                     </button>
@@ -576,30 +694,32 @@ export default function SparePartsCatalogue() {
                 </div>
 
                 <div className="text-left sm:text-right">
-                  <div className="text-xs text-neutral-500 uppercase font-bold">Showroom Price</div>
-                  <div className="text-3xl font-display font-black text-neutral-950">
+                  <div className={`text-xs uppercase font-bold ${isDarkMode ? 'text-slate-400' : 'text-neutral-500'}`}>Showroom Price</div>
+                  <div className={`text-3xl font-display font-black ${isDarkMode ? 'text-white' : 'text-neutral-950'}`}>
                     {formatCurrency(selectedPart.price)}
                   </div>
-                  <div className="text-[11px] text-neutral-500 font-medium">Incl. 18% GST & 1-Year Warranty</div>
+                  <div className={`text-[11px] font-medium ${isDarkMode ? 'text-slate-400' : 'text-neutral-500'}`}>Incl. 18% GST & 1-Year Warranty</div>
                 </div>
               </div>
 
               {/* Status and Stock level badge */}
-              <div className="p-3.5 rounded-2xl bg-neutral-50 border border-neutral-200 flex items-center justify-between text-xs">
-                <span className="text-neutral-600 font-bold">Stock Availability:</span>
+              <div className={`p-3.5 rounded-2xl border flex items-center justify-between text-xs ${
+                isDarkMode ? 'bg-[#030d08] border-emerald-950' : 'bg-neutral-50 border-neutral-200'
+              }`}>
+                <span className={`font-bold ${isDarkMode ? 'text-slate-300' : 'text-neutral-600'}`}>Stock Availability:</span>
                 <span className="font-bold flex items-center gap-1.5">
                   {selectedPart.stock_status === 'IN_STOCK' && (
-                    <span className="text-emerald-700 flex items-center gap-1 font-bold">
+                    <span className="text-emerald-400 flex items-center gap-1 font-bold">
                       <CheckCircle2 className="w-4 h-4" /> Ready for Immediate Dispatch ({selectedPart.stock_quantity} units)
                     </span>
                   )}
                   {selectedPart.stock_status === 'LOW_STOCK' && (
-                    <span className="text-amber-800 flex items-center gap-1 font-bold">
+                    <span className="text-amber-400 flex items-center gap-1 font-bold">
                       <AlertTriangle className="w-4 h-4" /> Limited Units Left ({selectedPart.stock_quantity} units)
                     </span>
                   )}
                   {selectedPart.stock_status === 'OUT_OF_STOCK' && (
-                    <span className="text-rose-700 flex items-center gap-1 font-bold">
+                    <span className="text-rose-400 flex items-center gap-1 font-bold">
                       <XCircle className="w-4 h-4" /> Back-order Available
                     </span>
                   )}
@@ -608,41 +728,47 @@ export default function SparePartsCatalogue() {
 
               {/* Description */}
               <div>
-                <h4 className="text-xs font-bold uppercase text-neutral-700 mb-2">Technical Description</h4>
-                <p className="text-xs text-neutral-600 leading-relaxed bg-neutral-50 p-4 rounded-2xl border border-neutral-200 font-medium">
+                <h4 className={`text-xs font-bold uppercase mb-2 ${isDarkMode ? 'text-slate-300' : 'text-neutral-700'}`}>Technical Description</h4>
+                <p className={`text-xs leading-relaxed p-4 rounded-2xl border font-medium ${
+                  isDarkMode ? 'bg-[#030d08] border-emerald-950 text-slate-300' : 'bg-neutral-50 border-neutral-200 text-neutral-600'
+                }`}>
                   {selectedPart.description}
                 </p>
               </div>
 
               {/* Reservation / Inquiry Form */}
-              <div className="border-t border-neutral-200 pt-5">
+              <div className={`border-t pt-5 ${isDarkMode ? 'border-emerald-950' : 'border-neutral-200'}`}>
                 {inquirySuccess ? (
-                  <div className="p-6 rounded-3xl bg-neutral-50 border border-neutral-200 text-center space-y-2">
-                    <CheckCircle2 className="w-10 h-10 text-emerald-600 mx-auto mb-2" />
-                    <h3 className="text-lg font-display font-black text-neutral-950 uppercase mb-1">Reservation Hold Confirmed!</h3>
-                    <p className="text-xs text-neutral-600 mb-3 font-medium">
+                  <div className={`p-6 rounded-3xl border text-center space-y-2 ${
+                    isDarkMode ? 'bg-[#030d08] border-emerald-950' : 'bg-neutral-50 border-neutral-200'
+                  }`}>
+                    <CheckCircle2 className="w-10 h-10 text-emerald-400 mx-auto mb-2" />
+                    <h3 className={`text-lg font-display font-black uppercase mb-1 ${isDarkMode ? 'text-white' : 'text-neutral-950'}`}>
+                      Reservation Hold Confirmed!
+                    </h3>
+                    <p className={`text-xs mb-3 font-medium ${isDarkMode ? 'text-slate-300' : 'text-neutral-600'}`}>
                       Your part inquiry has been logged with the Voltix Service & Spare Parts Department.
                     </p>
-                    <div className="inline-block px-4 py-1.5 bg-neutral-950 text-white rounded-full text-xs font-mono font-bold mb-3 shadow-xs">
+                    <div className="inline-block px-4 py-1.5 bg-emerald-500 text-black rounded-full text-xs font-mono font-bold mb-3 shadow-xs">
                       Hold Token: {inquirySuccess.code}
                     </div>
-                    <p className="text-[11px] text-neutral-500 font-medium">
+                    <p className={`text-[11px] font-medium ${isDarkMode ? 'text-slate-400' : 'text-neutral-500'}`}>
                       Our service technician will contact you on your registered phone within 2 showroom hours to arrange pickup or installation.
                     </p>
                   </div>
                 ) : (
                   <form onSubmit={handleInquirySubmit} className="space-y-4">
                     <div className="flex items-center justify-between">
-                      <h4 className="text-xs font-bold uppercase text-neutral-700 flex items-center gap-1.5">
-                        <Send className="w-3.5 h-3.5 text-neutral-950" />
+                      <h4 className={`text-xs font-bold uppercase flex items-center gap-1.5 ${isDarkMode ? 'text-slate-200' : 'text-neutral-700'}`}>
+                        <Send className="w-3.5 h-3.5 text-emerald-400" />
                         Reserve / Inquire for Service Installation
                       </h4>
-                      <span className="text-[11px] text-neutral-500 font-bold">No payment required now</span>
+                      <span className={`text-[11px] font-bold ${isDarkMode ? 'text-slate-400' : 'text-neutral-500'}`}>No payment required now</span>
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                       <div>
-                        <label className="block text-[11px] font-bold text-neutral-700 mb-1">Your Full Name *</label>
+                        <label className={`block text-[11px] font-bold mb-1 ${isDarkMode ? 'text-slate-300' : 'text-neutral-700'}`}>Your Full Name *</label>
                         <div className="relative">
                           <User className="absolute left-3.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-neutral-400" />
                           <input
@@ -651,13 +777,17 @@ export default function SparePartsCatalogue() {
                             placeholder="e.g. Rahul Sharma"
                             value={inquiryForm.customer_name}
                             onChange={(e) => setInquiryForm({ ...inquiryForm, customer_name: e.target.value })}
-                            className="w-full pl-9 pr-3 py-2 bg-neutral-50 border border-neutral-300 rounded-full text-xs text-neutral-900 focus:outline-none focus:border-neutral-900"
+                            className={`w-full pl-9 pr-3 py-2 border rounded-full text-xs focus:outline-none ${
+                              isDarkMode
+                                ? 'bg-[#030d08] border-emerald-950 text-white placeholder-slate-500 focus:border-emerald-500'
+                                : 'bg-neutral-50 border-neutral-300 text-neutral-900 focus:border-neutral-900'
+                            }`}
                           />
                         </div>
                       </div>
 
                       <div>
-                        <label className="block text-[11px] font-bold text-neutral-700 mb-1">Phone Number (10 Digits) *</label>
+                        <label className={`block text-[11px] font-bold mb-1 ${isDarkMode ? 'text-slate-300' : 'text-neutral-700'}`}>Phone Number (10 Digits) *</label>
                         <div className="relative">
                           <Phone className="absolute left-3.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-neutral-400" />
                           <input
@@ -666,25 +796,33 @@ export default function SparePartsCatalogue() {
                             placeholder="e.g. 9876543210"
                             value={inquiryForm.phone}
                             onChange={(e) => setInquiryForm({ ...inquiryForm, phone: e.target.value })}
-                            className="w-full pl-9 pr-3 py-2 bg-neutral-50 border border-neutral-300 rounded-full text-xs text-neutral-900 focus:outline-none focus:border-neutral-900"
+                            className={`w-full pl-9 pr-3 py-2 border rounded-full text-xs focus:outline-none ${
+                              isDarkMode
+                                ? 'bg-[#030d08] border-emerald-950 text-white placeholder-slate-500 focus:border-emerald-500'
+                                : 'bg-neutral-50 border-neutral-300 text-neutral-900 focus:border-neutral-900'
+                            }`}
                           />
                         </div>
                       </div>
                     </div>
 
                     <div>
-                      <label className="block text-[11px] font-bold text-neutral-700 mb-1">Voltix EV Model You Own (Optional)</label>
+                      <label className={`block text-[11px] font-bold mb-1 ${isDarkMode ? 'text-slate-300' : 'text-neutral-700'}`}>Voltix EV Model You Own (Optional)</label>
                       <input
                         type="text"
                         placeholder="e.g. Voltix Pulse Pro or Voltix Glide City"
                         value={inquiryForm.preferred_model}
                         onChange={(e) => setInquiryForm({ ...inquiryForm, preferred_model: e.target.value })}
-                        className="w-full px-4 py-2 bg-neutral-50 border border-neutral-300 rounded-full text-xs text-neutral-900 focus:outline-none focus:border-neutral-900"
+                        className={`w-full px-4 py-2 border rounded-full text-xs focus:outline-none ${
+                          isDarkMode
+                            ? 'bg-[#030d08] border-emerald-950 text-white placeholder-slate-500 focus:border-emerald-500'
+                            : 'bg-neutral-50 border-neutral-300 text-neutral-900 focus:border-neutral-900'
+                        }`}
                       />
                     </div>
 
                     <div>
-                      <label className="block text-[11px] font-bold text-neutral-700 mb-1">Special Note or Fitment Question</label>
+                      <label className={`block text-[11px] font-bold mb-1 ${isDarkMode ? 'text-slate-300' : 'text-neutral-700'}`}>Special Note or Fitment Question</label>
                       <div className="relative">
                         <MessageSquare className="absolute left-3.5 top-3 w-3.5 h-3.5 text-neutral-400" />
                         <textarea
@@ -692,7 +830,11 @@ export default function SparePartsCatalogue() {
                           placeholder="e.g. I need showroom technician installation service at the Connaught Place branch."
                           value={inquiryForm.notes}
                           onChange={(e) => setInquiryForm({ ...inquiryForm, notes: e.target.value })}
-                          className="w-full pl-9 pr-3 py-2 bg-neutral-50 border border-neutral-300 rounded-2xl text-xs text-neutral-900 focus:outline-none focus:border-neutral-900"
+                          className={`w-full pl-9 pr-3 py-2 border rounded-2xl text-xs focus:outline-none ${
+                            isDarkMode
+                              ? 'bg-[#030d08] border-emerald-950 text-white placeholder-slate-500 focus:border-emerald-500'
+                              : 'bg-neutral-50 border-neutral-300 text-neutral-900 focus:border-neutral-900'
+                          }`}
                         />
                       </div>
                     </div>
@@ -700,7 +842,11 @@ export default function SparePartsCatalogue() {
                     <button
                       type="submit"
                       disabled={inquirySubmitting}
-                      className="w-full py-3 bg-neutral-950 hover:bg-neutral-800 text-white font-bold text-xs uppercase tracking-wider rounded-full transition-all shadow-md shadow-neutral-900/20 disabled:opacity-50"
+                      className={`w-full py-3 font-bold text-xs uppercase tracking-wider rounded-full transition-all shadow-md disabled:opacity-50 ${
+                        isDarkMode
+                          ? 'bg-emerald-500 hover:bg-emerald-400 text-black shadow-emerald-500/20'
+                          : 'bg-neutral-950 hover:bg-neutral-800 text-white shadow-neutral-900/20'
+                      }`}
                     >
                       {inquirySubmitting ? 'Registering Hold...' : 'Confirm Part Reservation & Inquiry'}
                     </button>

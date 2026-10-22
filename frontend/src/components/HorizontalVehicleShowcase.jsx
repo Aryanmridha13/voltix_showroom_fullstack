@@ -2,13 +2,15 @@ import React, { useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowLeft, ArrowRight, BatteryCharging, Gauge, Sparkles, Tag } from 'lucide-react';
+import { useTheme } from '../context/ThemeContext';
 
 /**
  * HorizontalVehicleShowcase
- * High-key White Studio Automotive Showcase inspired by Tesla and Porsche design languages.
- * Features massive Anton watermark typography, clean white studio cards, and smooth horizontal scrolling.
+ * Dynamic Dual-Theme Automotive Showcase inspired by Tesla and Porsche design languages.
+ * Supports Studio Light and Cyber Dark modes seamlessly.
  */
 export default function HorizontalVehicleShowcase({ vehicles = [] }) {
+  const { isDarkMode } = useTheme();
   const containerRef = useRef(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
@@ -79,14 +81,22 @@ export default function HorizontalVehicleShowcase({ vehicles = [] }) {
       {/* Header with Navigation Controls */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row sm:items-end justify-between gap-6">
         <div className="space-y-2">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-neutral-900 text-white text-xs font-bold uppercase tracking-wider shadow-sm">
+          <div className={`inline-flex items-center gap-2 px-3.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider shadow-sm transition-colors ${
+            isDarkMode
+              ? 'bg-[#06180f] text-emerald-300 border border-emerald-950/80'
+              : 'bg-neutral-900 text-white'
+          }`}>
             <Sparkles className="w-3.5 h-3.5 text-emerald-400" />
             Performance Lineup
           </div>
-          <h2 className="text-3xl sm:text-5xl font-section-title font-black text-neutral-950 tracking-section uppercase">
-            Engineered <span className="text-emerald-600">Fleet</span>
+          <h2 className={`text-3xl sm:text-5xl font-section-title font-black tracking-section uppercase transition-colors ${
+            isDarkMode ? 'text-white' : 'text-neutral-950'
+          }`}>
+            Engineered <span className={isDarkMode ? 'text-emerald-400' : 'text-emerald-600'}>Fleet</span>
           </h2>
-          <p className="text-sm text-neutral-500 max-w-xl font-medium">
+          <p className={`text-sm max-w-xl font-medium transition-colors ${
+            isDarkMode ? 'text-slate-400' : 'text-neutral-500'
+          }`}>
             Swipe or use controls to explore precision-tuned electric variants built for speed, range, and zero-compromise endurance.
           </p>
         </div>
@@ -97,7 +107,11 @@ export default function HorizontalVehicleShowcase({ vehicles = [] }) {
             onClick={() => scroll('left')}
             disabled={!canScrollLeft}
             aria-label="Scroll left"
-            className="w-12 h-12 rounded-full bg-white border border-neutral-300 flex items-center justify-center text-neutral-900 disabled:opacity-30 disabled:cursor-not-allowed hover:bg-neutral-100 transition-all shadow-sm active:scale-95"
+            className={`w-12 h-12 rounded-full border flex items-center justify-center disabled:opacity-30 disabled:cursor-not-allowed transition-all shadow-sm active:scale-95 ${
+              isDarkMode
+                ? 'bg-[#06180f] border-emerald-950 text-slate-100 hover:bg-[#030d08]'
+                : 'bg-white border-neutral-300 text-neutral-900 hover:bg-neutral-100'
+            }`}
           >
             <ArrowLeft className="w-5 h-5" />
           </button>
@@ -105,7 +119,11 @@ export default function HorizontalVehicleShowcase({ vehicles = [] }) {
             onClick={() => scroll('right')}
             disabled={!canScrollRight}
             aria-label="Scroll right"
-            className="w-12 h-12 rounded-full bg-white border border-neutral-300 flex items-center justify-center text-neutral-900 disabled:opacity-30 disabled:cursor-not-allowed hover:bg-neutral-100 transition-all shadow-sm active:scale-95"
+            className={`w-12 h-12 rounded-full border flex items-center justify-center disabled:opacity-30 disabled:cursor-not-allowed transition-all shadow-sm active:scale-95 ${
+              isDarkMode
+                ? 'bg-[#06180f] border-emerald-950 text-slate-100 hover:bg-[#030d08]'
+                : 'bg-white border-neutral-300 text-neutral-900 hover:bg-neutral-100'
+            }`}
           >
             <ArrowRight className="w-5 h-5" />
           </button>
@@ -126,27 +144,41 @@ export default function HorizontalVehicleShowcase({ vehicles = [] }) {
             <motion.div
               key={variant.id || index}
               whileHover={{ y: -8, transition: { duration: 0.25 } }}
-              className="min-w-[340px] sm:min-w-[420px] max-w-[420px] rounded-3xl bg-white border border-neutral-200/90 shadow-lg hover:shadow-2xl hover:border-neutral-400 overflow-hidden flex flex-col justify-between relative group snap-start transition-all"
+              className={`min-w-[340px] sm:min-w-[420px] max-w-[420px] rounded-3xl border overflow-hidden flex flex-col justify-between relative group snap-start transition-all ${
+                isDarkMode
+                  ? 'bg-[#06180f] border-emerald-950/80 shadow-emerald-950/20 hover:border-emerald-500/50 hover:shadow-2xl'
+                  : 'bg-white border-neutral-200/90 shadow-lg hover:shadow-2xl hover:border-neutral-400'
+              }`}
             >
-              {/* Massive Watermark Typography Behind Vehicle - Visible Black Contrast */}
-              <div className="absolute top-16 left-1/2 -translate-x-1/2 font-display text-7xl sm:text-8xl font-black text-neutral-950/20 uppercase tracking-tighter select-none pointer-events-none whitespace-nowrap z-0">
+              {/* Massive Watermark Typography Behind Vehicle */}
+              <div className={`absolute top-16 left-1/2 -translate-x-1/2 font-display text-7xl sm:text-8xl font-black uppercase tracking-tighter select-none pointer-events-none whitespace-nowrap z-0 transition-colors ${
+                isDarkMode ? 'text-white/10' : 'text-neutral-950/20'
+              }`}>
                 {watermark}
               </div>
 
               {/* Card Header & Badges with Proper Spacing */}
               <div className="p-7 pb-2 relative z-10 flex items-start justify-between min-h-[95px]">
                 <div>
-                  <span className="text-[11px] font-extrabold text-emerald-700 uppercase tracking-widest block mb-1.5">
+                  <span className={`text-[11px] font-extrabold uppercase tracking-widest block mb-1.5 ${
+                    isDarkMode ? 'text-emerald-400' : 'text-emerald-700'
+                  }`}>
                     {variant.model_name || 'Voltix Series'}
                   </span>
-                  <h3 className="text-xl sm:text-[22px] font-bold font-sans text-neutral-950 tracking-tight group-hover:text-emerald-700 transition-colors leading-snug">
+                  <h3 className={`text-xl sm:text-[22px] font-bold font-sans tracking-tight leading-snug transition-colors ${
+                    isDarkMode ? 'text-white group-hover:text-emerald-400' : 'text-neutral-950 group-hover:text-emerald-700'
+                  }`}>
                     {variant.name}
                   </h3>
                 </div>
 
                 {variant.original_price && (
-                  <span className="px-3 py-1 rounded-full text-[11px] font-bold bg-neutral-100 text-neutral-900 border border-neutral-300 flex items-center gap-1 shadow-xs shrink-0 ml-3">
-                    <Tag className="w-3 h-3 text-emerald-600" /> Special
+                  <span className={`px-3 py-1 rounded-full text-[11px] font-bold border flex items-center gap-1 shadow-xs shrink-0 ml-3 ${
+                    isDarkMode
+                      ? 'bg-[#030d08] text-emerald-300 border-emerald-950'
+                      : 'bg-neutral-100 text-neutral-900 border-neutral-300'
+                  }`}>
+                    <Tag className="w-3 h-3 text-emerald-400" /> Special
                   </span>
                 )}
               </div>
@@ -154,7 +186,9 @@ export default function HorizontalVehicleShowcase({ vehicles = [] }) {
               {/* Center Floating Cutout with Ample Breathing Space */}
               <div className="h-64 relative flex items-center justify-center px-6 my-3 z-10">
                 {/* Soft ground shadow ellipse */}
-                <div className="absolute bottom-3 w-52 h-7 rounded-[100%] bg-neutral-900/20 blur-md pointer-events-none" />
+                <div className={`absolute bottom-3 w-52 h-7 rounded-[100%] blur-md pointer-events-none transition-colors ${
+                  isDarkMode ? 'bg-black/50' : 'bg-neutral-900/20'
+                }`} />
 
                 <motion.img
                   src={variant.default_image || '/vehicles/scooter_blue.png'}
@@ -170,26 +204,50 @@ export default function HorizontalVehicleShowcase({ vehicles = [] }) {
               </div>
 
               {/* Specs & Pricing Footer */}
-              <div className="p-7 pt-3 relative z-10 space-y-4 bg-gradient-to-t from-neutral-50 via-white to-transparent">
+              <div className={`p-7 pt-3 relative z-10 space-y-4 ${
+                isDarkMode
+                  ? 'bg-gradient-to-t from-[#030d08] via-[#06180f] to-transparent'
+                  : 'bg-gradient-to-t from-neutral-50 via-white to-transparent'
+              }`}>
                 {/* Performance Pill Grid */}
-                <div className="grid grid-cols-2 gap-3 py-3 px-4 rounded-2xl bg-neutral-100/90 border border-neutral-200">
+                <div className={`grid grid-cols-2 gap-3 py-3 px-4 rounded-2xl border transition-colors ${
+                  isDarkMode
+                    ? 'bg-[#030d08]/90 border-emerald-950'
+                    : 'bg-neutral-100/90 border-neutral-200'
+                }`}>
                   <div className="flex items-center gap-2.5">
-                    <div className="w-8 h-8 rounded-xl bg-white border border-neutral-200 flex items-center justify-center text-neutral-900 shrink-0 shadow-xs">
-                      <BatteryCharging className="w-4 h-4 text-emerald-600" />
+                    <div className={`w-8 h-8 rounded-xl border flex items-center justify-center shrink-0 shadow-xs ${
+                      isDarkMode
+                        ? 'bg-[#06180f] border-emerald-950 text-emerald-400'
+                        : 'bg-white border-neutral-200 text-neutral-900'
+                    }`}>
+                      <BatteryCharging className="w-4 h-4 text-emerald-400" />
                     </div>
                     <div>
-                      <p className="text-[10px] text-neutral-500 uppercase font-bold">Certified Range</p>
-                      <p className="text-sm font-black text-neutral-950">{variant.driving_range_km || 140} km</p>
+                      <p className={`text-[10px] uppercase font-bold ${
+                        isDarkMode ? 'text-slate-400' : 'text-neutral-500'
+                      }`}>Certified Range</p>
+                      <p className={`text-sm font-black ${
+                        isDarkMode ? 'text-white' : 'text-neutral-950'
+                      }`}>{variant.driving_range_km || 140} km</p>
                     </div>
                   </div>
 
                   <div className="flex items-center gap-2.5">
-                    <div className="w-8 h-8 rounded-xl bg-white border border-neutral-200 flex items-center justify-center text-neutral-900 shrink-0 shadow-xs">
-                      <Gauge className="w-4 h-4 text-neutral-950" />
+                    <div className={`w-8 h-8 rounded-xl border flex items-center justify-center shrink-0 shadow-xs ${
+                      isDarkMode
+                        ? 'bg-[#06180f] border-emerald-950 text-emerald-400'
+                        : 'bg-white border-neutral-200 text-neutral-900'
+                    }`}>
+                      <Gauge className={`w-4 h-4 ${isDarkMode ? 'text-slate-200' : 'text-neutral-950'}`} />
                     </div>
                     <div>
-                      <p className="text-[10px] text-neutral-500 uppercase font-bold">Top Speed</p>
-                      <p className="text-sm font-black text-neutral-950">{variant.top_speed_kmh || 80} km/h</p>
+                      <p className={`text-[10px] uppercase font-bold ${
+                        isDarkMode ? 'text-slate-400' : 'text-neutral-500'
+                      }`}>Top Speed</p>
+                      <p className={`text-sm font-black ${
+                        isDarkMode ? 'text-white' : 'text-neutral-950'
+                      }`}>{variant.top_speed_kmh || 80} km/h</p>
                     </div>
                   </div>
                 </div>
@@ -197,13 +255,19 @@ export default function HorizontalVehicleShowcase({ vehicles = [] }) {
                 {/* Price and Actions */}
                 <div className="flex items-center justify-between pt-2">
                   <div>
-                    <span className="text-[11px] text-neutral-500 block font-medium">Ex-Showroom Price</span>
+                    <span className={`text-[11px] block font-medium ${
+                      isDarkMode ? 'text-slate-400' : 'text-neutral-500'
+                    }`}>Ex-Showroom Price</span>
                     <div className="flex items-baseline gap-2">
-                      <span className="text-xl sm:text-2xl font-display font-black text-neutral-950">
+                      <span className={`text-xl sm:text-2xl font-display font-black ${
+                        isDarkMode ? 'text-white' : 'text-neutral-950'
+                      }`}>
                         ₹{Number(variant.base_price || 99999).toLocaleString('en-IN')}
                       </span>
                       {variant.original_price && (
-                        <span className="text-xs text-neutral-400 line-through">
+                        <span className={`text-xs line-through ${
+                          isDarkMode ? 'text-slate-500' : 'text-neutral-400'
+                        }`}>
                           ₹{Number(variant.original_price).toLocaleString('en-IN')}
                         </span>
                       )}
@@ -213,16 +277,24 @@ export default function HorizontalVehicleShowcase({ vehicles = [] }) {
                   <div className="flex items-center gap-2">
                     <Link
                       to={`/vehicles/${variant.id}`}
-                      className="px-5 py-2.5 rounded-full bg-neutral-950 text-white font-bold text-xs uppercase tracking-wider hover:bg-neutral-800 transition-all shadow-md shadow-neutral-900/20 active:scale-95"
+                      className={`px-5 py-2.5 rounded-full font-bold text-xs uppercase tracking-wider transition-all shadow-md active:scale-95 ${
+                        isDarkMode
+                          ? 'bg-emerald-500 hover:bg-emerald-400 text-black shadow-emerald-500/20'
+                          : 'bg-neutral-950 hover:bg-neutral-800 text-white shadow-neutral-900/20'
+                      }`}
                     >
                       Details
                     </Link>
                     <Link
                       to={`/customizer?variant=${variant.id}`}
-                      className="p-2.5 rounded-full border border-neutral-300 text-neutral-800 hover:text-black hover:bg-neutral-100 transition-colors"
+                      className={`p-2.5 rounded-full border transition-colors ${
+                        isDarkMode
+                          ? 'border-emerald-950 text-emerald-400 hover:bg-[#030d08]'
+                          : 'border-neutral-300 text-neutral-800 hover:text-black hover:bg-neutral-100'
+                      }`}
                       title="Customize 3D Finish"
                     >
-                      <Sparkles className="w-4 h-4 text-emerald-600" />
+                      <Sparkles className="w-4 h-4 text-emerald-400" />
                     </Link>
                   </div>
                 </div>

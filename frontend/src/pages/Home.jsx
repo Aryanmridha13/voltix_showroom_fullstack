@@ -5,6 +5,7 @@ import api from '../services/api';
 import InteractiveTeslaStage from '../components/InteractiveTeslaStage';
 import HorizontalVehicleShowcase from '../components/HorizontalVehicleShowcase';
 import AngleShowcase from '../components/AngleShowcase';
+import { useTheme } from '../context/ThemeContext';
 
 /**
  * Home Page
@@ -18,6 +19,7 @@ import AngleShowcase from '../components/AngleShowcase';
  * - Horizontal Draggable Lineup & "Built to Every Angle" 360 Showcase
  */
 export default function Home() {
+  const { isDarkMode } = useTheme();
   const [health, setHealth] = useState(null);
   const [vehicles, setVehicles] = useState([]);
 
@@ -68,47 +70,87 @@ export default function Home() {
           EDITORIAL STATS COUNTERS: High-Key Studio Reference
           ========================================================================= */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="p-8 sm:p-14 rounded-3xl bg-white border border-neutral-200/90 shadow-xl relative overflow-hidden">
-          {/* Studio Watermark - Visible Black Contrast */}
-          <div className="absolute top-4 left-1/2 -translate-x-1/2 font-display text-7xl sm:text-9xl font-black text-neutral-950/15 uppercase tracking-tighter select-none pointer-events-none whitespace-nowrap z-0">
+        <div className={`p-8 sm:p-14 rounded-3xl border shadow-xl relative overflow-hidden transition-all ${
+          isDarkMode
+            ? 'bg-gradient-to-b from-[#04140b] via-[#030d07] to-[#020b05] border-emerald-950/80 shadow-emerald-950/20'
+            : 'bg-white border-neutral-200/90 shadow-xl'
+        }`}>
+          {/* Studio Watermark */}
+          <div className={`absolute top-4 left-1/2 -translate-x-1/2 font-display text-7xl sm:text-9xl font-black uppercase tracking-tighter select-none pointer-events-none whitespace-nowrap z-0 transition-colors ${
+            isDarkMode ? 'text-white/10' : 'text-neutral-950/15'
+          }`}>
             INTEGRITY
           </div>
 
           <div className="text-center space-y-3 mb-12 relative z-10">
-            <span className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-neutral-900 text-white text-xs font-bold uppercase tracking-wider shadow-sm">
+            <span className={`inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider shadow-sm transition-colors ${
+              isDarkMode
+                ? 'bg-[#06180f] text-emerald-300 border border-emerald-950/80'
+                : 'bg-neutral-900 text-white'
+            }`}>
               Automotive Engineering Integrity
             </span>
-            <h2 className="text-3xl sm:text-5xl font-section-title font-black text-neutral-950 uppercase tracking-section">
-              Flawless Performance. <span className="text-emerald-700">Zero Compromise.</span>
+            <h2 className={`text-3xl sm:text-5xl font-section-title font-black uppercase tracking-section transition-colors ${
+              isDarkMode ? 'text-white' : 'text-neutral-950'
+            }`}>
+              Flawless Performance. <span className={isDarkMode ? 'text-emerald-400' : 'text-emerald-700'}>Zero Compromise.</span>
             </h2>
-            <p className="text-sm text-neutral-500 max-w-xl mx-auto font-medium">
+            <p className={`text-sm max-w-xl mx-auto font-medium transition-colors ${
+              isDarkMode ? 'text-slate-400' : 'text-neutral-500'
+            }`}>
               Every Voltix drivetrain undergoes rigorous 2,000-cycle torture testing and climate simulation.
             </p>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center divide-y md:divide-y-0 md:divide-x divide-neutral-200 relative z-10">
+          <div className={`grid grid-cols-2 md:grid-cols-4 gap-8 text-center divide-y md:divide-y-0 md:divide-x relative z-10 ${
+            isDarkMode ? 'divide-emerald-950/80' : 'divide-neutral-200'
+          }`}>
             <motion.div whileHover={{ scale: 1.05 }} className="space-y-2 pt-4 md:pt-0">
-              <span className="text-4xl sm:text-6xl font-section-title font-black text-neutral-950 tracking-wide block">160K+</span>
-              <p className="text-xs text-neutral-500 uppercase font-bold tracking-wider">Electric Km Logged</p>
-              <span className="text-[11px] text-emerald-700 block font-semibold">By Verified Riders</span>
+              <span className={`text-4xl sm:text-6xl font-section-title font-black tracking-wide block transition-colors ${
+                isDarkMode ? 'text-white' : 'text-neutral-950'
+              }`}>160K+</span>
+              <p className={`text-xs uppercase font-bold tracking-wider ${
+                isDarkMode ? 'text-slate-400' : 'text-neutral-500'
+              }`}>Electric Km Logged</p>
+              <span className={`text-[11px] block font-semibold ${
+                isDarkMode ? 'text-emerald-400' : 'text-emerald-700'
+              }`}>By Verified Riders</span>
             </motion.div>
 
             <motion.div whileHover={{ scale: 1.05 }} className="space-y-2 pt-4 md:pt-0 md:pl-6">
-              <span className="text-4xl sm:text-6xl font-section-title font-black text-neutral-950 tracking-wide block">0.18₹</span>
-              <p className="text-xs text-neutral-500 uppercase font-bold tracking-wider">Per KM Operating Cost</p>
-              <span className="text-[11px] text-emerald-700 block font-semibold">92% Petrol Savings</span>
+              <span className={`text-4xl sm:text-6xl font-section-title font-black tracking-wide block transition-colors ${
+                isDarkMode ? 'text-white' : 'text-neutral-950'
+              }`}>0.18₹</span>
+              <p className={`text-xs uppercase font-bold tracking-wider ${
+                isDarkMode ? 'text-slate-400' : 'text-neutral-500'
+              }`}>Per KM Operating Cost</p>
+              <span className={`text-[11px] block font-semibold ${
+                isDarkMode ? 'text-emerald-400' : 'text-emerald-700'
+              }`}>92% Petrol Savings</span>
             </motion.div>
 
             <motion.div whileHover={{ scale: 1.05 }} className="space-y-2 pt-4 md:pt-0 md:pl-6">
-              <span className="text-4xl sm:text-6xl font-section-title font-black text-neutral-950 tracking-wide block">45 Min</span>
-              <p className="text-xs text-neutral-500 uppercase font-bold tracking-wider">Fast Charge Window</p>
-              <span className="text-[11px] text-emerald-700 block font-semibold">CCS2 Compatible</span>
+              <span className={`text-4xl sm:text-6xl font-section-title font-black tracking-wide block transition-colors ${
+                isDarkMode ? 'text-white' : 'text-neutral-950'
+              }`}>45 Min</span>
+              <p className={`text-xs uppercase font-bold tracking-wider ${
+                isDarkMode ? 'text-slate-400' : 'text-neutral-500'
+              }`}>Fast Charge Window</p>
+              <span className={`text-[11px] block font-semibold ${
+                isDarkMode ? 'text-emerald-400' : 'text-emerald-700'
+              }`}>CCS2 Compatible</span>
             </motion.div>
 
             <motion.div whileHover={{ scale: 1.05 }} className="space-y-2 pt-4 md:pt-0 md:pl-6">
-              <span className="text-4xl sm:text-6xl font-section-title font-black text-neutral-950 tracking-wide block">98%</span>
-              <p className="text-xs text-neutral-500 uppercase font-bold tracking-wider">Customer Trust Score</p>
-              <span className="text-[11px] text-emerald-700 block font-semibold">5-Year BMS Warranty</span>
+              <span className={`text-4xl sm:text-6xl font-section-title font-black tracking-wide block transition-colors ${
+                isDarkMode ? 'text-white' : 'text-neutral-950'
+              }`}>98%</span>
+              <p className={`text-xs uppercase font-bold tracking-wider ${
+                isDarkMode ? 'text-slate-400' : 'text-neutral-500'
+              }`}>Customer Trust Score</p>
+              <span className={`text-[11px] block font-semibold ${
+                isDarkMode ? 'text-emerald-400' : 'text-emerald-700'
+              }`}>5-Year BMS Warranty</span>
             </motion.div>
           </div>
         </div>
@@ -118,16 +160,20 @@ export default function Home() {
           SHOWROOM STATUS & HEALTH BANNER
           ========================================================================= */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <div className="inline-flex items-center gap-3 px-6 py-2.5 rounded-full bg-white border border-neutral-300 text-xs text-neutral-600 shadow-sm">
-          <Activity className="w-4 h-4 text-emerald-600" />
-          <span className="font-bold text-neutral-950">Live Showroom Engine:</span>
+        <div className={`inline-flex items-center gap-3 px-6 py-2.5 rounded-full border text-xs shadow-sm transition-colors ${
+          isDarkMode
+            ? 'bg-[#06180f] border-emerald-950 text-slate-300'
+            : 'bg-white border-neutral-300 text-neutral-600'
+        }`}>
+          <Activity className="w-4 h-4 text-emerald-400" />
+          <span className={`font-bold ${isDarkMode ? 'text-white' : 'text-neutral-950'}`}>Live Showroom Engine:</span>
           {health?.status === 'healthy' ? (
-            <span className="flex items-center gap-1.5 text-emerald-700 font-bold">
+            <span className={`flex items-center gap-1.5 font-bold ${isDarkMode ? 'text-emerald-400' : 'text-emerald-700'}`}>
               <CheckCircle2 className="w-4 h-4" />
               Active (MySQL 8.0 Concurrency - {health.database?.latency_ms || 1.1}ms)
             </span>
           ) : (
-            <span className="text-amber-600 font-bold">Connecting Live Node...</span>
+            <span className="text-amber-500 font-bold">Connecting Live Node...</span>
           )}
         </div>
       </section>

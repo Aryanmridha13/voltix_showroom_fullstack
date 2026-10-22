@@ -15,9 +15,11 @@ import ThreeVehicleStage from './ThreeVehicleStage';
  * - Bottom-right action pills: COMPARE NOW, CONFIGURE, ORDER NOW
  * - Dual High-Key Studio (Reference photo style) & Dark Cyber mode
  */
+import { useTheme } from '../context/ThemeContext';
+
 export default function InteractiveTeslaStage() {
   const [activeModelIndex, setActiveModelIndex] = useState(2); // Default to Model Three (Index 2)
-  const [isDarkMode, setIsDarkMode] = useState(false); // High-key studio like reference by default
+  const { isDarkMode, toggleTheme } = useTheme();
   const containerRef = useRef(null);
 
   const models = [
@@ -134,7 +136,7 @@ export default function InteractiveTeslaStage() {
 
         {/* Studio / Cyber Theme Switcher */}
         <button
-          onClick={() => setIsDarkMode(!isDarkMode)}
+          onClick={toggleTheme}
           className={`flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-bold transition-all shadow-sm ${
             isDarkMode
               ? 'bg-slate-900 border border-emerald-950 text-slate-300 hover:text-white'
