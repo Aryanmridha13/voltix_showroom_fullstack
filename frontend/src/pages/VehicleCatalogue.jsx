@@ -285,8 +285,8 @@ export default function VehicleCatalogue() {
             >
               {/* Image Container with Watermark Typography and Ground Shadow */}
               <div className="h-60 bg-gradient-to-b from-[#fafafa] to-[#f2f2f4] relative flex items-center justify-center p-6 overflow-hidden border-b border-neutral-200/80">
-                {/* Background Watermark Model Name (Tesla Reference 1 style) */}
-                <div className="absolute top-3 left-1/2 -translate-x-1/2 font-display text-5xl sm:text-6xl font-black text-neutral-950/[0.045] uppercase tracking-tighter select-none pointer-events-none whitespace-nowrap z-0">
+                {/* Background Watermark Model Name - Visible Black Contrast */}
+                <div className="absolute top-3 left-1/2 -translate-x-1/2 font-display text-5xl sm:text-6xl font-black text-neutral-950/20 uppercase tracking-tighter select-none pointer-events-none whitespace-nowrap z-0">
                   {variant.model_name}
                 </div>
 
@@ -318,10 +318,10 @@ export default function VehicleCatalogue() {
               {/* Card Body */}
               <div className="p-6 flex-1 flex flex-col justify-between space-y-5 bg-gradient-to-t from-neutral-50/50 via-white to-transparent">
                 <div>
-                  <p className="text-[11px] font-bold text-emerald-700 uppercase tracking-widest">
+                  <p className="text-[11px] font-extrabold text-emerald-700 uppercase tracking-widest mb-1.5">
                     {variant.model_name}
                   </p>
-                  <h3 className="text-xl sm:text-2xl font-card-title text-neutral-950 group-hover:text-emerald-700 transition-colors uppercase tracking-card">
+                  <h3 className="text-lg sm:text-xl font-bold font-card-title text-neutral-950 group-hover:text-emerald-700 transition-colors uppercase tracking-wide leading-snug">
                     {variant.name}
                   </h3>
                 </div>

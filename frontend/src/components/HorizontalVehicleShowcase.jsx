@@ -128,40 +128,40 @@ export default function HorizontalVehicleShowcase({ vehicles = [] }) {
               whileHover={{ y: -8, transition: { duration: 0.25 } }}
               className="min-w-[340px] sm:min-w-[420px] max-w-[420px] rounded-3xl bg-white border border-neutral-200/90 shadow-lg hover:shadow-2xl hover:border-neutral-400 overflow-hidden flex flex-col justify-between relative group snap-start transition-all"
             >
-              {/* Massive Watermark Typography Behind Vehicle (Reference Image 1 style) */}
-              <div className="absolute top-10 left-1/2 -translate-x-1/2 font-display text-7xl sm:text-8xl font-black text-neutral-950/[0.045] uppercase tracking-tighter select-none pointer-events-none whitespace-nowrap z-0">
+              {/* Massive Watermark Typography Behind Vehicle - Visible Black Contrast */}
+              <div className="absolute top-16 left-1/2 -translate-x-1/2 font-display text-7xl sm:text-8xl font-black text-neutral-950/20 uppercase tracking-tighter select-none pointer-events-none whitespace-nowrap z-0">
                 {watermark}
               </div>
 
-              {/* Card Header & Badges */}
-              <div className="p-6 relative z-10 flex items-start justify-between">
+              {/* Card Header & Badges with Proper Spacing */}
+              <div className="p-7 pb-2 relative z-10 flex items-start justify-between min-h-[95px]">
                 <div>
-                  <span className="text-[11px] font-bold text-emerald-700 uppercase tracking-widest block">
+                  <span className="text-[11px] font-extrabold text-emerald-700 uppercase tracking-widest block mb-1.5">
                     {variant.model_name || 'Voltix Series'}
                   </span>
-                  <h3 className="text-xl sm:text-2xl font-card-title text-neutral-950 tracking-card group-hover:text-emerald-700 transition-colors uppercase">
+                  <h3 className="text-lg sm:text-xl font-bold font-card-title text-neutral-950 tracking-wide group-hover:text-emerald-700 transition-colors uppercase leading-snug">
                     {variant.name}
                   </h3>
                 </div>
 
                 {variant.original_price && (
-                  <span className="px-3 py-1 rounded-full text-[11px] font-bold bg-neutral-100 text-neutral-900 border border-neutral-300 flex items-center gap-1 shadow-xs">
+                  <span className="px-3 py-1 rounded-full text-[11px] font-bold bg-neutral-100 text-neutral-900 border border-neutral-300 flex items-center gap-1 shadow-xs shrink-0 ml-3">
                     <Tag className="w-3 h-3 text-emerald-600" /> Special
                   </span>
                 )}
               </div>
 
-              {/* Center Floating Cutout */}
-              <div className="h-60 relative flex items-center justify-center px-6 my-2 z-10">
+              {/* Center Floating Cutout with Ample Breathing Space */}
+              <div className="h-64 relative flex items-center justify-center px-6 my-3 z-10">
                 {/* Soft ground shadow ellipse */}
-                <div className="absolute bottom-4 w-48 h-6 rounded-[100%] bg-neutral-900/15 blur-md pointer-events-none" />
+                <div className="absolute bottom-3 w-52 h-7 rounded-[100%] bg-neutral-900/20 blur-md pointer-events-none" />
 
                 <motion.img
                   src={variant.default_image || '/vehicles/scooter_blue.png'}
                   alt={variant.name}
-                  whileHover={{ scale: 1.1, rotate: -1 }}
+                  whileHover={{ scale: 1.08, rotate: -1 }}
                   transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-                  className="max-h-full w-auto object-contain drop-shadow-[0_15px_25px_rgba(0,0,0,0.35)]"
+                  className="max-h-full w-auto object-contain drop-shadow-[0_16px_30px_rgba(0,0,0,0.35)]"
                   onError={(e) => {
                     e.target.onerror = null;
                     e.target.src = '/vehicles/scooter_blue.png';
@@ -170,9 +170,9 @@ export default function HorizontalVehicleShowcase({ vehicles = [] }) {
               </div>
 
               {/* Specs & Pricing Footer */}
-              <div className="p-6 pt-2 relative z-10 space-y-5 bg-gradient-to-t from-neutral-50 via-white to-transparent">
+              <div className="p-7 pt-3 relative z-10 space-y-4 bg-gradient-to-t from-neutral-50 via-white to-transparent">
                 {/* Performance Pill Grid */}
-                <div className="grid grid-cols-2 gap-3 py-3 px-4 rounded-2xl bg-neutral-100/80 border border-neutral-200">
+                <div className="grid grid-cols-2 gap-3 py-3 px-4 rounded-2xl bg-neutral-100/90 border border-neutral-200">
                   <div className="flex items-center gap-2.5">
                     <div className="w-8 h-8 rounded-xl bg-white border border-neutral-200 flex items-center justify-center text-neutral-900 shrink-0 shadow-xs">
                       <BatteryCharging className="w-4 h-4 text-emerald-600" />

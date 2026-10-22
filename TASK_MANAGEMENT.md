@@ -353,4 +353,10 @@
      - Restored `.font-display` to `letter-spacing: -0.025em; word-spacing: normal;` so the hero section background typography retains its original tight, compact editorial format.
      - Contained the hero text (`text-[12vw] sm:text-[14vw] lg:text-[15vw]`) and optimized hero stage padding/heights so the text cannot touch or overflow into the bottom bar or subsequent sections.
 
+  4. **Vehicle Showcase Card Spacing, Title Sizing & Visible Black Watermark Contrast:**
+     - **Card Spacing:** Upgraded `HorizontalVehicleShowcase.jsx` and `VehicleCatalogue.jsx` card layout with generous breathing space (`p-7`, `min-h-[95px]` header, `h-64` vehicle cutout area, and balanced footer padding).
+     - **Title Text Sizing:** Refined card titles (`variant.name`) from oversized `text-2xl` to balanced, legible `text-lg sm:text-xl font-bold font-card-title tracking-wide leading-snug`, eliminating awkward wrapping and preventing collisions with the vehicle cutouts.
+     - **Background Watermark Visibility:** Elevated faint `[0.045]` opacities across all background watermarks (`MODEL 01`, `MODEL 02`, `INTEGRITY`, `VOLTIX`, `ACCESS`, `REGISTER`, `404`) to bold, rich visible black contrast (`text-neutral-950/20` / `text-neutral-950/15`).
+
+
 

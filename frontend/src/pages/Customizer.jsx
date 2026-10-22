@@ -192,8 +192,8 @@ export default function Customizer() {
           {/* Left Canvas: Live Vehicle Render */}
           <div className="lg:col-span-7 space-y-4">
             <div className="rounded-3xl bg-gradient-to-b from-[#fafafa] to-[#f2f2f4] border border-neutral-200/90 shadow-md p-8 h-[420px] sm:h-[500px] flex items-center justify-center relative overflow-hidden group">
-              {/* Massive Anton Watermark Behind Vehicle */}
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-display text-8xl sm:text-9xl font-black text-neutral-950/[0.04] uppercase tracking-tighter select-none pointer-events-none whitespace-nowrap z-0">
+              {/* Massive Anton Watermark Behind Vehicle - Visible Black Contrast */}
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-display text-8xl sm:text-9xl font-black text-neutral-950/15 uppercase tracking-tighter select-none pointer-events-none whitespace-nowrap z-0">
                 {optionsData?.model_name || 'STUDIO'}
               </div>
 

@@ -10,8 +10,8 @@ export default function NotFound() {
   return (
     <div className="min-h-[70vh] flex items-center justify-center px-4 py-16 text-center">
       <div className="max-w-md w-full space-y-6 bg-white p-8 sm:p-10 rounded-3xl border border-neutral-200/90 shadow-xl relative overflow-hidden">
-        {/* Watermark */}
-        <div className="absolute top-2 left-1/2 -translate-x-1/2 font-display text-9xl font-black text-neutral-950/[0.04] uppercase select-none pointer-events-none whitespace-nowrap z-0">
+        {/* Watermark - Visible Black Contrast */}
+        <div className="absolute top-2 left-1/2 -translate-x-1/2 font-display text-9xl font-black text-neutral-950/10 uppercase select-none pointer-events-none whitespace-nowrap z-0">
           404
         </div>
 

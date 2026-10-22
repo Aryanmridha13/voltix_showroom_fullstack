@@ -69,8 +69,8 @@ export default function Home() {
           ========================================================================= */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="p-8 sm:p-14 rounded-3xl bg-white border border-neutral-200/90 shadow-xl relative overflow-hidden">
-          {/* Subtle Studio Watermark */}
-          <div className="absolute top-4 left-1/2 -translate-x-1/2 font-display text-7xl sm:text-9xl font-black text-neutral-950/[0.03] uppercase tracking-tighter select-none pointer-events-none whitespace-nowrap z-0">
+          {/* Studio Watermark - Visible Black Contrast */}
+          <div className="absolute top-4 left-1/2 -translate-x-1/2 font-display text-7xl sm:text-9xl font-black text-neutral-950/15 uppercase tracking-tighter select-none pointer-events-none whitespace-nowrap z-0">
             INTEGRITY
           </div>
 

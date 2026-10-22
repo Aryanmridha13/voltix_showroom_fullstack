@@ -60,8 +60,8 @@ export default function Login() {
   return (
     <div className="min-h-[75vh] flex items-center justify-center px-4 py-12">
       <div className="max-w-md w-full space-y-6 bg-white p-8 sm:p-10 rounded-3xl border border-neutral-200/90 shadow-xl relative overflow-hidden">
-        {/* Subtle Background Watermark */}
-        <div className="absolute top-2 left-1/2 -translate-x-1/2 font-display text-8xl font-black text-neutral-950/[0.03] uppercase tracking-tighter select-none pointer-events-none whitespace-nowrap z-0">
+        {/* Background Watermark - Visible Black Contrast */}
+        <div className="absolute top-2 left-1/2 -translate-x-1/2 font-display text-8xl font-black text-neutral-950/10 uppercase tracking-tighter select-none pointer-events-none whitespace-nowrap z-0">
           ACCESS
         </div>
 

@@ -144,8 +144,8 @@ export default function AngleShowcase() {
 
           {/* Center Stage: Vehicle Cutout with Dynamic Typography & Ground Shadow */}
           <div className="lg:col-span-6 relative flex flex-col items-center justify-center min-h-[380px] sm:min-h-[460px] order-1 lg:order-2">
-            {/* Massive Behind-Vehicle Text (Tesla style) */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-display text-7xl sm:text-9xl font-black text-neutral-950/[0.045] uppercase tracking-tighter select-none pointer-events-none whitespace-nowrap">
+            {/* Massive Behind-Vehicle Text (Tesla style) - Visible Black Contrast */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-display text-7xl sm:text-9xl font-black text-neutral-950/15 uppercase tracking-tighter select-none pointer-events-none whitespace-nowrap">
               {current.badge}
             </div>
 

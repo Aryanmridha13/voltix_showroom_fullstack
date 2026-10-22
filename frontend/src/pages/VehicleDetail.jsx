@@ -155,8 +155,8 @@ export default function VehicleDetail() {
         {/* Left: Image Display & Thumbnails */}
         <div className="lg:col-span-7 space-y-4">
           <div className="rounded-3xl bg-gradient-to-b from-[#fafafa] to-[#f2f2f4] border border-neutral-200/90 shadow-md p-8 h-[400px] sm:h-[480px] flex items-center justify-center relative overflow-hidden group">
-            {/* Watermark Behind Vehicle (Tesla style) */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-display text-8xl sm:text-9xl font-black text-neutral-950/[0.04] uppercase tracking-tighter select-none pointer-events-none whitespace-nowrap z-0">
+            {/* Watermark Behind Vehicle (Tesla style) - Visible Black Contrast */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-display text-8xl sm:text-9xl font-black text-neutral-950/15 uppercase tracking-tighter select-none pointer-events-none whitespace-nowrap z-0">
               {variant.model_details?.name || 'VOLTIX'}
             </div>
 
