@@ -13,6 +13,8 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import NotFound from './pages/NotFound';
 import PlaceholderPage from './pages/PlaceholderPage';
+import VehicleCatalogue from './pages/VehicleCatalogue';
+import VehicleDetail from './pages/VehicleDetail';
 
 export default function App() {
   return (
@@ -29,31 +31,9 @@ export default function App() {
                   <Route path="/login" element={<Login />} />
                   <Route path="/register" element={<Register />} />
 
-                  {/* Vehicle Catalogue (Phase 13) */}
-                  <Route
-                    path="/vehicles"
-                    element={
-                      <PlaceholderPage
-                        title="Vehicle Catalogue & Specs"
-                        phase="Phase 13 Milestone"
-                        description="Interactive EV catalogue with category filters, battery specs, price sorting, and dynamic imagery."
-                        actionText="Try 3D Customizer"
-                        actionLink="/customizer"
-                      />
-                    }
-                  />
-                  <Route
-                    path="/vehicles/:id"
-                    element={
-                      <PlaceholderPage
-                        title="Vehicle Specifications & Details"
-                        phase="Phase 13 Milestone"
-                        description="High-definition 360 viewer, technical specs sheet, verified rider reviews, and test ride trigger."
-                        actionText="View Catalogue"
-                        actionLink="/vehicles"
-                      />
-                    }
-                  />
+                  {/* Vehicle Catalogue & Details */}
+                  <Route path="/vehicles" element={<VehicleCatalogue />} />
+                  <Route path="/vehicles/:id" element={<VehicleDetail />} />
 
                   {/* 3D Customizer (Phase 14) */}
                   <Route
