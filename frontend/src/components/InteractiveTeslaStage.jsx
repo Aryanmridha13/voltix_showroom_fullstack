@@ -116,6 +116,24 @@ export default function InteractiveTeslaStage() {
       {/* 3D Three.js Ambient Particle Constellation & Pedestal (Subtle in Background) */}
       <ThreeVehicleStage accentColor={current.accentColor} />
 
+      {/* Ambient Radial Spotlight Illuminating Vehicle & Stage Background */}
+      <div
+        className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[85vw] max-w-[1000px] h-[500px] rounded-full blur-[120px] pointer-events-none transition-all duration-700 z-0 ${
+          isDarkMode
+            ? 'bg-gradient-to-tr from-emerald-500/20 via-cyan-500/15 to-transparent'
+            : 'bg-gradient-to-b from-white via-neutral-100/70 to-transparent'
+        }`}
+      />
+
+      {/* Studio Showroom Floor Horizon Seam */}
+      <div
+        className={`absolute bottom-0 inset-x-0 h-1/3 pointer-events-none transition-opacity duration-700 z-0 ${
+          isDarkMode
+            ? 'bg-gradient-to-t from-emerald-950/25 to-transparent'
+            : 'bg-gradient-to-t from-neutral-200/50 to-transparent'
+        }`}
+      />
+
       {/* Top Floating Controls Bar */}
       <div className="relative z-30 flex items-center justify-between w-full">
         {/* Brand Tag */}
@@ -181,7 +199,9 @@ export default function InteractiveTeslaStage() {
               transition={{ duration: 0.55, ease: 'easeOut' }}
               style={{ letterSpacing: '-0.025em', wordSpacing: 'normal' }}
               className={`font-display font-black text-[12vw] sm:text-[14vw] lg:text-[15vw] leading-none uppercase select-none transition-colors duration-700 whitespace-nowrap ${
-                isDarkMode ? 'text-white/[0.08]' : 'text-neutral-900'
+                isDarkMode
+                  ? 'text-white/20 drop-shadow-[0_0_40px_rgba(255,255,255,0.06)]'
+                  : 'text-neutral-900'
               }`}
             >
               {current.displayTitle}
@@ -297,13 +317,13 @@ export default function InteractiveTeslaStage() {
 
         {/* Right: 3 Rounded Action Pills (COMPARE NOW, CONFIGURE, ORDER NOW) */}
         <div className="lg:col-span-5 flex flex-wrap items-center justify-start lg:justify-end gap-3 sm:gap-4">
-          {/* 1. COMPARE NOW (Pill Outline) */}
+          {/* 1. COMPARE NOW (White Pill Button with bold black text) */}
           <Link
             to="/vehicles"
-            className={`px-6 py-2.5 rounded-full text-xs font-black uppercase tracking-wider transition-all duration-200 border active:scale-95 ${
+            className={`px-6 py-2.5 rounded-full text-xs font-black uppercase tracking-wider transition-all duration-200 border active:scale-95 shadow-md ${
               isDarkMode
-                ? 'border-slate-700 hover:border-emerald-400 text-slate-200 hover:text-white glass-panel'
-                : 'border-neutral-800 hover:bg-neutral-200/60 text-neutral-900 bg-transparent'
+                ? 'bg-white hover:bg-neutral-100 text-neutral-950 hover:text-black border-white'
+                : 'bg-white hover:bg-neutral-100 text-neutral-950 hover:text-black border-neutral-300'
             }`}
           >
             Compare Now
