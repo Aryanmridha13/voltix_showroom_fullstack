@@ -18,7 +18,7 @@ export default function Footer() {
               <BatteryCharging className="w-7 h-7 text-emerald-600" />
             </div>
             <div>
-              <h4 className="text-[15px] font-card-title text-neutral-950 uppercase tracking-card mb-0.5">5-Year Battery Warranty</h4>
+              <h4 className="text-[16px] sm:text-[17px] font-bold font-sans text-neutral-950 tracking-tight leading-snug mb-1">5-Year Battery Warranty</h4>
               <p className="text-xs sm:text-[13px] text-neutral-500 font-medium leading-relaxed">Up to 80% capacity guarantee over 100,000 km.</p>
             </div>
           </div>
@@ -28,7 +28,7 @@ export default function Footer() {
               <ShieldCheck className="w-7 h-7 text-neutral-950" />
             </div>
             <div>
-              <h4 className="text-[15px] font-card-title text-neutral-950 uppercase tracking-card mb-0.5">100% Genuine Spare Parts</h4>
+              <h4 className="text-[16px] sm:text-[17px] font-bold font-sans text-neutral-950 tracking-tight leading-snug mb-1">100% Genuine Spare Parts</h4>
               <p className="text-xs sm:text-[13px] text-neutral-500 font-medium leading-relaxed">Direct from factory inventory with full traceability.</p>
             </div>
           </div>
@@ -38,7 +38,7 @@ export default function Footer() {
               <Clock className="w-7 h-7 text-emerald-700" />
             </div>
             <div>
-              <h4 className="text-[15px] font-card-title text-neutral-950 uppercase tracking-card mb-0.5">Instant Slot Booking</h4>
+              <h4 className="text-[16px] sm:text-[17px] font-bold font-sans text-neutral-950 tracking-tight leading-snug mb-1">Instant Slot Booking</h4>
               <p className="text-xs sm:text-[13px] text-neutral-500 font-medium leading-relaxed">Guaranteed 45-min experiential test ride booking.</p>
             </div>
           </div>

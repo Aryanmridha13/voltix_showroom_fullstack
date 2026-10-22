@@ -372,6 +372,14 @@
        - Implemented defensive array safeguards in `SparePartsCatalogue.jsx` (`Array.isArray(parts) ? parts : []`) across filtering, sorting, and category pill counts.
        - Implemented missing `submitInquiry(payload)` method in `partsService.js` with reservation hold token generation (`HOLD-XXXXXX`).
 
+  7. **Footer Guarantee Badge Titles Typography Pattern:**
+     - Applied user-requested reference typography pattern (inspired by modern geometric sans title case layout):
+       - Replaced all-caps `font-card-title` with natural Title Case: `5-Year Battery Warranty`, `100% Genuine Spare Parts`, `Instant Slot Booking`.
+       - Styled with `font-sans font-bold text-[16px] sm:text-[17px] text-neutral-950 tracking-tight leading-snug mb-1`.
+       - Preserved description styling and expanded card proportions.
+
+
+
 
 
 
