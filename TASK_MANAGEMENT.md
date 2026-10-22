@@ -229,7 +229,8 @@
      - *Fix in `frontend/src/pages/Login.jsx`:* Added 1-click demo login buttons for **Admin** and **Customer**.
   5. **Transparent High-Resolution EV Scooter Cutouts:**
      - Processed 3 user-provided real EV scooter photos (`scooter_grey.png`, `scooter_red.png`, `scooter_blue.png`) with advanced edge-connected BFS and alpha feathering, completely removing white studio backgrounds, enclosed chassis voids, and ground shadow smudges while keeping headlight reflections and tire treads 100% intact.
-     - Assigned images across all 11 varian   6. **Automotive Reference UI (Tesla, Porsche & Roadster Design System):**
+     - Assigned transparent cutouts across all 11 variant models in the showroom database.
+   6. **Automotive Reference UI (Tesla, Porsche & Roadster Design System):**
      - Installed `three` and `framer-motion` for React 19.
      - Built `ThreeVehicleStage.jsx`: Interactive Three.js 3D particle constellation and rotating holographic showroom pedestal with mouse-tracking lighting.
      - Built `HorizontalVehicleShowcase.jsx`: Framer Motion draggable and scrollable left-to-right fleet showcase with massive behind-the-card watermark typography and performance chips.
@@ -241,11 +242,22 @@
        - Exact lower-left layout with vertical accent bar + editorial vehicle edition brief.
        - Exact lower-right pill button cluster: `COMPARE NOW`, `CONFIGURE`, `ORDER NOW`.
        - 1-click Studio Light / Cyber Dark dual mode toggle.
-     - Enhanced `VehicleCatalogue.jsx` with Framer Motion staggered entry animations.
+   7. **Global High-Key White Studio & Bold Editorial Typography Overhaul:**
+     - Applied clean White Studio background (`#f6f6f8` / `#ffffff`) across the entire root canvas (`App.jsx`), removing all dark container overrides.
+     - Standardized on Google Fonts **`Anton`** & **`Syne`** for bold, tight-tracking, uppercase display headlines (`font-display`) and massive watermark lettering across all views.
+     - Transformed all cards across the application into pure white luxury studio cards (`bg-white border border-neutral-200/90 shadow-md hover:shadow-2xl rounded-3xl`) with soft ground shadows beneath vehicle wheels:
+       - **Home Page (`Home.jsx`):** White studio stats counter card with subtle `INTEGRITY` watermark and white rounded-full live node health indicator.
+       - **Vehicle Catalogue (`VehicleCatalogue.jsx`):** Clean white cards with `Anton` watermark typography, pill filter buttons, and solid black `rounded-full` CTA buttons.
+       - **Vehicle Detail (`VehicleDetail.jsx`):** Pure white studio showcase container with watermark lettering, high-key specification matrix cards, and clean review cards.
+       - **3D Customizer (`Customizer.jsx`):** White studio paint canvas with watermark model lettering, rounded swatch pills, and real-time backend price engine card.
+       - **Book Test Ride (`BookTestRide.jsx`):** White studio vehicle selection cards, pill slot buttons, and rider verification card.
+       - **My Test Rides (`MyBookings.jsx`):** White studio rider dashboard cards, pill status badges, and quick reservation actions.
+       - **Spare Parts Catalogue (`SparePartsCatalogue.jsx`):** White OEM component cards, rounded search pills, and clean inquiry reservation modal.
+       - **Authentication (`Login.jsx`, `Register.jsx`, `NotFound.jsx`):** Crisp white cards with `font-display` `Anton` headers, demo accounts bar, and black pill submit buttons.
+       - **Navbar & Footer (`Navbar.jsx`, `Footer.jsx`):** Frosted white glass navbar with black pill CTA and studio off-white footer with 3 pure white guarantee cards.
 - **Why it was implemented:**
-  - Elevates the showroom UX from a traditional web page into an award-winning automotive brand digital experience matching Tesla, Porsche, and Lucid Motors.
-- **Git Commit:** `c0bd752` on branch `feature/phase-18-system-hardening`.
-
+  - Elevates the showroom UX from a traditional web page into an award-winning automotive brand digital experience matching Tesla, Porsche, and Lucid Motors, fulfilling the user's directive to make all sections feature a clean white background, Anton typography, and studio cards.
+- **Git Commit:** `feature/phase-18-system-hardening`.
 ---
 
 ## 🛑 3. Current Stopping Point & Next Steps (Resume Checkpoint)

@@ -16,6 +16,11 @@ import { motion } from 'framer-motion';
 import vehicleService from '../services/vehicleService';
 import { useAlert } from '../context/AlertContext';
 
+/**
+ * VehicleCatalogue Page
+ * High-key White Studio Automotive Catalogue matching the Tesla / Porsche clean studio aesthetic.
+ * Clean white cards, bold Anton display typography, rounded pill filters and buttons.
+ */
 export default function VehicleCatalogue() {
   const [searchParams, setSearchParams] = useSearchParams();
   const { error: showError } = useAlert();
@@ -104,22 +109,22 @@ export default function VehicleCatalogue() {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-10">
       {/* Catalogue Header */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-slate-800 pb-8">
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-neutral-200/90 pb-8">
         <div>
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-xs font-semibold uppercase tracking-wider mb-2">
-            <Zap className="w-3.5 h-3.5" />
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-neutral-900 text-white text-xs font-bold uppercase tracking-wider mb-2 shadow-sm">
+            <Zap className="w-3.5 h-3.5 text-emerald-400" />
             Zero-Emission Fleet
           </div>
-          <h1 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+          <h1 className="text-4xl sm:text-6xl font-display font-black text-neutral-950 tracking-tight uppercase">
             Vehicle Catalogue
           </h1>
-          <p className="text-sm text-slate-400 mt-1">
+          <p className="text-sm text-neutral-500 mt-1 font-medium max-w-2xl">
             Engineered for pure electric performance, intelligent range, and unmatched acceleration.
           </p>
         </div>
-        <div className="text-xs font-medium text-slate-400">
-          Showing <span className="text-cyan-400 font-bold">{vehicles.length}</span> of{' '}
-          <span className="text-white font-bold">{meta.total_records}</span> configured models
+        <div className="text-xs font-semibold text-neutral-500">
+          Showing <span className="text-neutral-950 font-bold">{vehicles.length}</span> of{' '}
+          <span className="text-neutral-950 font-bold">{meta.total_records}</span> configured models
         </div>
       </div>
 
@@ -129,7 +134,7 @@ export default function VehicleCatalogue() {
         <div className="flex flex-col sm:flex-row gap-3">
           {/* Search Box */}
           <div className="relative flex-1">
-            <Search className="w-4 h-4 text-slate-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
+            <Search className="w-4 h-4 text-neutral-400 absolute left-4 top-1/2 -translate-y-1/2" />
             <input
               type="text"
               value={searchQuery}
@@ -138,19 +143,19 @@ export default function VehicleCatalogue() {
                 setPage(1);
               }}
               placeholder="Search by vehicle name, model, or variant..."
-              className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-900/90 border border-slate-800 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500 transition-colors"
+              className="w-full pl-11 pr-4 py-2.5 rounded-full bg-white border border-neutral-300 text-sm text-neutral-900 placeholder-neutral-400 focus:outline-none focus:border-neutral-900 shadow-xs transition-colors"
             />
           </div>
 
           {/* Driving Range Filter */}
-          <div className="sm:w-48">
+          <div className="sm:w-52">
             <select
               value={minRange}
               onChange={(e) => {
                 setMinRange(e.target.value);
                 setPage(1);
               }}
-              className="w-full px-3.5 py-2.5 rounded-xl bg-slate-900/90 border border-slate-800 text-sm text-slate-200 focus:outline-none focus:border-cyan-500"
+              className="w-full px-4 py-2.5 rounded-full bg-white border border-neutral-300 text-sm text-neutral-800 focus:outline-none focus:border-neutral-900 shadow-xs cursor-pointer"
             >
               <option value="">All Driving Ranges</option>
               <option value="100">100+ KM Range</option>
@@ -168,7 +173,7 @@ export default function VehicleCatalogue() {
                 setOrdering(e.target.value);
                 setPage(1);
               }}
-              className="w-full px-3.5 py-2.5 rounded-xl bg-slate-900/90 border border-slate-800 text-sm text-slate-200 focus:outline-none focus:border-cyan-500"
+              className="w-full px-4 py-2.5 rounded-full bg-white border border-neutral-300 text-sm text-neutral-800 focus:outline-none focus:border-neutral-900 shadow-xs cursor-pointer"
             >
               <option value="base_price">Price: Low to High</option>
               <option value="-base_price">Price: High to Low</option>
@@ -180,7 +185,7 @@ export default function VehicleCatalogue() {
           {(selectedCategory || searchQuery || minRange || ordering !== 'base_price') && (
             <button
               onClick={handleResetFilters}
-              className="px-3.5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-750 text-slate-300 text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors"
+              className="px-5 py-2.5 rounded-full bg-neutral-100 hover:bg-neutral-200 text-neutral-800 text-xs font-bold flex items-center justify-center gap-1.5 border border-neutral-300 shadow-xs transition-colors"
             >
               <RotateCcw className="w-3.5 h-3.5" />
               Reset
@@ -195,10 +200,10 @@ export default function VehicleCatalogue() {
               setSelectedCategory('');
               setPage(1);
             }}
-            className={`px-4 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all ${
+            className={`px-5 py-2 rounded-full text-xs font-bold uppercase tracking-wider whitespace-nowrap transition-all ${
               selectedCategory === ''
-                ? 'bg-gradient-to-r from-emerald-500 via-emerald-400 to-lime-400 text-slate-950 shadow-md shadow-emerald-500/25 font-bold'
-                : 'bg-slate-900/80 text-slate-400 hover:text-white border border-emerald-950/80 hover:border-emerald-700/60'
+                ? 'bg-neutral-950 text-white shadow-md shadow-neutral-900/20 scale-102'
+                : 'bg-white text-neutral-700 hover:text-neutral-950 border border-neutral-300 hover:border-neutral-400 shadow-xs'
             }`}
           >
             All Categories ({meta.total_records})
@@ -211,19 +216,19 @@ export default function VehicleCatalogue() {
                 setSelectedCategory(cat.slug);
                 setPage(1);
               }}
-              className={`px-4 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all flex items-center gap-1.5 ${
+              className={`px-5 py-2 rounded-full text-xs font-bold uppercase tracking-wider whitespace-nowrap transition-all flex items-center gap-1.5 ${
                 selectedCategory === cat.slug
-                  ? 'bg-gradient-to-r from-emerald-500 via-emerald-400 to-lime-400 text-slate-950 shadow-md shadow-emerald-500/25 font-bold'
-                  : 'bg-slate-900/80 text-slate-400 hover:text-white border border-emerald-950/80 hover:border-emerald-700/60'
+                  ? 'bg-neutral-950 text-white shadow-md shadow-neutral-900/20 scale-102'
+                  : 'bg-white text-neutral-700 hover:text-neutral-950 border border-neutral-300 hover:border-neutral-400 shadow-xs'
               }`}
             >
               <span>{cat.name}</span>
               {cat.models_count !== undefined && (
                 <span
-                  className={`text-[10px] px-1.5 py-0.2 rounded-full ${
+                  className={`text-[10px] px-2 py-0.5 rounded-full font-bold ${
                     selectedCategory === cat.slug
-                      ? 'bg-slate-950/20 text-slate-950 font-black'
-                      : 'bg-slate-800 text-slate-400'
+                      ? 'bg-white/20 text-white'
+                      : 'bg-neutral-100 text-neutral-600'
                   }`}
                 >
                   {cat.models_count}
@@ -240,29 +245,29 @@ export default function VehicleCatalogue() {
           {[1, 2, 3, 4, 5, 6].map((idx) => (
             <div
               key={idx}
-              className="rounded-3xl glass-card p-6 h-96 animate-pulse bg-slate-900/40 border border-slate-800 flex flex-col justify-between"
+              className="rounded-3xl bg-white border border-neutral-200 p-6 h-96 animate-pulse flex flex-col justify-between shadow-sm"
             >
-              <div className="h-44 bg-slate-800/60 rounded-2xl" />
+              <div className="h-44 bg-neutral-100 rounded-2xl" />
               <div className="space-y-3 pt-4">
-                <div className="h-4 bg-slate-800/80 rounded w-1/3" />
-                <div className="h-6 bg-slate-800 rounded w-3/4" />
-                <div className="h-4 bg-slate-800/60 rounded w-1/2" />
+                <div className="h-4 bg-neutral-200 rounded w-1/3" />
+                <div className="h-6 bg-neutral-200 rounded w-3/4" />
+                <div className="h-4 bg-neutral-100 rounded w-1/2" />
               </div>
             </div>
           ))}
         </div>
       ) : vehicles.length === 0 ? (
-        <div className="text-center py-20 glass-panel rounded-3xl border border-slate-800 space-y-4">
-          <div className="w-16 h-16 rounded-2xl bg-cyan-500/10 text-cyan-400 flex items-center justify-center mx-auto">
+        <div className="text-center py-20 bg-white rounded-3xl border border-neutral-200 shadow-sm space-y-4">
+          <div className="w-16 h-16 rounded-2xl bg-neutral-100 text-neutral-900 flex items-center justify-center mx-auto border border-neutral-200">
             <SlidersHorizontal className="w-8 h-8" />
           </div>
-          <h3 className="text-lg font-bold text-white">No vehicles found matching filters</h3>
-          <p className="text-xs text-slate-400 max-w-sm mx-auto">
+          <h3 className="text-lg font-display font-black text-neutral-950 uppercase">No vehicles found matching filters</h3>
+          <p className="text-xs text-neutral-500 max-w-sm mx-auto font-medium">
             Try adjusting your search criteria, clearing the minimum range, or selecting a different category.
           </p>
           <button
             onClick={handleResetFilters}
-            className="px-4 py-2 rounded-xl bg-slate-800 text-cyan-400 text-xs font-semibold hover:bg-slate-750 transition-colors"
+            className="px-5 py-2.5 rounded-full bg-neutral-950 text-white text-xs font-bold uppercase tracking-wider hover:bg-neutral-800 transition-colors shadow-sm"
           >
             Clear All Filters
           </button>
@@ -276,18 +281,17 @@ export default function VehicleCatalogue() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.45, delay: index * 0.06 }}
               whileHover={{ y: -8, transition: { duration: 0.25 } }}
-              className="rounded-3xl glass-card overflow-hidden flex flex-col border border-emerald-950/80 group bg-[#04120a]/80 shadow-2xl relative"
+              className="rounded-3xl bg-white border border-neutral-200/90 shadow-md hover:shadow-2xl hover:border-neutral-400 overflow-hidden flex flex-col justify-between group transition-all relative"
             >
-              {/* Image Container */}
-              <div className="h-56 bg-gradient-to-b from-[#05140e] to-[#020b07] relative flex items-center justify-center p-6 overflow-hidden border-b border-emerald-950/60">
+              {/* Image Container with Watermark Typography and Ground Shadow */}
+              <div className="h-60 bg-gradient-to-b from-[#fafafa] to-[#f2f2f4] relative flex items-center justify-center p-6 overflow-hidden border-b border-neutral-200/80">
                 {/* Background Watermark Model Name (Tesla Reference 1 style) */}
-                <div className="absolute top-2 left-1/2 -translate-x-1/2 text-5xl font-black text-white/[0.04] uppercase tracking-tighter select-none pointer-events-none whitespace-nowrap z-0">
+                <div className="absolute top-3 left-1/2 -translate-x-1/2 font-display text-5xl sm:text-6xl font-black text-neutral-950/[0.045] uppercase tracking-tighter select-none pointer-events-none whitespace-nowrap z-0">
                   {variant.model_name}
                 </div>
 
-                {/* Ambient Radial Lighting Glow */}
-                <div className="absolute inset-0 bg-gradient-to-t from-emerald-500/10 via-transparent to-transparent pointer-events-none" />
-                <div className="absolute w-40 h-40 rounded-full bg-emerald-500/15 blur-2xl group-hover:bg-lime-400/25 group-hover:scale-125 transition-all duration-700 pointer-events-none" />
+                {/* Soft ground shadow ellipse beneath wheels */}
+                <div className="absolute bottom-4 w-48 h-6 rounded-[100%] bg-neutral-900/15 blur-md pointer-events-none" />
 
                 <img
                   src={
@@ -295,72 +299,72 @@ export default function VehicleCatalogue() {
                     '/vehicles/scooter_blue.png'
                   }
                   alt={`${variant.model_name} ${variant.name}`}
-                  className="max-h-full w-auto object-contain drop-shadow-[0_12px_24px_rgba(0,0,0,0.85)] group-hover:scale-110 group-hover:-translate-y-1 transition-all duration-500 relative z-10"
+                  className="max-h-full w-auto object-contain drop-shadow-[0_12px_24px_rgba(0,0,0,0.3)] group-hover:scale-108 transition-all duration-500 relative z-10"
                   onError={(e) => {
                     e.target.onerror = null;
                     e.target.src = '/vehicles/scooter_blue.png';
                   }}
                 />
-                <span className="absolute top-4 left-4 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-slate-950/80 text-emerald-300 border border-emerald-950/80 backdrop-blur-md z-20">
+                <span className="absolute top-4 left-4 px-3 py-1 rounded-full text-[11px] font-bold bg-white/95 text-neutral-900 border border-neutral-300 shadow-xs z-20">
                   {variant.category_name}
                 </span>
                 {variant.original_price && (
-                  <span className="absolute top-4 right-4 px-2.5 py-1 rounded-full text-[11px] font-bold bg-lime-500/20 text-lime-300 border border-lime-500/30 backdrop-blur-md flex items-center gap-1 z-20">
-                    <Tag className="w-3 h-3" /> Special Offer
+                  <span className="absolute top-4 right-4 px-3 py-1 rounded-full text-[11px] font-bold bg-neutral-950 text-white shadow-xs flex items-center gap-1 z-20">
+                    <Tag className="w-3 h-3 text-emerald-400" /> Special
                   </span>
                 )}
               </div>
 
               {/* Card Body */}
-              <div className="p-6 flex-1 flex flex-col justify-between space-y-5">
+              <div className="p-6 flex-1 flex flex-col justify-between space-y-5 bg-gradient-to-t from-neutral-50/50 via-white to-transparent">
                 <div>
-                  <p className="text-xs font-medium text-slate-400 uppercase tracking-wider">
+                  <p className="text-[11px] font-bold text-emerald-700 uppercase tracking-widest">
                     {variant.model_name}
                   </p>
-                  <h3 className="text-xl font-bold text-white group-hover:text-emerald-400 transition-colors">
+                  <h3 className="text-2xl font-display font-black text-neutral-950 group-hover:text-emerald-700 transition-colors uppercase tracking-tight">
                     {variant.name}
                   </h3>
                 </div>
 
                 {/* Key Spec Badges */}
-                <div className="grid grid-cols-3 gap-2 py-3 px-3 rounded-2xl bg-[#030e09]/70 border border-emerald-950/60 text-center">
+                <div className="grid grid-cols-3 gap-2 py-3 px-3 rounded-2xl bg-neutral-100/80 border border-neutral-200 text-center">
                   <div>
-                    <div className="flex items-center justify-center gap-1 text-emerald-400 text-xs font-bold">
+                    <div className="flex items-center justify-center gap-1 text-emerald-700 text-xs font-black">
                       <BatteryCharging className="w-3.5 h-3.5" />
                       {variant.driving_range_km || 140} km
                     </div>
-                    <span className="text-[10px] text-slate-400 uppercase">True Range</span>
+                    <span className="text-[10px] text-neutral-500 uppercase font-bold">True Range</span>
                   </div>
 
-                  <div className="border-x border-emerald-950/80">
-                    <div className="flex items-center justify-center gap-1 text-lime-400 text-xs font-bold">
+                  <div className="border-x border-neutral-300">
+                    <div className="flex items-center justify-center gap-1 text-neutral-950 text-xs font-black">
                       <Gauge className="w-3.5 h-3.5" />
                       {variant.top_speed_kmh || 90} km/h
                     </div>
-                    <span className="text-[10px] text-slate-400 uppercase">Top Speed</span>
+                    <span className="text-[10px] text-neutral-500 uppercase font-bold">Top Speed</span>
                   </div>
 
                   <div>
-                    <div className="text-slate-200 text-xs font-bold truncate px-1">
+                    <div className="text-neutral-900 text-xs font-black truncate px-1">
                       {variant.battery_type || 'LiFePO4'}
                     </div>
-                    <span className="text-[10px] text-slate-400 uppercase">Cell Chemistry</span>
+                    <span className="text-[10px] text-neutral-500 uppercase font-bold">Chemistry</span>
                   </div>
                 </div>
 
                 {/* Pricing & CTAs */}
-                <div className="pt-2 border-t border-slate-800/80 space-y-3">
+                <div className="pt-2 border-t border-neutral-200 space-y-3">
                   <div className="flex items-baseline justify-between">
                     <div>
-                      <span className="text-[10px] uppercase font-semibold text-slate-400 block">
+                      <span className="text-[10px] uppercase font-bold text-neutral-500 block">
                         Ex-Showroom Price
                       </span>
-                      <span className="text-xl font-extrabold text-white">
+                      <span className="text-2xl font-display font-black text-neutral-950">
                         {formatINR(variant.base_price)}
                       </span>
                     </div>
                     {variant.original_price && (
-                      <span className="text-xs text-slate-500 line-through">
+                      <span className="text-xs text-neutral-400 line-through font-medium">
                         {formatINR(variant.original_price)}
                       </span>
                     )}
@@ -370,24 +374,24 @@ export default function VehicleCatalogue() {
                   <div className="grid grid-cols-2 gap-2 pt-1">
                     <Link
                       to={`/vehicles/${variant.id}`}
-                      className="flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl bg-slate-800/90 hover:bg-slate-750 text-white text-xs font-semibold transition-colors"
+                      className="flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-full bg-white hover:bg-neutral-100 border border-neutral-300 text-neutral-900 text-xs font-bold transition-colors shadow-xs"
                     >
                       Full Specs
-                      <ArrowRight className="w-3.5 h-3.5 text-emerald-400" />
+                      <ArrowRight className="w-3.5 h-3.5 text-neutral-950" />
                     </Link>
 
                     <Link
                       to={`/customizer?variant=${variant.id}`}
-                      className="flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl bg-lime-500/10 hover:bg-lime-500/20 text-lime-300 border border-lime-500/30 text-xs font-semibold transition-colors"
+                      className="flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-full bg-white hover:bg-neutral-100 border border-neutral-300 text-neutral-900 text-xs font-bold transition-colors shadow-xs"
                     >
-                      <Sparkles className="w-3.5 h-3.5 text-lime-400" />
+                      <Sparkles className="w-3.5 h-3.5 text-emerald-600" />
                       Customizer
                     </Link>
                   </div>
 
                   <Link
                     to={`/book-test-ride?variant=${variant.id}`}
-                    className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 via-emerald-400 to-lime-400 text-slate-950 font-bold text-xs hover:opacity-95 shadow-md shadow-emerald-500/20 transition-all"
+                    className="w-full flex items-center justify-center gap-2 py-3 rounded-full bg-neutral-950 text-white font-bold text-xs uppercase tracking-wider hover:bg-neutral-800 shadow-md shadow-neutral-900/20 active:scale-98 transition-all"
                   >
                     <Calendar className="w-3.5 h-3.5" />
                     Book Experiential Test Ride
@@ -401,21 +405,21 @@ export default function VehicleCatalogue() {
 
       {/* Pagination Controls */}
       {meta.total_pages > 1 && (
-        <div className="flex items-center justify-center gap-3 pt-8 border-t border-slate-800">
+        <div className="flex items-center justify-center gap-3 pt-8 border-t border-neutral-200">
           <button
             onClick={() => setPage((p) => Math.max(1, p - 1))}
             disabled={page === 1}
-            className="px-4 py-2 rounded-xl bg-slate-900 border border-slate-800 text-xs font-semibold text-slate-300 disabled:opacity-40 hover:border-slate-700 transition-colors"
+            className="px-5 py-2 rounded-full bg-white border border-neutral-300 text-xs font-bold text-neutral-800 disabled:opacity-40 hover:border-neutral-500 shadow-xs transition-colors"
           >
             Previous
           </button>
-          <span className="text-xs font-medium text-slate-400">
-            Page <span className="text-white font-bold">{page}</span> of {meta.total_pages}
+          <span className="text-xs font-bold text-neutral-500">
+            Page <span className="text-neutral-950 font-black">{page}</span> of {meta.total_pages}
           </span>
           <button
             onClick={() => setPage((p) => Math.min(meta.total_pages, p + 1))}
             disabled={page === meta.total_pages}
-            className="px-4 py-2 rounded-xl bg-slate-900 border border-slate-800 text-xs font-semibold text-slate-300 disabled:opacity-40 hover:border-slate-700 transition-colors"
+            className="px-5 py-2 rounded-full bg-white border border-neutral-300 text-xs font-bold text-neutral-800 disabled:opacity-40 hover:border-neutral-500 shadow-xs transition-colors"
           >
             Next
           </button>

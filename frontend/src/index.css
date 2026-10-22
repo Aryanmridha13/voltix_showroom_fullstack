@@ -2,99 +2,93 @@
 
 @layer base {
   :root {
-    --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    --color-primary: #10b981;
-    --color-primary-glow: rgba(16, 185, 129, 0.35);
-    --color-accent: #84cc16;
-    --color-accent-glow: rgba(132, 204, 22, 0.35);
+    --font-sans: 'Outfit', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --color-primary: #111827;
+    --color-primary-glow: rgba(0, 0, 0, 0.12);
+    --color-accent: #10b981;
+    --color-accent-glow: rgba(16, 185, 129, 0.25);
   }
 
   body {
     font-family: var(--font-sans);
-    background-color: #030d09;
-    color: #f1f5f9;
+    background-color: #f6f6f8;
+    color: #171717;
     min-height: 100vh;
     overflow-x: hidden;
-    selection-background-color: #84cc16;
-    selection-color: #030d09;
+    selection-background-color: #111827;
+    selection-color: #ffffff;
   }
 
-  /* Custom Sleek Eco-Performance Scrollbar */
+  /* Custom Clean Studio Scrollbar */
   ::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
+    width: 7px;
+    height: 7px;
   }
   ::-webkit-scrollbar-track {
-    background: #05140e;
+    background: #ebebee;
   }
   ::-webkit-scrollbar-thumb {
-    background: #112d20;
-    border-radius: 4px;
-    border: 1px solid rgba(16, 185, 129, 0.15);
+    background: #cbd5e1;
+    border-radius: 9999px;
   }
   ::-webkit-scrollbar-thumb:hover {
-    background: #10b981;
+    background: #94a3b8;
   }
 }
 
-/* Glassmorphism and Neon Eco Glow Utilities */
+/* Studio Glassmorphism and Luxury Shadow Utilities */
 .glass-panel {
-  background: rgba(5, 20, 14, 0.78);
+  background: rgba(255, 255, 255, 0.88);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(52, 211, 153, 0.12);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.03);
 }
 
 .glass-card {
-  background: rgba(5, 20, 14, 0.68);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(52, 211, 153, 0.1);
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 25px -4px rgba(0, 0, 0, 0.05);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .glass-card:hover {
-  border-color: rgba(132, 204, 22, 0.45);
-  box-shadow: 0 12px 30px -10px rgba(16, 185, 129, 0.22);
-  transform: translateY(-2px);
+  border-color: rgba(0, 0, 0, 0.22);
+  box-shadow: 0 16px 38px -8px rgba(0, 0, 0, 0.12);
+  transform: translateY(-4px);
 }
 
-.neon-glow-emerald {
-  box-shadow: 0 0 25px -4px rgba(16, 185, 129, 0.45);
-}
-
-.neon-glow-lime {
-  box-shadow: 0 0 25px -4px rgba(132, 204, 22, 0.45);
-}
-
+/* High-contrast and subtle text gradient utilities */
 .text-gradient-emerald {
-  background: linear-gradient(135deg, #34d399 0%, #10b981 45%, #a3e635 100%);
+  background: linear-gradient(135deg, #111827 0%, #059669 60%, #10b981 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
-.text-gradient-lime {
-  background: linear-gradient(135deg, #a3e635 0%, #84cc16 50%, #10b981 100%);
+.text-gradient-dark {
+  background: linear-gradient(135deg, #0a0a0a 0%, #262626 50%, #525252 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
-.btn-emerald-glow {
-  background: linear-gradient(135deg, #10b981 0%, #059669 40%, #84cc16 100%);
-  box-shadow: 0 4px 20px -3px rgba(16, 185, 129, 0.35);
+.btn-studio-black {
+  background: #111827;
+  color: #ffffff;
+  border-radius: 9999px;
+  box-shadow: 0 4px 16px -2px rgba(0, 0, 0, 0.25);
   transition: all 0.2s ease-in-out;
 }
 
-.btn-emerald-glow:hover {
-  background: linear-gradient(135deg, #34d399 0%, #10b981 50%, #a3e635 100%);
-  box-shadow: 0 6px 26px -2px rgba(132, 204, 22, 0.5);
+.btn-studio-black:hover {
+  background: #000000;
+  box-shadow: 0 6px 22px -2px rgba(0, 0, 0, 0.4);
   transform: translateY(-1px);
 }
 
 /* Automotive Bold Typography & 3D Stage Utilities */
 .font-display {
-  font-family: 'Anton', 'Syne', -apple-system, sans-serif;
-  letter-spacing: -0.02em;
+  font-family: 'Anton', 'Syne', -apple-system, BlinkMacSystemFont, sans-serif;
+  letter-spacing: -0.025em;
 }
 
 .perspective-1200 {

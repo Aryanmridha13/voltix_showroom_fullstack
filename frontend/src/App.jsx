@@ -26,7 +26,7 @@ export default function App() {
       <AlertProvider>
         <AuthProvider>
           <BrowserRouter>
-            <div className="flex flex-col min-h-screen bg-[#030d09] text-slate-100 selection:bg-lime-400 selection:text-slate-950">
+            <div className="flex flex-col min-h-screen bg-[#f6f6f8] text-neutral-900 selection:bg-neutral-900 selection:text-white">
               <Navbar />
               <main className="flex-1">
                 <Routes>

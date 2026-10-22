@@ -14,6 +14,10 @@ import {
 import { useAuth } from '../context/AuthContext';
 import { useAlert } from '../context/AlertContext';
 
+/**
+ * Navbar Component
+ * High-key White Studio Automotive Navigation matching Tesla / Porsche design language.
+ */
 export default function Navbar() {
   const { user, isAuthenticated, isAdmin, isCustomer, logout } = useAuth();
   const { success } = useAlert();
@@ -29,23 +33,23 @@ export default function Navbar() {
   };
 
   const navLinkClass = ({ isActive }) =>
-    `text-sm font-medium transition-colors py-1 relative ${
+    `text-xs font-bold uppercase tracking-wider transition-colors py-1 relative ${
       isActive
-        ? 'text-emerald-400 after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-gradient-to-r after:from-emerald-400 after:to-lime-400'
-        : 'text-slate-300 hover:text-white'
+        ? 'text-neutral-950 after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-neutral-950'
+        : 'text-neutral-600 hover:text-neutral-950'
     }`;
 
   return (
-    <header className="sticky top-0 z-40 w-full glass-panel border-b border-emerald-950/60 bg-[#05140e]/90 backdrop-blur-md">
+    <header className="sticky top-0 z-40 w-full border-b border-neutral-200/90 bg-white/90 backdrop-blur-md shadow-xs">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
         {/* Brand Logo */}
         <Link to="/" className="flex items-center gap-3 group">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-500 via-teal-400 to-lime-400 flex items-center justify-center shadow-lg shadow-emerald-500/25 group-hover:scale-105 transition-transform">
-            <Zap className="w-5 h-5 text-slate-950 fill-slate-950" />
+          <div className="w-10 h-10 rounded-full bg-neutral-950 flex items-center justify-center shadow-md shadow-neutral-900/20 group-hover:scale-105 transition-transform">
+            <Zap className="w-5 h-5 text-emerald-400 fill-emerald-400" />
           </div>
           <div>
-            <span className="text-xl font-bold tracking-wider text-white">VOLTIX</span>
-            <span className="text-xs font-semibold tracking-widest text-lime-400 block -mt-1 uppercase">
+            <span className="text-2xl font-display font-black tracking-tight text-neutral-950 block">VOLTIX</span>
+            <span className="text-[10px] font-bold tracking-widest text-emerald-700 block -mt-1.5 uppercase">
               EV Motors
             </span>
           </div>
@@ -58,28 +62,28 @@ export default function Navbar() {
           </NavLink>
           <NavLink to="/customizer" className={navLinkClass}>
             <span className="flex items-center gap-1.5">
-              <Sparkles className="w-4 h-4 text-lime-400" />
+              <Sparkles className="w-4 h-4 text-emerald-600" />
               Customizer
             </span>
           </NavLink>
           <NavLink to="/book-test-ride" className={navLinkClass}>
             <span className="flex items-center gap-1.5">
-              <Calendar className="w-4 h-4 text-emerald-400" />
+              <Calendar className="w-4 h-4 text-neutral-950" />
               Book Test Ride
             </span>
           </NavLink>
           <NavLink to="/parts" className={navLinkClass}>
             <span className="flex items-center gap-1.5">
-              <Wrench className="w-4 h-4 text-teal-400" />
+              <Wrench className="w-4 h-4 text-neutral-600" />
               Spare Parts
             </span>
           </NavLink>
           {isAdmin && (
             <NavLink
               to="/admin"
-              className="text-xs font-semibold px-2.5 py-1 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-500/35 hover:border-lime-400/50 flex items-center gap-1"
+              className="text-xs font-bold uppercase tracking-wider px-3.5 py-1.5 rounded-full bg-neutral-100 text-neutral-950 border border-neutral-300 hover:border-neutral-500 flex items-center gap-1 shadow-xs"
             >
-              <ShieldAlert className="w-3.5 h-3.5" />
+              <ShieldAlert className="w-3.5 h-3.5 text-emerald-600" />
               Admin Portal
             </NavLink>
           )}
@@ -91,58 +95,56 @@ export default function Navbar() {
             <div className="relative">
               <button
                 onClick={() => setProfileDropdownOpen(!profileDropdownOpen)}
-                className="flex items-center gap-2.5 px-3 py-1.5 rounded-full bg-slate-900 border border-emerald-900/60 hover:border-emerald-700 transition-colors text-slate-200"
+                className="flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-white border border-neutral-300 hover:border-neutral-500 transition-colors text-neutral-900 shadow-xs cursor-pointer"
               >
-                <div className="w-7 h-7 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-xs uppercase">
+                <div className="w-7 h-7 rounded-full bg-neutral-950 text-white flex items-center justify-center font-bold text-xs uppercase">
                   {user?.first_name ? user.first_name[0] : (user?.username?.[0] || 'U')}
                 </div>
-                <span className="text-sm font-medium max-w-[120px] truncate">
+                <span className="text-xs font-bold max-w-[120px] truncate uppercase tracking-wider">
                   {user?.first_name || user?.username || 'Rider'}
                 </span>
-                <ChevronDown className="w-4 h-4 text-slate-400" />
+                <ChevronDown className="w-3.5 h-3.5 text-neutral-500" />
               </button>
 
               {/* Profile Dropdown */}
               {profileDropdownOpen && (
                 <div
-                  className="absolute right-0 mt-2 w-56 rounded-2xl glass-panel bg-[#05140e]/95 border border-emerald-900/50 shadow-2xl py-2 z-50 animate-in fade-in slide-in-from-top-2"
+                  className="absolute right-0 mt-2 w-56 rounded-3xl bg-white border border-neutral-200/90 shadow-xl py-2 z-50 animate-in fade-in slide-in-from-top-2"
                   onMouseLeave={() => setProfileDropdownOpen(false)}
                 >
-                  <div className="px-4 py-2 border-b border-slate-800">
-                    <p className="text-xs font-semibold text-slate-400">Signed in as</p>
-                    <p className="text-sm font-medium text-white truncate">{user?.email}</p>
-                    <span className="inline-block mt-1 text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300">
+                  <div className="px-5 py-3 border-b border-neutral-200">
+                    <p className="text-[10px] font-bold uppercase tracking-wider text-neutral-400">Signed in as</p>
+                    <p className="text-xs font-bold text-neutral-950 truncate">{user?.email}</p>
+                    <span className="inline-block mt-1 text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full bg-neutral-100 text-neutral-800 border border-neutral-200">
                       {user?.role}
                     </span>
                   </div>
 
                   {isCustomer && (
-                    <>
-                      <Link
-                        to="/my-bookings"
-                        onClick={() => setProfileDropdownOpen(false)}
-                        className="flex items-center gap-2.5 px-4 py-2.5 text-sm text-slate-300 hover:bg-slate-800/60 hover:text-emerald-400 transition-colors"
-                      >
-                        <Calendar className="w-4 h-4" />
-                        My Test Rides
-                      </Link>
-                    </>
+                    <Link
+                      to="/my-bookings"
+                      onClick={() => setProfileDropdownOpen(false)}
+                      className="flex items-center gap-2.5 px-5 py-2.5 text-xs font-bold uppercase tracking-wider text-neutral-700 hover:bg-neutral-50 hover:text-neutral-950 transition-colors"
+                    >
+                      <Calendar className="w-4 h-4 text-emerald-600" />
+                      My Test Rides
+                    </Link>
                   )}
 
                   {isAdmin && (
                     <Link
                       to="/admin"
                       onClick={() => setProfileDropdownOpen(false)}
-                      className="flex items-center gap-2.5 px-4 py-2.5 text-sm text-emerald-400 hover:bg-slate-800/60 transition-colors"
+                      className="flex items-center gap-2.5 px-5 py-2.5 text-xs font-bold uppercase tracking-wider text-neutral-950 hover:bg-neutral-50 transition-colors"
                     >
-                      <ShieldAlert className="w-4 h-4" />
+                      <ShieldAlert className="w-4 h-4 text-emerald-600" />
                       Admin Control Panel
                     </Link>
                   )}
 
                   <button
                     onClick={handleLogout}
-                    className="w-full flex items-center gap-2.5 px-4 py-2.5 text-sm text-rose-400 hover:bg-rose-500/10 transition-colors border-t border-slate-800 mt-1"
+                    className="w-full flex items-center gap-2.5 px-5 py-2.5 text-xs font-bold uppercase tracking-wider text-rose-600 hover:bg-rose-50 transition-colors border-t border-neutral-200 mt-1"
                   >
                     <LogOut className="w-4 h-4" />
                     Sign Out
@@ -154,13 +156,13 @@ export default function Navbar() {
             <div className="flex items-center gap-3">
               <Link
                 to="/login"
-                className="text-sm font-medium text-slate-300 hover:text-emerald-400 px-3 py-1.5 transition-colors"
+                className="text-xs font-bold uppercase tracking-wider text-neutral-800 hover:text-black px-5 py-2 rounded-full border border-neutral-300 hover:bg-neutral-100 transition-all shadow-xs"
               >
                 Sign In
               </Link>
               <Link
                 to="/register"
-                className="text-sm font-bold px-4 py-2 rounded-xl bg-gradient-to-r from-emerald-500 via-emerald-400 to-lime-400 text-slate-950 hover:opacity-95 transition-all shadow-md shadow-emerald-500/25"
+                className="text-xs font-bold uppercase tracking-wider px-5 py-2 rounded-full bg-neutral-950 hover:bg-black text-white transition-all shadow-md shadow-neutral-900/20 active:scale-95"
               >
                 Register
               </Link>
@@ -172,7 +174,7 @@ export default function Navbar() {
         <div className="flex md:hidden items-center">
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800/60 transition-colors"
+            className="p-2 rounded-full text-neutral-700 hover:text-black hover:bg-neutral-100 transition-colors"
             aria-label="Toggle mobile menu"
           >
             {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -182,32 +184,32 @@ export default function Navbar() {
 
       {/* Mobile Drawer Menu */}
       {mobileMenuOpen && (
-        <div className="md:hidden glass-panel border-b border-slate-800 px-4 pt-3 pb-6 space-y-3 bg-slate-950/95">
+        <div className="md:hidden border-b border-neutral-200 px-4 pt-3 pb-6 space-y-3 bg-white/95 backdrop-blur-md">
           <NavLink
             to="/vehicles"
             onClick={() => setMobileMenuOpen(false)}
-            className="block text-slate-200 hover:text-emerald-400 text-base font-medium py-2"
+            className="block text-neutral-800 hover:text-neutral-950 text-sm font-bold uppercase tracking-wider py-2"
           >
             Vehicles
           </NavLink>
           <NavLink
             to="/customizer"
             onClick={() => setMobileMenuOpen(false)}
-            className="block text-slate-200 hover:text-lime-400 text-base font-medium py-2"
+            className="block text-neutral-800 hover:text-neutral-950 text-sm font-bold uppercase tracking-wider py-2"
           >
             Customizer
           </NavLink>
           <NavLink
             to="/book-test-ride"
             onClick={() => setMobileMenuOpen(false)}
-            className="block text-slate-200 hover:text-emerald-400 text-base font-medium py-2"
+            className="block text-neutral-800 hover:text-neutral-950 text-sm font-bold uppercase tracking-wider py-2"
           >
             Book Test Ride
           </NavLink>
           <NavLink
             to="/parts"
             onClick={() => setMobileMenuOpen(false)}
-            className="block text-slate-200 hover:text-teal-400 text-base font-medium py-2"
+            className="block text-neutral-800 hover:text-neutral-950 text-sm font-bold uppercase tracking-wider py-2"
           >
             Spare Parts
           </NavLink>
@@ -215,29 +217,29 @@ export default function Navbar() {
             <NavLink
               to="/admin"
               onClick={() => setMobileMenuOpen(false)}
-              className="block text-emerald-400 text-base font-semibold py-2"
+              className="block text-neutral-950 text-sm font-bold uppercase tracking-wider py-2"
             >
               Admin Portal
             </NavLink>
           )}
 
-          <div className="pt-4 border-t border-slate-800">
+          <div className="pt-4 border-t border-neutral-200">
             {isAuthenticated ? (
               <div className="space-y-3">
                 <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-sm">
+                  <div className="w-8 h-8 rounded-full bg-neutral-950 text-white flex items-center justify-center font-bold text-xs uppercase">
                     {user?.first_name?.[0] || 'U'}
                   </div>
                   <div>
-                    <p className="text-sm font-medium text-white">{user?.first_name || user?.username}</p>
-                    <p className="text-xs text-slate-400">{user?.email}</p>
+                    <p className="text-xs font-bold text-neutral-950">{user?.first_name || user?.username}</p>
+                    <p className="text-[11px] text-neutral-500">{user?.email}</p>
                   </div>
                 </div>
                 {isCustomer && (
                   <Link
                     to="/my-bookings"
                     onClick={() => setMobileMenuOpen(false)}
-                    className="block text-sm text-slate-300 py-1.5"
+                    className="block text-xs font-bold uppercase tracking-wider text-neutral-700 py-1.5"
                   >
                     My Test Rides
                   </Link>
@@ -247,7 +249,7 @@ export default function Navbar() {
                     handleLogout();
                     setMobileMenuOpen(false);
                   }}
-                  className="w-full text-left text-sm text-rose-400 py-1.5 font-medium"
+                  className="w-full text-left text-xs text-rose-600 py-1.5 font-bold uppercase tracking-wider"
                 >
                   Sign Out
                 </button>
@@ -257,14 +259,14 @@ export default function Navbar() {
                 <Link
                   to="/login"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="w-full text-center py-2.5 rounded-xl border border-slate-700 text-slate-200 font-medium"
+                  className="w-full text-center py-2.5 rounded-full border border-neutral-300 text-neutral-900 font-bold text-xs uppercase tracking-wider"
                 >
                   Sign In
                 </Link>
                 <Link
                   to="/register"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="w-full text-center py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 via-emerald-400 to-lime-400 text-slate-950 font-bold shadow-lg shadow-emerald-500/25"
+                  className="w-full text-center py-2.5 rounded-full bg-neutral-950 text-white font-bold text-xs uppercase tracking-wider shadow-md"
                 >
                   Register Account
                 </Link>
