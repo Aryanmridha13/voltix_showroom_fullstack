@@ -8,6 +8,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from django_filters.rest_framework import DjangoFilterBackend
 
+from drf_spectacular.utils import extend_schema, extend_schema_view
 from apps.accounts.permissions import IsAdminUserRole, IsOwnerOrAdmin
 from apps.reviews.models import VehicleReview
 from apps.reviews.filters import VehicleReviewFilter
@@ -20,6 +21,15 @@ from apps.reviews.serializers import (
 from apps.reviews.services import ReviewService
 
 
+@extend_schema(tags=['Customer Reviews & Feedback'])
+@extend_schema_view(
+    list=extend_schema(summary="List Vehicle Reviews (Public sees approved; author sees own; admin sees all)"),
+    retrieve=extend_schema(summary="Get Single Review Details"),
+    create=extend_schema(summary="Submit Review for Vehicle Variant (Customer)"),
+    update=extend_schema(summary="Update Own Review (Author)"),
+    partial_update=extend_schema(summary="Partially Update Own Review (Author)"),
+    destroy=extend_schema(summary="Delete Review (Author or Admin)"),
+)
 class VehicleReviewViewSet(viewsets.ModelViewSet):
     """
     CRUD ViewSet for vehicle reviews with moderation workflow and statistics.

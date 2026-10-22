@@ -1,0 +1,4510 @@
+openapi: 3.0.3
+info:
+  title: Voltix EV Motors Showroom API
+  version: 1.0.0
+  description: Enterprise RESTful API specification for the Voltix EV Motors management
+    platform. Includes vehicle catalogue, dynamic colour customizer, spare parts inventory,
+    test ride booking engine, and customer ratings & feedback.
+paths:
+  /api/v1/auth/change-password/:
+    post:
+      operationId: auth_change_password_create
+      description: Allows authenticated users to change their account password.
+      summary: Change Password
+      tags:
+      - Authentication & Profile
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChangePasswordRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ChangePasswordRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ChangePasswordRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: Password changed successfully
+  /api/v1/auth/login/:
+    post:
+      operationId: auth_login_create
+      description: Authenticates via email/username and password. Returns JWT tokens
+        and user profile.
+      summary: Customer / Admin Login
+      tags:
+      - Authentication & Profile
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomTokenObtainPairRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CustomTokenObtainPairRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CustomTokenObtainPairRequest'
+        required: true
+      responses:
+        '200':
+          description: Login successful
+        '401':
+          description: Invalid credentials
+  /api/v1/auth/logout/:
+    post:
+      operationId: auth_logout_create
+      description: |-
+        Stateless JWT Logout endpoint.
+        Instructs the frontend to purge stored tokens.
+      summary: Logout User
+      tags:
+      - Authentication & Profile
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: Logged out successfully. Purge client tokens.
+  /api/v1/auth/me/:
+    get:
+      operationId: auth_me_retrieve
+      description: Retrieve or update currently logged in user profile.
+      summary: Get Current User Profile
+      tags:
+      - Authentication & Profile
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+    put:
+      operationId: auth_me_update
+      description: Retrieve or update currently logged in user profile.
+      tags:
+      - auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserUpdateRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserUpdateRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UserUpdateRequest'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserUpdate'
+          description: ''
+    patch:
+      operationId: auth_me_partial_update
+      description: Retrieve or update currently logged in user profile.
+      summary: Update Current User Profile
+      tags:
+      - Authentication & Profile
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedUserUpdateRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedUserUpdateRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedUserUpdateRequest'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+  /api/v1/auth/register/:
+    post:
+      operationId: auth_register_create
+      description: Creates a new customer account with profile details and issues
+        JWT tokens.
+      summary: Register Customer Account
+      tags:
+      - Authentication & Profile
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRegistrationRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserRegistrationRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UserRegistrationRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '201':
+          description: Registration successful
+        '400':
+          description: Validation error
+  /api/v1/auth/token/refresh/:
+    post:
+      operationId: auth_token_refresh_create
+      description: Provides a new access token using a valid refresh token.
+      summary: Refresh Access Token
+      tags:
+      - Authentication & Profile
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenRefreshRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TokenRefreshRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TokenRefreshRequest'
+        required: true
+      responses:
+        '200':
+          description: Token refreshed successfully
+        '401':
+          description: Token invalid or expired
+  /api/v1/bookings/:
+    get:
+      operationId: bookings_list
+      description: |-
+        Test Ride Booking ViewSet managing scheduling, slot validation,
+        customer booking history, cancellation, and admin status updates.
+      summary: List Test Ride Bookings (Customer sees own, Admin sees all)
+      parameters:
+      - in: query
+        name: booking_date
+        schema:
+          type: string
+          format: date
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - in: query
+        name: status
+        schema:
+          type: string
+          title: Booking status
+          enum:
+          - CANCELLED
+          - COMPLETED
+          - CONFIRMED
+          - PENDING
+        description: |-
+          * `PENDING` - Pending Confirmation
+          * `CONFIRMED` - Confirmed
+          * `COMPLETED` - Completed
+          * `CANCELLED` - Cancelled
+      - in: query
+        name: variant
+        schema:
+          type: integer
+      tags:
+      - Test Ride Bookings
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedBookingDetailList'
+          description: ''
+    post:
+      operationId: bookings_create
+      description: |-
+        Test Ride Booking ViewSet managing scheduling, slot validation,
+        customer booking history, cancellation, and admin status updates.
+      summary: Book a Test Ride (Authenticated Customer)
+      tags:
+      - Test Ride Bookings
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BookingCreateRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/BookingCreateRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/BookingCreateRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookingCreate'
+          description: ''
+  /api/v1/bookings/{id}/:
+    get:
+      operationId: bookings_retrieve
+      description: |-
+        Test Ride Booking ViewSet managing scheduling, slot validation,
+        customer booking history, cancellation, and admin status updates.
+      summary: Get Single Booking Details (Owner or Admin)
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Test Ride Booking.
+        required: true
+      tags:
+      - Test Ride Bookings
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookingDetail'
+          description: ''
+  /api/v1/bookings/{id}/cancel/:
+    patch:
+      operationId: bookings_cancel_partial_update
+      description: Allows the customer or an admin to cancel an eligible test ride
+        booking.
+      summary: Cancel an Active Booking
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Test Ride Booking.
+        required: true
+      tags:
+      - Test Ride Bookings
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedBookingCancelRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedBookingCancelRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedBookingCancelRequest'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: Booking cancelled successfully
+  /api/v1/bookings/{id}/update-status/:
+    patch:
+      operationId: bookings_update_status_partial_update
+      description: Allows administrators to confirm or mark test rides as completed.
+      summary: Update Booking Status (Admin Only)
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Test Ride Booking.
+        required: true
+      tags:
+      - Test Ride Bookings
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedAdminBookingStatusUpdateRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedAdminBookingStatusUpdateRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedAdminBookingStatusUpdateRequest'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: Booking status updated
+  /api/v1/bookings/available-slots/:
+    get:
+      operationId: bookings_available_slots_retrieve
+      description: Returns list of time slots for a vehicle on a specific date, marking
+        available vs booked.
+      summary: Check Slot Availability for Vehicle & Date
+      parameters:
+      - in: query
+        name: date
+        schema:
+          type: string
+        description: Date in YYYY-MM-DD format
+        required: true
+      - in: query
+        name: variant_id
+        schema:
+          type: integer
+        description: Vehicle Variant ID
+        required: true
+      tags:
+      - Test Ride Bookings
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          description: Slot availability retrieved
+  /api/v1/customizer/calculate-price/:
+    post:
+      operationId: customizer_calculate_price_create
+      description: Validates variant and colour combination, calculates price adjustments,
+        and returns authoritative total price and image.
+      summary: Calculate Dynamic Configuration Price
+      tags:
+      - Customizer & Colours
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PriceCalculationRequestRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PriceCalculationRequestRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PriceCalculationRequestRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          description: Price calculated successfully
+        '400':
+          description: Incompatible or unavailable combination
+  /api/v1/customizer/colours/:
+    get:
+      operationId: customizer_colours_list
+      summary: List Vehicle Colours (Public)
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - Customizer & Colours
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedColourList'
+          description: ''
+    post:
+      operationId: customizer_colours_create
+      summary: Create Colour (Admin Only)
+      tags:
+      - Customizer & Colours
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ColourRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ColourRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ColourRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Colour'
+          description: ''
+  /api/v1/customizer/colours/{id}/:
+    get:
+      operationId: customizer_colours_retrieve
+      summary: Get Colour Details (Public)
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Colour.
+        required: true
+      tags:
+      - Customizer & Colours
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Colour'
+          description: ''
+    put:
+      operationId: customizer_colours_update
+      summary: Update Colour (Admin Only)
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Colour.
+        required: true
+      tags:
+      - Customizer & Colours
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ColourRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ColourRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ColourRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Colour'
+          description: ''
+    patch:
+      operationId: customizer_colours_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Colour.
+        required: true
+      tags:
+      - Customizer & Colours
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedColourRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedColourRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedColourRequest'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Colour'
+          description: ''
+    delete:
+      operationId: customizer_colours_destroy
+      summary: Delete Colour (Admin Only)
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Colour.
+        required: true
+      tags:
+      - Customizer & Colours
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/customizer/combinations/:
+    get:
+      operationId: customizer_combinations_list
+      summary: List Colour Combinations (Public)
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - Customizer & Colours
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedColourCombinationList'
+          description: ''
+    post:
+      operationId: customizer_combinations_create
+      summary: Create Colour Combination (Admin Only)
+      tags:
+      - Customizer & Colours
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ColourCombinationRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ColourCombinationRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ColourCombinationRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ColourCombination'
+          description: ''
+  /api/v1/customizer/combinations/{id}/:
+    get:
+      operationId: customizer_combinations_retrieve
+      summary: Get Colour Combination Details (Public)
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Colour Combination.
+        required: true
+      tags:
+      - Customizer & Colours
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ColourCombination'
+          description: ''
+    put:
+      operationId: customizer_combinations_update
+      summary: Update Colour Combination (Admin Only)
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Colour Combination.
+        required: true
+      tags:
+      - Customizer & Colours
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ColourCombinationRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ColourCombinationRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ColourCombinationRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ColourCombination'
+          description: ''
+    patch:
+      operationId: customizer_combinations_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Colour Combination.
+        required: true
+      tags:
+      - Customizer & Colours
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedColourCombinationRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedColourCombinationRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedColourCombinationRequest'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ColourCombination'
+          description: ''
+    delete:
+      operationId: customizer_combinations_destroy
+      summary: Delete Colour Combination (Admin Only)
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Colour Combination.
+        required: true
+      tags:
+      - Customizer & Colours
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/customizer/configs/:
+    get:
+      operationId: customizer_configs_list
+      description: Admin ViewSet for configuring vehicle colour options, images, and
+        price adjustments.
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - Customizer & Colours
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedVehicleColourConfigAdminList'
+          description: ''
+    post:
+      operationId: customizer_configs_create
+      description: Admin ViewSet for configuring vehicle colour options, images, and
+        price adjustments.
+      tags:
+      - Customizer & Colours
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VehicleColourConfigAdminRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/VehicleColourConfigAdminRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/VehicleColourConfigAdminRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VehicleColourConfigAdmin'
+          description: ''
+  /api/v1/customizer/configs/{id}/:
+    get:
+      operationId: customizer_configs_retrieve
+      description: Admin ViewSet for configuring vehicle colour options, images, and
+        price adjustments.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Vehicle Colour Configuration.
+        required: true
+      tags:
+      - Customizer & Colours
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VehicleColourConfigAdmin'
+          description: ''
+    put:
+      operationId: customizer_configs_update
+      description: Admin ViewSet for configuring vehicle colour options, images, and
+        price adjustments.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Vehicle Colour Configuration.
+        required: true
+      tags:
+      - Customizer & Colours
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VehicleColourConfigAdminRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/VehicleColourConfigAdminRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/VehicleColourConfigAdminRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VehicleColourConfigAdmin'
+          description: ''
+    patch:
+      operationId: customizer_configs_partial_update
+      description: Admin ViewSet for configuring vehicle colour options, images, and
+        price adjustments.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Vehicle Colour Configuration.
+        required: true
+      tags:
+      - Customizer & Colours
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedVehicleColourConfigAdminRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedVehicleColourConfigAdminRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedVehicleColourConfigAdminRequest'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VehicleColourConfigAdmin'
+          description: ''
+    delete:
+      operationId: customizer_configs_destroy
+      description: Admin ViewSet for configuring vehicle colour options, images, and
+        price adjustments.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Vehicle Colour Configuration.
+        required: true
+      tags:
+      - Customizer & Colours
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/customizer/variants/{variant_id}/options/:
+    get:
+      operationId: customizer_variants_options_retrieve
+      description: Returns available single-tone & dual-tone finishes with price adjustments
+        and high-res images for a vehicle variant.
+      summary: Get Vehicle Customizer Options
+      parameters:
+      - in: path
+        name: variant_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Customizer & Colours
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          description: Customization options loaded
+  /api/v1/health/:
+    get:
+      operationId: health_retrieve
+      description: Verifies backend API responsiveness and active MySQL database connection.
+      summary: System Health & Database Probe
+      tags:
+      - System Health
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          description: System healthy and database connected
+        '503':
+          description: Database connectivity failure
+  /api/v1/parts/categories/:
+    get:
+      operationId: parts_categories_list
+      summary: List Spare Part Categories (Public)
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - Spare Parts & Inventory
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedPartCategoryList'
+          description: ''
+    post:
+      operationId: parts_categories_create
+      summary: Create Part Category (Admin Only)
+      tags:
+      - Spare Parts & Inventory
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PartCategoryRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PartCategoryRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PartCategoryRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartCategory'
+          description: ''
+  /api/v1/parts/categories/{slug}/:
+    get:
+      operationId: parts_categories_retrieve
+      summary: Get Part Category Details (Public)
+      parameters:
+      - in: path
+        name: slug
+        schema:
+          type: string
+        required: true
+      tags:
+      - Spare Parts & Inventory
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartCategory'
+          description: ''
+    put:
+      operationId: parts_categories_update
+      summary: Update Part Category (Admin Only)
+      parameters:
+      - in: path
+        name: slug
+        schema:
+          type: string
+        required: true
+      tags:
+      - Spare Parts & Inventory
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PartCategoryRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PartCategoryRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PartCategoryRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartCategory'
+          description: ''
+    patch:
+      operationId: parts_categories_partial_update
+      parameters:
+      - in: path
+        name: slug
+        schema:
+          type: string
+        required: true
+      tags:
+      - Spare Parts & Inventory
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedPartCategoryRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedPartCategoryRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedPartCategoryRequest'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartCategory'
+          description: ''
+    delete:
+      operationId: parts_categories_destroy
+      summary: Delete Part Category (Admin Only)
+      parameters:
+      - in: path
+        name: slug
+        schema:
+          type: string
+        required: true
+      tags:
+      - Spare Parts & Inventory
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/parts/items/:
+    get:
+      operationId: parts_items_list
+      description: |-
+        Spare parts inventory management ViewSet.
+        Provides public catalogue browsing and protected inventory management.
+      summary: Search, Filter, & Paginate Spare Parts (Public)
+      parameters:
+      - in: query
+        name: category
+        schema:
+          type: string
+        description: Category Slug
+      - in: query
+        name: category_id
+        schema:
+          type: integer
+        description: Category ID
+      - in: query
+        name: max_price
+        schema:
+          type: number
+        description: Maximum Price (₹)
+      - in: query
+        name: min_price
+        schema:
+          type: number
+        description: Minimum Price (₹)
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      - in: query
+        name: stock_status
+        schema:
+          type: string
+          enum:
+          - IN_STOCK
+          - LOW_STOCK
+          - OUT_OF_STOCK
+        description: |-
+          Derived Stock Status
+
+          * `IN_STOCK` - In Stock
+          * `LOW_STOCK` - Low Stock
+          * `OUT_OF_STOCK` - Out of Stock
+      tags:
+      - Spare Parts & Inventory
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedSparePartListList'
+          description: ''
+    post:
+      operationId: parts_items_create
+      description: |-
+        Spare parts inventory management ViewSet.
+        Provides public catalogue browsing and protected inventory management.
+      summary: Create Spare Part (Admin Only)
+      tags:
+      - Spare Parts & Inventory
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SparePartCreateUpdateRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SparePartCreateUpdateRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SparePartCreateUpdateRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SparePartCreateUpdate'
+          description: ''
+  /api/v1/parts/items/{id}/:
+    get:
+      operationId: parts_items_retrieve
+      description: |-
+        Spare parts inventory management ViewSet.
+        Provides public catalogue browsing and protected inventory management.
+      summary: Get Single Spare Part Details (Public)
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Spare Part.
+        required: true
+      tags:
+      - Spare Parts & Inventory
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SparePartDetail'
+          description: ''
+    put:
+      operationId: parts_items_update
+      description: |-
+        Spare parts inventory management ViewSet.
+        Provides public catalogue browsing and protected inventory management.
+      summary: Update Spare Part (Admin Only)
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Spare Part.
+        required: true
+      tags:
+      - Spare Parts & Inventory
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SparePartCreateUpdateRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SparePartCreateUpdateRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SparePartCreateUpdateRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SparePartCreateUpdate'
+          description: ''
+    patch:
+      operationId: parts_items_partial_update
+      description: |-
+        Spare parts inventory management ViewSet.
+        Provides public catalogue browsing and protected inventory management.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Spare Part.
+        required: true
+      tags:
+      - Spare Parts & Inventory
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedSparePartCreateUpdateRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedSparePartCreateUpdateRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedSparePartCreateUpdateRequest'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SparePartCreateUpdate'
+          description: ''
+    delete:
+      operationId: parts_items_destroy
+      description: |-
+        Spare parts inventory management ViewSet.
+        Provides public catalogue browsing and protected inventory management.
+      summary: Delete Spare Part (Admin Only)
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Spare Part.
+        required: true
+      tags:
+      - Spare Parts & Inventory
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/parts/items/{id}/adjust-stock/:
+    post:
+      operationId: parts_items_adjust_stock_create
+      description: Safely adjusts part stock quantity (ADD, DEDUCT, SET) inside a
+        database transaction.
+      summary: Adjust Inventory Quantity (Admin Only)
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Spare Part.
+        required: true
+      tags:
+      - Spare Parts & Inventory
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockAdjustmentRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/StockAdjustmentRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/StockAdjustmentRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: Stock adjusted successfully
+  /api/v1/parts/items/low-stock/:
+    get:
+      operationId: parts_items_low_stock_retrieve
+      description: Retrieves spare parts where inventory is at or below the alert
+        threshold.
+      summary: List Low Stock Spare Parts (Admin Only)
+      tags:
+      - Spare Parts & Inventory
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: Low stock items retrieved
+  /api/v1/reviews/:
+    get:
+      operationId: reviews_list
+      description: CRUD ViewSet for vehicle reviews with moderation workflow and statistics.
+      summary: List Vehicle Reviews (Public sees approved; author sees own; admin
+        sees all)
+      parameters:
+      - in: query
+        name: is_verified_rider
+        schema:
+          type: boolean
+      - in: query
+        name: min_rating
+        schema:
+          type: integer
+      - in: query
+        name: model
+        schema:
+          type: number
+      - in: query
+        name: moderation_status
+        schema:
+          type: string
+          enum:
+          - APPROVED
+          - PENDING
+          - REJECTED
+        description: |-
+          Content moderation status.
+
+          * `PENDING` - Pending Moderation
+          * `APPROVED` - Approved
+          * `REJECTED` - Rejected
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - in: query
+        name: rating
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      - in: query
+        name: variant
+        schema:
+          type: number
+      tags:
+      - Customer Reviews & Feedback
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedVehicleReviewList'
+          description: ''
+    post:
+      operationId: reviews_create
+      description: CRUD ViewSet for vehicle reviews with moderation workflow and statistics.
+      summary: Submit Review for Vehicle Variant (Customer)
+      tags:
+      - Customer Reviews & Feedback
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReviewCreateRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ReviewCreateRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ReviewCreateRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReviewCreate'
+          description: ''
+  /api/v1/reviews/{id}/:
+    get:
+      operationId: reviews_retrieve
+      description: CRUD ViewSet for vehicle reviews with moderation workflow and statistics.
+      summary: Get Single Review Details
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Vehicle Review.
+        required: true
+      tags:
+      - Customer Reviews & Feedback
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VehicleReview'
+          description: ''
+    put:
+      operationId: reviews_update
+      description: CRUD ViewSet for vehicle reviews with moderation workflow and statistics.
+      summary: Update Own Review (Author)
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Vehicle Review.
+        required: true
+      tags:
+      - Customer Reviews & Feedback
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReviewUpdateRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ReviewUpdateRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ReviewUpdateRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReviewUpdate'
+          description: ''
+    patch:
+      operationId: reviews_partial_update
+      description: CRUD ViewSet for vehicle reviews with moderation workflow and statistics.
+      summary: Partially Update Own Review (Author)
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Vehicle Review.
+        required: true
+      tags:
+      - Customer Reviews & Feedback
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedReviewUpdateRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedReviewUpdateRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedReviewUpdateRequest'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReviewUpdate'
+          description: ''
+    delete:
+      operationId: reviews_destroy
+      description: CRUD ViewSet for vehicle reviews with moderation workflow and statistics.
+      summary: Delete Review (Author or Admin)
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Vehicle Review.
+        required: true
+      tags:
+      - Customer Reviews & Feedback
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/reviews/{id}/moderate/:
+    patch:
+      operationId: reviews_moderate_partial_update
+      description: Admin endpoint to approve, reject, or mark review as pending.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Vehicle Review.
+        required: true
+      tags:
+      - Customer Reviews & Feedback
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedReviewModerationRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedReviewModerationRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedReviewModerationRequest'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReviewModeration'
+          description: ''
+  /api/v1/reviews/my-reviews/:
+    get:
+      operationId: reviews_my_reviews_retrieve
+      description: Endpoint for authenticated customer to view all reviews authored
+        by themselves.
+      tags:
+      - Customer Reviews & Feedback
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VehicleReview'
+          description: ''
+  /api/v1/reviews/variant/{variant_id}/stats/:
+    get:
+      operationId: reviews_variant_stats_retrieve
+      description: Public endpoint returning aggregate rating metrics for a vehicle
+        variant.
+      parameters:
+      - in: path
+        name: variant_id
+        schema:
+          type: integer
+          description: Vehicle variant being reviewed.
+        required: true
+      tags:
+      - Customer Reviews & Feedback
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VehicleReview'
+          description: ''
+  /api/v1/vehicles/categories/:
+    get:
+      operationId: vehicles_categories_list
+      description: CRUD API for EV Categories (e.g., Scooters, Cruiser Bikes, Commercial).
+      summary: List Vehicle Categories (Public)
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - Vehicles & Specifications
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedVehicleCategoryList'
+          description: ''
+    post:
+      operationId: vehicles_categories_create
+      description: CRUD API for EV Categories (e.g., Scooters, Cruiser Bikes, Commercial).
+      summary: Create Vehicle Category (Admin Only)
+      tags:
+      - Vehicles & Specifications
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VehicleCategoryRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/VehicleCategoryRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/VehicleCategoryRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VehicleCategory'
+          description: ''
+  /api/v1/vehicles/categories/{slug}/:
+    get:
+      operationId: vehicles_categories_retrieve
+      description: CRUD API for EV Categories (e.g., Scooters, Cruiser Bikes, Commercial).
+      summary: Get Vehicle Category Details (Public)
+      parameters:
+      - in: path
+        name: slug
+        schema:
+          type: string
+        required: true
+      tags:
+      - Vehicles & Specifications
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VehicleCategory'
+          description: ''
+    put:
+      operationId: vehicles_categories_update
+      description: CRUD API for EV Categories (e.g., Scooters, Cruiser Bikes, Commercial).
+      summary: Update Vehicle Category (Admin Only)
+      parameters:
+      - in: path
+        name: slug
+        schema:
+          type: string
+        required: true
+      tags:
+      - Vehicles & Specifications
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VehicleCategoryRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/VehicleCategoryRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/VehicleCategoryRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VehicleCategory'
+          description: ''
+    patch:
+      operationId: vehicles_categories_partial_update
+      description: CRUD API for EV Categories (e.g., Scooters, Cruiser Bikes, Commercial).
+      parameters:
+      - in: path
+        name: slug
+        schema:
+          type: string
+        required: true
+      tags:
+      - Vehicles & Specifications
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedVehicleCategoryRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedVehicleCategoryRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedVehicleCategoryRequest'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VehicleCategory'
+          description: ''
+    delete:
+      operationId: vehicles_categories_destroy
+      description: CRUD API for EV Categories (e.g., Scooters, Cruiser Bikes, Commercial).
+      summary: Delete Vehicle Category (Admin Only)
+      parameters:
+      - in: path
+        name: slug
+        schema:
+          type: string
+        required: true
+      tags:
+      - Vehicles & Specifications
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/vehicles/models/:
+    get:
+      operationId: vehicles_models_list
+      description: CRUD API for Vehicle Models (e.g., 'X-One', 'SE', 'Ranger', 'MX16').
+      summary: List Vehicle Models (Public)
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - Vehicles & Specifications
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedVehicleModelList'
+          description: ''
+    post:
+      operationId: vehicles_models_create
+      description: CRUD API for Vehicle Models (e.g., 'X-One', 'SE', 'Ranger', 'MX16').
+      summary: Create Vehicle Model (Admin Only)
+      tags:
+      - Vehicles & Specifications
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VehicleModelRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/VehicleModelRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/VehicleModelRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VehicleModel'
+          description: ''
+  /api/v1/vehicles/models/{slug}/:
+    get:
+      operationId: vehicles_models_retrieve
+      description: CRUD API for Vehicle Models (e.g., 'X-One', 'SE', 'Ranger', 'MX16').
+      summary: Get Vehicle Model Details (Public)
+      parameters:
+      - in: path
+        name: slug
+        schema:
+          type: string
+        required: true
+      tags:
+      - Vehicles & Specifications
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VehicleModel'
+          description: ''
+    put:
+      operationId: vehicles_models_update
+      description: CRUD API for Vehicle Models (e.g., 'X-One', 'SE', 'Ranger', 'MX16').
+      summary: Update Vehicle Model (Admin Only)
+      parameters:
+      - in: path
+        name: slug
+        schema:
+          type: string
+        required: true
+      tags:
+      - Vehicles & Specifications
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VehicleModelRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/VehicleModelRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/VehicleModelRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VehicleModel'
+          description: ''
+    patch:
+      operationId: vehicles_models_partial_update
+      description: CRUD API for Vehicle Models (e.g., 'X-One', 'SE', 'Ranger', 'MX16').
+      parameters:
+      - in: path
+        name: slug
+        schema:
+          type: string
+        required: true
+      tags:
+      - Vehicles & Specifications
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedVehicleModelRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedVehicleModelRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedVehicleModelRequest'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VehicleModel'
+          description: ''
+    delete:
+      operationId: vehicles_models_destroy
+      description: CRUD API for Vehicle Models (e.g., 'X-One', 'SE', 'Ranger', 'MX16').
+      summary: Delete Vehicle Model (Admin Only)
+      parameters:
+      - in: path
+        name: slug
+        schema:
+          type: string
+        required: true
+      tags:
+      - Vehicles & Specifications
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/vehicles/variants/:
+    get:
+      operationId: vehicles_variants_list
+      description: |-
+        Master Vehicle Variant ViewSet providing:
+        - Public Search & Filtering (category, battery, range, price)
+        - Sorting by price, range, and new arrivals
+        - Pagination
+        - Atomic Admin CRUD with specs
+      summary: Search, Filter, & Paginate Vehicle Catalogue (Public)
+      parameters:
+      - in: query
+        name: battery_type
+        schema:
+          type: string
+        description: Battery Type (e.g. Graphene, LiFePO4)
+      - in: query
+        name: category
+        schema:
+          type: string
+        description: Category Slug
+      - in: query
+        name: category_id
+        schema:
+          type: integer
+        description: Category ID
+      - in: query
+        name: is_featured
+        schema:
+          type: boolean
+        description: Featured Models Only
+      - in: query
+        name: max_price
+        schema:
+          type: number
+        description: Maximum Price
+      - in: query
+        name: max_range
+        schema:
+          type: integer
+        description: Maximum Driving Range (KM)
+      - in: query
+        name: min_price
+        schema:
+          type: number
+        description: Minimum Price
+      - in: query
+        name: min_range
+        schema:
+          type: integer
+        description: Minimum Driving Range (KM)
+      - in: query
+        name: min_speed
+        schema:
+          type: integer
+        description: Minimum Top Speed (KM/H)
+      - in: query
+        name: model
+        schema:
+          type: string
+        description: Model Slug
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - Vehicles & Specifications
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedVehicleVariantListList'
+          description: ''
+    post:
+      operationId: vehicles_variants_create
+      description: |-
+        Master Vehicle Variant ViewSet providing:
+        - Public Search & Filtering (category, battery, range, price)
+        - Sorting by price, range, and new arrivals
+        - Pagination
+        - Atomic Admin CRUD with specs
+      summary: Create Vehicle Variant with Specs (Admin Only)
+      tags:
+      - Vehicles & Specifications
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VehicleVariantCreateUpdateRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/VehicleVariantCreateUpdateRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/VehicleVariantCreateUpdateRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VehicleVariantCreateUpdate'
+          description: ''
+  /api/v1/vehicles/variants/{id}/:
+    get:
+      operationId: vehicles_variants_retrieve
+      description: |-
+        Master Vehicle Variant ViewSet providing:
+        - Public Search & Filtering (category, battery, range, price)
+        - Sorting by price, range, and new arrivals
+        - Pagination
+        - Atomic Admin CRUD with specs
+      summary: Get Single Vehicle Details with Full Specs (Public)
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Vehicle Variant.
+        required: true
+      tags:
+      - Vehicles & Specifications
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VehicleVariantDetail'
+          description: ''
+    put:
+      operationId: vehicles_variants_update
+      description: |-
+        Master Vehicle Variant ViewSet providing:
+        - Public Search & Filtering (category, battery, range, price)
+        - Sorting by price, range, and new arrivals
+        - Pagination
+        - Atomic Admin CRUD with specs
+      summary: Update Vehicle Variant with Specs (Admin Only)
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Vehicle Variant.
+        required: true
+      tags:
+      - Vehicles & Specifications
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VehicleVariantCreateUpdateRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/VehicleVariantCreateUpdateRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/VehicleVariantCreateUpdateRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VehicleVariantCreateUpdate'
+          description: ''
+    patch:
+      operationId: vehicles_variants_partial_update
+      description: |-
+        Master Vehicle Variant ViewSet providing:
+        - Public Search & Filtering (category, battery, range, price)
+        - Sorting by price, range, and new arrivals
+        - Pagination
+        - Atomic Admin CRUD with specs
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Vehicle Variant.
+        required: true
+      tags:
+      - Vehicles & Specifications
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedVehicleVariantCreateUpdateRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedVehicleVariantCreateUpdateRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedVehicleVariantCreateUpdateRequest'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VehicleVariantCreateUpdate'
+          description: ''
+    delete:
+      operationId: vehicles_variants_destroy
+      description: |-
+        Master Vehicle Variant ViewSet providing:
+        - Public Search & Filtering (category, battery, range, price)
+        - Sorting by price, range, and new arrivals
+        - Pagination
+        - Atomic Admin CRUD with specs
+      summary: Delete Vehicle Variant (Admin Only)
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Vehicle Variant.
+        required: true
+      tags:
+      - Vehicles & Specifications
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/vehicles/variants/featured/:
+    get:
+      operationId: vehicles_variants_featured_retrieve
+      description: |-
+        Master Vehicle Variant ViewSet providing:
+        - Public Search & Filtering (category, battery, range, price)
+        - Sorting by price, range, and new arrivals
+        - Pagination
+        - Atomic Admin CRUD with specs
+      summary: List Featured EV Models for Homepage Showcase
+      tags:
+      - Vehicles & Specifications
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VehicleVariantCreateUpdate'
+          description: ''
+components:
+  schemas:
+    ActionEnum:
+      enum:
+      - ADD
+      - DEDUCT
+      - SET
+      type: string
+      description: |-
+        * `ADD` - Add to current stock
+        * `DEDUCT` - Deduct from current stock
+        * `SET` - Set exact stock quantity
+    BookingCreate:
+      type: object
+      properties:
+        booking_date:
+          type: string
+          format: date
+        time_slot:
+          $ref: '#/components/schemas/TimeSlotEnum'
+        contact_phone:
+          type: string
+          title: Contact phone number
+          maxLength: 15
+        driving_license_number:
+          type: string
+          maxLength: 50
+      required:
+      - booking_date
+      - contact_phone
+      - driving_license_number
+      - time_slot
+    BookingCreateRequest:
+      type: object
+      properties:
+        variant_id:
+          type: integer
+          writeOnly: true
+        booking_date:
+          type: string
+          format: date
+        time_slot:
+          $ref: '#/components/schemas/TimeSlotEnum'
+        contact_phone:
+          type: string
+          minLength: 1
+          title: Contact phone number
+          maxLength: 15
+        driving_license_number:
+          type: string
+          minLength: 1
+          maxLength: 50
+      required:
+      - booking_date
+      - contact_phone
+      - driving_license_number
+      - time_slot
+      - variant_id
+    BookingDetail:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        booking_reference:
+          type: string
+          readOnly: true
+          title: Booking reference code
+        customer_email:
+          type: string
+          format: email
+          readOnly: true
+        customer_name:
+          type: string
+          readOnly: true
+        variant:
+          type: integer
+          readOnly: true
+          title: Vehicle variant
+        variant_name:
+          type: string
+          readOnly: true
+        model_name:
+          type: string
+          readOnly: true
+        category_name:
+          type: string
+          readOnly: true
+        variant_image:
+          type: string
+          format: uri
+          nullable: true
+          readOnly: true
+        booking_date:
+          type: string
+          format: date
+          readOnly: true
+        time_slot:
+          allOf:
+          - $ref: '#/components/schemas/TimeSlotEnum'
+          readOnly: true
+        contact_phone:
+          type: string
+          readOnly: true
+          title: Contact phone number
+        driving_license_number:
+          type: string
+          readOnly: true
+        status:
+          allOf:
+          - $ref: '#/components/schemas/BookingStatusEnum'
+          readOnly: true
+          title: Booking status
+        cancellation_reason:
+          type: string
+          readOnly: true
+        admin_notes:
+          type: string
+          readOnly: true
+          title: Internal admin notes
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - admin_notes
+      - booking_date
+      - booking_reference
+      - cancellation_reason
+      - category_name
+      - contact_phone
+      - created_at
+      - customer_email
+      - customer_name
+      - driving_license_number
+      - id
+      - model_name
+      - status
+      - time_slot
+      - updated_at
+      - variant
+      - variant_image
+      - variant_name
+    BookingStatusEnum:
+      enum:
+      - PENDING
+      - CONFIRMED
+      - COMPLETED
+      - CANCELLED
+      type: string
+      description: |-
+        * `PENDING` - Pending Confirmation
+        * `CONFIRMED` - Confirmed
+        * `COMPLETED` - Completed
+        * `CANCELLED` - Cancelled
+    ChangePasswordRequest:
+      type: object
+      properties:
+        old_password:
+          type: string
+          writeOnly: true
+          minLength: 1
+        new_password:
+          type: string
+          writeOnly: true
+          minLength: 1
+        new_password_confirm:
+          type: string
+          writeOnly: true
+          minLength: 1
+      required:
+      - new_password
+      - new_password_confirm
+      - old_password
+    Colour:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          title: Colour name
+          maxLength: 60
+        hex_code:
+          type: string
+          title: HEX color code
+          description: 'e.g., #E62E2D or #1E88E5'
+          maxLength: 7
+        is_active:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - hex_code
+      - id
+      - name
+    ColourCombination:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          title: Combination name
+          maxLength: 120
+        is_dual_tone:
+          type: boolean
+          title: Is dual-tone finish
+        primary_colour:
+          type: integer
+        primary_colour_details:
+          allOf:
+          - $ref: '#/components/schemas/Colour'
+          readOnly: true
+        secondary_colour:
+          type: integer
+          nullable: true
+          title: Secondary colour (for dual-tone)
+        secondary_colour_details:
+          allOf:
+          - $ref: '#/components/schemas/Colour'
+          readOnly: true
+        is_active:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - id
+      - name
+      - primary_colour
+      - primary_colour_details
+      - secondary_colour
+      - secondary_colour_details
+    ColourCombinationRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          title: Combination name
+          maxLength: 120
+        is_dual_tone:
+          type: boolean
+          title: Is dual-tone finish
+        primary_colour:
+          type: integer
+        secondary_colour:
+          type: integer
+          nullable: true
+          title: Secondary colour (for dual-tone)
+        is_active:
+          type: boolean
+      required:
+      - name
+      - primary_colour
+      - secondary_colour
+    ColourRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          title: Colour name
+          maxLength: 60
+        hex_code:
+          type: string
+          minLength: 1
+          title: HEX color code
+          description: 'e.g., #E62E2D or #1E88E5'
+          maxLength: 7
+        is_active:
+          type: boolean
+      required:
+      - hex_code
+      - name
+    CustomTokenObtainPairRequest:
+      type: object
+      description: |-
+        Custom JWT Token Serializer that adds user role and profile metadata
+        to both the token claims and the immediate login response payload.
+      properties:
+        email:
+          type: string
+          writeOnly: true
+          minLength: 1
+        password:
+          type: string
+          writeOnly: true
+          minLength: 1
+      required:
+      - email
+      - password
+    CustomerProfile:
+      type: object
+      properties:
+        address:
+          type: string
+          title: Street address
+        city:
+          type: string
+          maxLength: 100
+        state:
+          type: string
+          maxLength: 100
+        pincode:
+          type: string
+          maxLength: 10
+        driving_license_number:
+          type: string
+          description: Mandatory for booking test rides.
+          maxLength: 50
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - updated_at
+    CustomerProfileRequest:
+      type: object
+      properties:
+        address:
+          type: string
+          title: Street address
+        city:
+          type: string
+          maxLength: 100
+        state:
+          type: string
+          maxLength: 100
+        pincode:
+          type: string
+          maxLength: 10
+        driving_license_number:
+          type: string
+          description: Mandatory for booking test rides.
+          maxLength: 50
+    PaginatedBookingDetailList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/BookingDetail'
+    PaginatedColourCombinationList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/ColourCombination'
+    PaginatedColourList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Colour'
+    PaginatedPartCategoryList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/PartCategory'
+    PaginatedSparePartListList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/SparePartList'
+    PaginatedVehicleCategoryList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/VehicleCategory'
+    PaginatedVehicleColourConfigAdminList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/VehicleColourConfigAdmin'
+    PaginatedVehicleModelList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/VehicleModel'
+    PaginatedVehicleReviewList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/VehicleReview'
+    PaginatedVehicleVariantListList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/VehicleVariantList'
+    PartCategory:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          title: Category name
+          maxLength: 100
+        slug:
+          type: string
+          readOnly: true
+          pattern: ^[-a-zA-Z0-9_]+$
+        description:
+          type: string
+        is_active:
+          type: boolean
+        parts_count:
+          type: integer
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - id
+      - name
+      - parts_count
+      - slug
+    PartCategoryRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          title: Category name
+          maxLength: 100
+        description:
+          type: string
+        is_active:
+          type: boolean
+      required:
+      - name
+    PatchedAdminBookingStatusUpdateRequest:
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/BookingStatusEnum'
+        admin_notes:
+          type: string
+          default: ''
+    PatchedBookingCancelRequest:
+      type: object
+      properties:
+        cancellation_reason:
+          type: string
+          default: Cancelled by customer
+    PatchedColourCombinationRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          title: Combination name
+          maxLength: 120
+        is_dual_tone:
+          type: boolean
+          title: Is dual-tone finish
+        primary_colour:
+          type: integer
+        secondary_colour:
+          type: integer
+          nullable: true
+          title: Secondary colour (for dual-tone)
+        is_active:
+          type: boolean
+    PatchedColourRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          title: Colour name
+          maxLength: 60
+        hex_code:
+          type: string
+          minLength: 1
+          title: HEX color code
+          description: 'e.g., #E62E2D or #1E88E5'
+          maxLength: 7
+        is_active:
+          type: boolean
+    PatchedPartCategoryRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          title: Category name
+          maxLength: 100
+        description:
+          type: string
+        is_active:
+          type: boolean
+    PatchedReviewModerationRequest:
+      type: object
+      description: Serializer for admin review moderation (approval/rejection).
+      properties:
+        status:
+          allOf:
+          - $ref: '#/components/schemas/ReviewModerationStatusEnum'
+          description: |-
+            Target moderation status (APPROVED, REJECTED, PENDING).
+
+            * `PENDING` - Pending Moderation
+            * `APPROVED` - Approved
+            * `REJECTED` - Rejected
+        notes:
+          type: string
+          default: ''
+          description: Optional internal explanation or moderator comment.
+    PatchedReviewUpdateRequest:
+      type: object
+      description: Serializer allowing author to edit their existing review.
+      properties:
+        rating:
+          type: integer
+          maximum: 5
+          minimum: 1
+          description: Star rating from 1 to 5.
+        title:
+          type: string
+          minLength: 1
+          description: Summary headline for the review.
+          maxLength: 150
+        comment:
+          type: string
+          minLength: 1
+          description: Detailed feedback, riding experience, pros and cons.
+    PatchedSparePartCreateUpdateRequest:
+      type: object
+      description: Admin serializer for creating and editing spare part details.
+      properties:
+        category:
+          type: integer
+        part_number:
+          type: string
+          minLength: 1
+          title: Part number / SKU
+          description: Unique SKU (e.g. VOLT-BAT-LIPO4-72V)
+          maxLength: 60
+        name:
+          type: string
+          minLength: 1
+          title: Part name
+          maxLength: 150
+        description:
+          type: string
+          minLength: 1
+        price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          title: Price (₹)
+        image:
+          type: string
+          format: binary
+          nullable: true
+          title: Part photo
+        stock_quantity:
+          type: integer
+          maximum: 4294967295
+          minimum: 0
+          format: int64
+        low_stock_threshold:
+          type: integer
+          maximum: 4294967295
+          minimum: 0
+          format: int64
+          title: Low stock alert threshold
+        is_active:
+          type: boolean
+    PatchedUserUpdateRequest:
+      type: object
+      properties:
+        first_name:
+          type: string
+          maxLength: 150
+        last_name:
+          type: string
+          maxLength: 150
+        phone_number:
+          type: string
+          maxLength: 15
+        profile:
+          $ref: '#/components/schemas/CustomerProfileRequest'
+    PatchedVehicleCategoryRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          title: Category name
+          maxLength: 100
+        description:
+          type: string
+        icon:
+          type: string
+          format: binary
+          nullable: true
+          title: Icon/banner
+        is_active:
+          type: boolean
+    PatchedVehicleColourConfigAdminRequest:
+      type: object
+      description: Admin serializer for configuring vehicle colours, images, and price
+        adjustments.
+      properties:
+        variant:
+          type: integer
+          title: Vehicle variant
+        combination:
+          type: integer
+          title: Colour combination
+        image:
+          type: string
+          format: binary
+          nullable: true
+          title: Customized vehicle image
+          description: High-resolution render of the vehicle in this exact color finish
+        price_adjustment:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          title: Price adjustment (₹)
+          description: Additive amount (e.g., ₹1500 for dual-tone premium finish,
+            0 for standard)
+        is_available:
+          type: boolean
+          title: Currently available
+    PatchedVehicleModelRequest:
+      type: object
+      properties:
+        category:
+          type: integer
+        name:
+          type: string
+          minLength: 1
+          title: Model name
+          maxLength: 120
+        tagline:
+          type: string
+          maxLength: 255
+        description:
+          type: string
+        is_featured:
+          type: boolean
+          title: Featured model
+        is_active:
+          type: boolean
+    PatchedVehicleVariantCreateUpdateRequest:
+      type: object
+      description: |-
+        Admin serializer that atomically provisions or updates a VehicleVariant
+        and its nested VehicleSpecification in a single database transaction.
+      properties:
+        model:
+          type: integer
+          title: Vehicle model
+        name:
+          type: string
+          minLength: 1
+          title: Variant name
+          maxLength: 120
+        sku:
+          type: string
+          minLength: 1
+          title: SKU / Code
+          maxLength: 60
+        base_price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,10}(?:\.\d{0,2})?$
+          title: Ex-showroom price (₹)
+        original_price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,10}(?:\.\d{0,2})?$
+          nullable: true
+          title: Strikethrough original price (₹)
+          description: For promotional strikethrough display (e.g., ₹104,999/-*)
+        default_image:
+          type: string
+          format: binary
+          nullable: true
+          title: Catalogue display image
+        is_active:
+          type: boolean
+        specification:
+          $ref: '#/components/schemas/VehicleSpecificationRequest'
+    PriceCalculationRequestRequest:
+      type: object
+      description: Validates client request parameters when calculating dynamic configuration
+        price.
+      properties:
+        variant_id:
+          type: integer
+        combination_id:
+          type: integer
+      required:
+      - combination_id
+      - variant_id
+    ReviewCreate:
+      type: object
+      description: Serializer for authenticated customer review submission.
+      properties:
+        rating:
+          type: integer
+          maximum: 5
+          minimum: 1
+          description: Star rating from 1 to 5.
+        title:
+          type: string
+          description: Summary headline for the review.
+          maxLength: 150
+        comment:
+          type: string
+          description: Detailed feedback, riding experience, pros and cons.
+      required:
+      - comment
+      - rating
+      - title
+    ReviewCreateRequest:
+      type: object
+      description: Serializer for authenticated customer review submission.
+      properties:
+        variant_id:
+          type: integer
+          writeOnly: true
+        rating:
+          type: integer
+          maximum: 5
+          minimum: 1
+          description: Star rating from 1 to 5.
+        title:
+          type: string
+          minLength: 1
+          description: Summary headline for the review.
+          maxLength: 150
+        comment:
+          type: string
+          minLength: 1
+          description: Detailed feedback, riding experience, pros and cons.
+      required:
+      - comment
+      - rating
+      - title
+      - variant_id
+    ReviewCustomerSummary:
+      type: object
+      description: Sanitized customer profile summary for public review displays.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          readOnly: true
+        role:
+          allOf:
+          - $ref: '#/components/schemas/RoleEnum'
+          title: User role
+      required:
+      - id
+      - name
+    ReviewModeration:
+      type: object
+      description: Serializer for admin review moderation (approval/rejection).
+      properties:
+        status:
+          allOf:
+          - $ref: '#/components/schemas/ReviewModerationStatusEnum'
+          description: |-
+            Target moderation status (APPROVED, REJECTED, PENDING).
+
+            * `PENDING` - Pending Moderation
+            * `APPROVED` - Approved
+            * `REJECTED` - Rejected
+        notes:
+          type: string
+          default: ''
+          description: Optional internal explanation or moderator comment.
+      required:
+      - status
+    ReviewModerationStatusEnum:
+      enum:
+      - PENDING
+      - APPROVED
+      - REJECTED
+      type: string
+      description: |-
+        * `PENDING` - Pending Moderation
+        * `APPROVED` - Approved
+        * `REJECTED` - Rejected
+    ReviewUpdate:
+      type: object
+      description: Serializer allowing author to edit their existing review.
+      properties:
+        rating:
+          type: integer
+          maximum: 5
+          minimum: 1
+          description: Star rating from 1 to 5.
+        title:
+          type: string
+          description: Summary headline for the review.
+          maxLength: 150
+        comment:
+          type: string
+          description: Detailed feedback, riding experience, pros and cons.
+      required:
+      - comment
+      - rating
+      - title
+    ReviewUpdateRequest:
+      type: object
+      description: Serializer allowing author to edit their existing review.
+      properties:
+        rating:
+          type: integer
+          maximum: 5
+          minimum: 1
+          description: Star rating from 1 to 5.
+        title:
+          type: string
+          minLength: 1
+          description: Summary headline for the review.
+          maxLength: 150
+        comment:
+          type: string
+          minLength: 1
+          description: Detailed feedback, riding experience, pros and cons.
+      required:
+      - comment
+      - rating
+      - title
+    ReviewVariantSummary:
+      type: object
+      description: Lightweight vehicle variant summary for review display.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          title: Variant name
+          maxLength: 120
+        sku:
+          type: string
+          title: SKU / Code
+          maxLength: 60
+        model_name:
+          type: string
+          readOnly: true
+        category_name:
+          type: string
+          readOnly: true
+      required:
+      - category_name
+      - id
+      - model_name
+      - name
+      - sku
+    RoleEnum:
+      enum:
+      - ADMIN
+      - CUSTOMER
+      type: string
+      description: |-
+        * `ADMIN` - Administrator
+        * `CUSTOMER` - Customer
+    SparePartCreateUpdate:
+      type: object
+      description: Admin serializer for creating and editing spare part details.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        category:
+          type: integer
+        part_number:
+          type: string
+          title: Part number / SKU
+          description: Unique SKU (e.g. VOLT-BAT-LIPO4-72V)
+          maxLength: 60
+        name:
+          type: string
+          title: Part name
+          maxLength: 150
+        description:
+          type: string
+        price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          title: Price (₹)
+        image:
+          type: string
+          format: uri
+          nullable: true
+          title: Part photo
+        stock_quantity:
+          type: integer
+          maximum: 4294967295
+          minimum: 0
+          format: int64
+        low_stock_threshold:
+          type: integer
+          maximum: 4294967295
+          minimum: 0
+          format: int64
+          title: Low stock alert threshold
+        stock_status:
+          type: string
+          readOnly: true
+        is_active:
+          type: boolean
+      required:
+      - category
+      - description
+      - id
+      - name
+      - part_number
+      - price
+      - stock_status
+    SparePartCreateUpdateRequest:
+      type: object
+      description: Admin serializer for creating and editing spare part details.
+      properties:
+        category:
+          type: integer
+        part_number:
+          type: string
+          minLength: 1
+          title: Part number / SKU
+          description: Unique SKU (e.g. VOLT-BAT-LIPO4-72V)
+          maxLength: 60
+        name:
+          type: string
+          minLength: 1
+          title: Part name
+          maxLength: 150
+        description:
+          type: string
+          minLength: 1
+        price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          title: Price (₹)
+        image:
+          type: string
+          format: binary
+          nullable: true
+          title: Part photo
+        stock_quantity:
+          type: integer
+          maximum: 4294967295
+          minimum: 0
+          format: int64
+        low_stock_threshold:
+          type: integer
+          maximum: 4294967295
+          minimum: 0
+          format: int64
+          title: Low stock alert threshold
+        is_active:
+          type: boolean
+      required:
+      - category
+      - description
+      - name
+      - part_number
+      - price
+    SparePartDetail:
+      type: object
+      description: Full detail representation for single spare part view.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        category:
+          type: integer
+        category_details:
+          allOf:
+          - $ref: '#/components/schemas/PartCategory'
+          readOnly: true
+        part_number:
+          type: string
+          title: Part number / SKU
+          description: Unique SKU (e.g. VOLT-BAT-LIPO4-72V)
+          maxLength: 60
+        name:
+          type: string
+          title: Part name
+          maxLength: 150
+        slug:
+          type: string
+          readOnly: true
+          pattern: ^[-a-zA-Z0-9_]+$
+        description:
+          type: string
+        price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          title: Price (₹)
+        image:
+          type: string
+          format: uri
+          nullable: true
+          title: Part photo
+        stock_quantity:
+          type: integer
+          maximum: 4294967295
+          minimum: 0
+          format: int64
+        low_stock_threshold:
+          type: integer
+          maximum: 4294967295
+          minimum: 0
+          format: int64
+          title: Low stock alert threshold
+        stock_status:
+          type: string
+          readOnly: true
+        is_in_stock:
+          type: boolean
+          readOnly: true
+        is_active:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - category
+      - category_details
+      - created_at
+      - description
+      - id
+      - is_in_stock
+      - name
+      - part_number
+      - price
+      - slug
+      - stock_status
+      - updated_at
+    SparePartList:
+      type: object
+      description: |-
+        List representation exposing the dynamically computed stock_status
+        and stock availability badge without manual calculation.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        category:
+          type: integer
+        category_name:
+          type: string
+          readOnly: true
+        category_slug:
+          type: string
+          readOnly: true
+        part_number:
+          type: string
+          title: Part number / SKU
+          description: Unique SKU (e.g. VOLT-BAT-LIPO4-72V)
+          maxLength: 60
+        name:
+          type: string
+          title: Part name
+          maxLength: 150
+        slug:
+          type: string
+          readOnly: true
+          pattern: ^[-a-zA-Z0-9_]+$
+        price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          title: Price (₹)
+        image:
+          type: string
+          format: uri
+          nullable: true
+          title: Part photo
+        stock_quantity:
+          type: integer
+          maximum: 4294967295
+          minimum: 0
+          format: int64
+        low_stock_threshold:
+          type: integer
+          maximum: 4294967295
+          minimum: 0
+          format: int64
+          title: Low stock alert threshold
+        stock_status:
+          type: string
+          readOnly: true
+        is_in_stock:
+          type: boolean
+          readOnly: true
+        is_active:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - category
+      - category_name
+      - category_slug
+      - created_at
+      - id
+      - is_in_stock
+      - name
+      - part_number
+      - price
+      - slug
+      - stock_status
+    StockAdjustmentRequest:
+      type: object
+      description: Serializes admin stock adjustment actions (ADD, DEDUCT, SET).
+      properties:
+        action:
+          $ref: '#/components/schemas/ActionEnum'
+        quantity:
+          type: integer
+          minimum: 0
+        reason:
+          type: string
+          default: ''
+          maxLength: 255
+      required:
+      - action
+      - quantity
+    TimeSlotEnum:
+      enum:
+      - 10:00-11:00
+      - 11:00-12:00
+      - 12:00-13:00
+      - 14:00-15:00
+      - 15:00-16:00
+      - 16:00-17:00
+      - 17:00-18:00
+      type: string
+      description: |-
+        * `10:00-11:00` - 10:00 AM - 11:00 AM
+        * `11:00-12:00` - 11:00 AM - 12:00 PM
+        * `12:00-13:00` - 12:00 PM - 01:00 PM
+        * `14:00-15:00` - 02:00 PM - 03:00 PM
+        * `15:00-16:00` - 03:00 PM - 04:00 PM
+        * `16:00-17:00` - 04:00 PM - 05:00 PM
+        * `17:00-18:00` - 05:00 PM - 06:00 PM
+    TokenRefreshRequest:
+      type: object
+      properties:
+        refresh:
+          type: string
+          minLength: 1
+      required:
+      - refresh
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        email:
+          type: string
+          format: email
+          title: Email address
+          maxLength: 254
+        username:
+          type: string
+          description: Required. 150 characters or fewer. Letters, digits and @/./+/-/_
+            only.
+          maxLength: 150
+        first_name:
+          type: string
+          maxLength: 150
+        last_name:
+          type: string
+          maxLength: 150
+        role:
+          allOf:
+          - $ref: '#/components/schemas/RoleEnum'
+          readOnly: true
+          title: User role
+        phone_number:
+          type: string
+          maxLength: 15
+        is_staff:
+          type: boolean
+          readOnly: true
+          title: Staff status
+          description: Designates whether the user can log into this admin site.
+        profile:
+          allOf:
+          - $ref: '#/components/schemas/CustomerProfile'
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - email
+      - id
+      - is_staff
+      - profile
+      - role
+      - username
+    UserRegistrationRequest:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          minLength: 1
+          title: Email address
+          maxLength: 254
+        username:
+          type: string
+          minLength: 1
+          description: Required. 150 characters or fewer. Letters, digits and @/./+/-/_
+            only.
+          maxLength: 150
+        password:
+          type: string
+          writeOnly: true
+          minLength: 1
+        password_confirm:
+          type: string
+          writeOnly: true
+          minLength: 1
+        first_name:
+          type: string
+          maxLength: 150
+        last_name:
+          type: string
+          maxLength: 150
+        phone_number:
+          type: string
+          maxLength: 15
+        city:
+          type: string
+          writeOnly: true
+          default: ''
+        driving_license_number:
+          type: string
+          writeOnly: true
+          default: ''
+      required:
+      - email
+      - password
+      - password_confirm
+      - username
+    UserUpdate:
+      type: object
+      properties:
+        first_name:
+          type: string
+          maxLength: 150
+        last_name:
+          type: string
+          maxLength: 150
+        phone_number:
+          type: string
+          maxLength: 15
+        profile:
+          $ref: '#/components/schemas/CustomerProfile'
+    UserUpdateRequest:
+      type: object
+      properties:
+        first_name:
+          type: string
+          maxLength: 150
+        last_name:
+          type: string
+          maxLength: 150
+        phone_number:
+          type: string
+          maxLength: 15
+        profile:
+          $ref: '#/components/schemas/CustomerProfileRequest'
+    VehicleCategory:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          title: Category name
+          maxLength: 100
+        slug:
+          type: string
+          readOnly: true
+          pattern: ^[-a-zA-Z0-9_]+$
+        description:
+          type: string
+        icon:
+          type: string
+          format: uri
+          nullable: true
+          title: Icon/banner
+        is_active:
+          type: boolean
+        models_count:
+          type: integer
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - id
+      - models_count
+      - name
+      - slug
+    VehicleCategoryRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          title: Category name
+          maxLength: 100
+        description:
+          type: string
+        icon:
+          type: string
+          format: binary
+          nullable: true
+          title: Icon/banner
+        is_active:
+          type: boolean
+      required:
+      - name
+    VehicleColourConfigAdmin:
+      type: object
+      description: Admin serializer for configuring vehicle colours, images, and price
+        adjustments.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        variant:
+          type: integer
+          title: Vehicle variant
+        combination:
+          type: integer
+          title: Colour combination
+        combination_details:
+          allOf:
+          - $ref: '#/components/schemas/ColourCombination'
+          readOnly: true
+        image:
+          type: string
+          format: uri
+          nullable: true
+          title: Customized vehicle image
+          description: High-resolution render of the vehicle in this exact color finish
+        price_adjustment:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          title: Price adjustment (₹)
+          description: Additive amount (e.g., ₹1500 for dual-tone premium finish,
+            0 for standard)
+        total_price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,10}(?:\.\d{0,2})?$
+          readOnly: true
+        is_available:
+          type: boolean
+          title: Currently available
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - combination
+      - combination_details
+      - created_at
+      - id
+      - total_price
+      - updated_at
+      - variant
+    VehicleColourConfigAdminRequest:
+      type: object
+      description: Admin serializer for configuring vehicle colours, images, and price
+        adjustments.
+      properties:
+        variant:
+          type: integer
+          title: Vehicle variant
+        combination:
+          type: integer
+          title: Colour combination
+        image:
+          type: string
+          format: binary
+          nullable: true
+          title: Customized vehicle image
+          description: High-resolution render of the vehicle in this exact color finish
+        price_adjustment:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          title: Price adjustment (₹)
+          description: Additive amount (e.g., ₹1500 for dual-tone premium finish,
+            0 for standard)
+        is_available:
+          type: boolean
+          title: Currently available
+      required:
+      - combination
+      - variant
+    VehicleImage:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        image:
+          type: string
+          format: uri
+          title: Gallery image
+        caption:
+          type: string
+          title: Caption / view angle
+          maxLength: 150
+        display_order:
+          type: integer
+          maximum: 4294967295
+          minimum: 0
+          format: int64
+      required:
+      - id
+      - image
+    VehicleModel:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        category:
+          type: integer
+        category_name:
+          type: string
+          readOnly: true
+        category_slug:
+          type: string
+          readOnly: true
+        name:
+          type: string
+          title: Model name
+          maxLength: 120
+        slug:
+          type: string
+          readOnly: true
+          pattern: ^[-a-zA-Z0-9_]+$
+        tagline:
+          type: string
+          maxLength: 255
+        description:
+          type: string
+        is_featured:
+          type: boolean
+          title: Featured model
+        is_active:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - category
+      - category_name
+      - category_slug
+      - created_at
+      - id
+      - name
+      - slug
+    VehicleModelRequest:
+      type: object
+      properties:
+        category:
+          type: integer
+        name:
+          type: string
+          minLength: 1
+          title: Model name
+          maxLength: 120
+        tagline:
+          type: string
+          maxLength: 255
+        description:
+          type: string
+        is_featured:
+          type: boolean
+          title: Featured model
+        is_active:
+          type: boolean
+      required:
+      - category
+      - name
+    VehicleReview:
+      type: object
+      description: Comprehensive serializer for listing and detailing vehicle reviews.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        customer:
+          allOf:
+          - $ref: '#/components/schemas/ReviewCustomerSummary'
+          readOnly: true
+        variant:
+          allOf:
+          - $ref: '#/components/schemas/ReviewVariantSummary'
+          readOnly: true
+        rating:
+          type: integer
+          maximum: 5
+          minimum: 1
+          description: Star rating from 1 to 5.
+        title:
+          type: string
+          description: Summary headline for the review.
+          maxLength: 150
+        comment:
+          type: string
+          description: Detailed feedback, riding experience, pros and cons.
+        is_verified_rider:
+          type: boolean
+          readOnly: true
+          description: True if the reviewer has a completed test ride booking for
+            this vehicle/variant.
+        moderation_status:
+          allOf:
+          - $ref: '#/components/schemas/ReviewModerationStatusEnum'
+          readOnly: true
+          description: |-
+            Content moderation status.
+
+            * `PENDING` - Pending Moderation
+            * `APPROVED` - Approved
+            * `REJECTED` - Rejected
+        moderation_notes:
+          type: string
+          readOnly: true
+          description: Internal notes regarding approval/rejection reason.
+        moderated_at:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+          description: Timestamp when review was moderated.
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - comment
+      - created_at
+      - customer
+      - id
+      - is_verified_rider
+      - moderated_at
+      - moderation_notes
+      - moderation_status
+      - rating
+      - title
+      - updated_at
+      - variant
+    VehicleSpecification:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        battery_type:
+          type: string
+          description: e.g., Graphene, LiFePO4, Advance Lithium
+          maxLength: 100
+        battery_capacity:
+          type: string
+          description: e.g., 72V 32Ah, 3.2 kWh
+          maxLength: 60
+        driving_range_km:
+          type: integer
+          maximum: 4294967295
+          minimum: 0
+          format: int64
+          title: Driving range (km)
+          description: Full charge estimated range (e.g., 60, 100, 322)
+        top_speed_kmh:
+          type: integer
+          maximum: 4294967295
+          minimum: 0
+          format: int64
+          title: Top speed (km/h)
+          description: e.g., 25, 65, 80
+        charging_time_hours:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,1})?$
+          title: Charging time (hours)
+          description: e.g., 4.5
+        motor_power_watt:
+          type: integer
+          maximum: 4294967295
+          minimum: 0
+          format: int64
+          title: Motor power (Watts)
+          description: e.g., 1200, 2500, 4000
+        warranty_years:
+          type: integer
+          maximum: 4294967295
+          minimum: 0
+          format: int64
+          title: Warranty period (years)
+        brakes_type:
+          type: string
+          maxLength: 100
+        tyres_type:
+          type: string
+          maxLength: 100
+        carrying_capacity_kg:
+          type: integer
+          maximum: 4294967295
+          minimum: 0
+          format: int64
+          title: Carrying capacity (kg)
+      required:
+      - battery_capacity
+      - battery_type
+      - charging_time_hours
+      - driving_range_km
+      - id
+      - motor_power_watt
+      - top_speed_kmh
+    VehicleSpecificationRequest:
+      type: object
+      properties:
+        battery_type:
+          type: string
+          minLength: 1
+          description: e.g., Graphene, LiFePO4, Advance Lithium
+          maxLength: 100
+        battery_capacity:
+          type: string
+          minLength: 1
+          description: e.g., 72V 32Ah, 3.2 kWh
+          maxLength: 60
+        driving_range_km:
+          type: integer
+          maximum: 4294967295
+          minimum: 0
+          format: int64
+          title: Driving range (km)
+          description: Full charge estimated range (e.g., 60, 100, 322)
+        top_speed_kmh:
+          type: integer
+          maximum: 4294967295
+          minimum: 0
+          format: int64
+          title: Top speed (km/h)
+          description: e.g., 25, 65, 80
+        charging_time_hours:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,1})?$
+          title: Charging time (hours)
+          description: e.g., 4.5
+        motor_power_watt:
+          type: integer
+          maximum: 4294967295
+          minimum: 0
+          format: int64
+          title: Motor power (Watts)
+          description: e.g., 1200, 2500, 4000
+        warranty_years:
+          type: integer
+          maximum: 4294967295
+          minimum: 0
+          format: int64
+          title: Warranty period (years)
+        brakes_type:
+          type: string
+          minLength: 1
+          maxLength: 100
+        tyres_type:
+          type: string
+          minLength: 1
+          maxLength: 100
+        carrying_capacity_kg:
+          type: integer
+          maximum: 4294967295
+          minimum: 0
+          format: int64
+          title: Carrying capacity (kg)
+      required:
+      - battery_capacity
+      - battery_type
+      - charging_time_hours
+      - driving_range_km
+      - motor_power_watt
+      - top_speed_kmh
+    VehicleVariantCreateUpdate:
+      type: object
+      description: |-
+        Admin serializer that atomically provisions or updates a VehicleVariant
+        and its nested VehicleSpecification in a single database transaction.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        model:
+          type: integer
+          title: Vehicle model
+        name:
+          type: string
+          title: Variant name
+          maxLength: 120
+        sku:
+          type: string
+          title: SKU / Code
+          maxLength: 60
+        base_price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,10}(?:\.\d{0,2})?$
+          title: Ex-showroom price (₹)
+        original_price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,10}(?:\.\d{0,2})?$
+          nullable: true
+          title: Strikethrough original price (₹)
+          description: For promotional strikethrough display (e.g., ₹104,999/-*)
+        default_image:
+          type: string
+          format: uri
+          nullable: true
+          title: Catalogue display image
+        is_active:
+          type: boolean
+        specification:
+          $ref: '#/components/schemas/VehicleSpecification'
+      required:
+      - base_price
+      - id
+      - model
+      - name
+      - sku
+      - specification
+    VehicleVariantCreateUpdateRequest:
+      type: object
+      description: |-
+        Admin serializer that atomically provisions or updates a VehicleVariant
+        and its nested VehicleSpecification in a single database transaction.
+      properties:
+        model:
+          type: integer
+          title: Vehicle model
+        name:
+          type: string
+          minLength: 1
+          title: Variant name
+          maxLength: 120
+        sku:
+          type: string
+          minLength: 1
+          title: SKU / Code
+          maxLength: 60
+        base_price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,10}(?:\.\d{0,2})?$
+          title: Ex-showroom price (₹)
+        original_price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,10}(?:\.\d{0,2})?$
+          nullable: true
+          title: Strikethrough original price (₹)
+          description: For promotional strikethrough display (e.g., ₹104,999/-*)
+        default_image:
+          type: string
+          format: binary
+          nullable: true
+          title: Catalogue display image
+        is_active:
+          type: boolean
+        specification:
+          $ref: '#/components/schemas/VehicleSpecificationRequest'
+      required:
+      - base_price
+      - model
+      - name
+      - sku
+      - specification
+    VehicleVariantDetail:
+      type: object
+      description: |-
+        Complete detail representation for single vehicle page.
+        Includes specs and gallery images.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        model:
+          type: integer
+          title: Vehicle model
+        model_details:
+          allOf:
+          - $ref: '#/components/schemas/VehicleModel'
+          readOnly: true
+        name:
+          type: string
+          title: Variant name
+          maxLength: 120
+        slug:
+          type: string
+          readOnly: true
+          pattern: ^[-a-zA-Z0-9_]+$
+        sku:
+          type: string
+          title: SKU / Code
+          maxLength: 60
+        base_price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,10}(?:\.\d{0,2})?$
+          title: Ex-showroom price (₹)
+        original_price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,10}(?:\.\d{0,2})?$
+          nullable: true
+          title: Strikethrough original price (₹)
+          description: For promotional strikethrough display (e.g., ₹104,999/-*)
+        default_image:
+          type: string
+          format: uri
+          nullable: true
+          title: Catalogue display image
+        is_active:
+          type: boolean
+        specification:
+          allOf:
+          - $ref: '#/components/schemas/VehicleSpecification'
+          readOnly: true
+        gallery_images:
+          type: array
+          items:
+            $ref: '#/components/schemas/VehicleImage'
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - base_price
+      - created_at
+      - gallery_images
+      - id
+      - model
+      - model_details
+      - name
+      - sku
+      - slug
+      - specification
+      - updated_at
+    VehicleVariantList:
+      type: object
+      description: |-
+        Optimized serializer for catalogue card grids.
+        Mirrors the exact card fields seen in real EV showrooms:
+        Name, Price, Discount/Strikethrough, Battery Type, Range, Top Speed.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        model:
+          type: integer
+          title: Vehicle model
+        model_name:
+          type: string
+          readOnly: true
+        category_name:
+          type: string
+          readOnly: true
+        category_slug:
+          type: string
+          readOnly: true
+        name:
+          type: string
+          title: Variant name
+          maxLength: 120
+        slug:
+          type: string
+          readOnly: true
+          pattern: ^[-a-zA-Z0-9_]+$
+        sku:
+          type: string
+          title: SKU / Code
+          maxLength: 60
+        base_price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,10}(?:\.\d{0,2})?$
+          title: Ex-showroom price (₹)
+        original_price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,10}(?:\.\d{0,2})?$
+          nullable: true
+          title: Strikethrough original price (₹)
+          description: For promotional strikethrough display (e.g., ₹104,999/-*)
+        default_image:
+          type: string
+          format: uri
+          nullable: true
+          title: Catalogue display image
+        battery_type:
+          type: string
+          readOnly: true
+        driving_range_km:
+          type: integer
+          readOnly: true
+        top_speed_kmh:
+          type: integer
+          readOnly: true
+        is_active:
+          type: boolean
+      required:
+      - base_price
+      - battery_type
+      - category_name
+      - category_slug
+      - driving_range_km
+      - id
+      - model
+      - model_name
+      - name
+      - sku
+      - slug
+      - top_speed_kmh
+  securitySchemes:
+    jwtAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+tags:
+- name: Authentication & Profile
+  description: JWT authentication, customer registration, login, and user profile
+    management.
+- name: Vehicles & Specifications
+  description: Electric vehicle categories, models, variants, specifications, and
+    catalogue imagery.
+- name: Customizer & Colours
+  description: Single/dual-tone colour configurations, pricing delta calculators,
+    and customization preview.
+- name: Spare Parts & Inventory
+  description: Component categories, spare parts stock status, inventory management,
+    and low-stock alerts.
+- name: Test Ride Bookings
+  description: Test ride scheduling, slot availability queries, concurrency lock,
+    and lifecycle management.
+- name: Customer Reviews & Feedback
+  description: Star ratings (1-5), verified rider badges, moderation actions, and
+    statistical metrics.
+- name: System Health
+  description: Service readiness, database latency probes, and operational diagnostics.

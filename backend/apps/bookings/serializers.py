@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from drf_spectacular.utils import extend_schema_field
 from apps.vehicles.serializers import VehicleVariantListSerializer
 from .models import TestRideBooking
 
@@ -59,6 +60,7 @@ class BookingDetailSerializer(serializers.ModelSerializer):
         ]
         read_only_fields = fields
 
+    @extend_schema_field(serializers.CharField())
     def get_customer_name(self, obj):
         full_name = f"{obj.customer.first_name} {obj.customer.last_name}".strip()
         return full_name if full_name else obj.customer.username

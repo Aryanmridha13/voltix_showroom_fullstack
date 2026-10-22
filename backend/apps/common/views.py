@@ -16,6 +16,7 @@ class HealthCheckView(APIView):
     @extend_schema(
         summary="System Health & Database Probe",
         description="Verifies backend API responsiveness and active MySQL database connection.",
+        tags=['System Health'],
         responses={
             200: OpenApiResponse(description="System healthy and database connected"),
             503: OpenApiResponse(description="Database connectivity failure")

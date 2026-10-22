@@ -16,6 +16,7 @@ from .serializers import (
     VehicleVariantCreateUpdateSerializer,
 )
 
+@extend_schema(tags=['Vehicles & Specifications'])
 @extend_schema_view(
     list=extend_schema(summary="List Vehicle Categories (Public)"),
     retrieve=extend_schema(summary="Get Vehicle Category Details (Public)"),
@@ -62,6 +63,7 @@ class VehicleCategoryViewSet(viewsets.ModelViewSet):
         })
 
 
+@extend_schema(tags=['Vehicles & Specifications'])
 @extend_schema_view(
     list=extend_schema(summary="List Vehicle Models (Public)"),
     retrieve=extend_schema(summary="Get Vehicle Model Details (Public)"),
@@ -109,6 +111,7 @@ class VehicleModelViewSet(viewsets.ModelViewSet):
 
 
 
+@extend_schema(tags=['Vehicles & Specifications'])
 @extend_schema_view(
     list=extend_schema(summary="Search, Filter, & Paginate Vehicle Catalogue (Public)"),
     retrieve=extend_schema(summary="Get Single Vehicle Details with Full Specs (Public)"),

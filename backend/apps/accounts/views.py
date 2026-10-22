@@ -24,6 +24,7 @@ class RegisterView(APIView):
     @extend_schema(
         summary="Register Customer Account",
         description="Creates a new customer account with profile details and issues JWT tokens.",
+        tags=["Authentication & Profile"],
         request=UserRegistrationSerializer,
         responses={
             201: OpenApiResponse(description="Registration successful"),
@@ -68,6 +69,7 @@ class CustomLoginView(TokenObtainPairView):
     @extend_schema(
         summary="Customer / Admin Login",
         description="Authenticates via email/username and password. Returns JWT tokens and user profile.",
+        tags=["Authentication & Profile"],
         responses={
             200: OpenApiResponse(description="Login successful"),
             401: OpenApiResponse(description="Invalid credentials")
@@ -92,6 +94,7 @@ class CustomTokenRefreshView(TokenRefreshView):
     @extend_schema(
         summary="Refresh Access Token",
         description="Provides a new access token using a valid refresh token.",
+        tags=["Authentication & Profile"],
         responses={
             200: OpenApiResponse(description="Token refreshed successfully"),
             401: OpenApiResponse(description="Token invalid or expired")
@@ -122,7 +125,11 @@ class CurrentUserView(generics.RetrieveUpdateAPIView):
     def get_object(self):
         return self.request.user
 
-    @extend_schema(summary="Get Current User Profile")
+    @extend_schema(
+        summary="Get Current User Profile",
+        tags=["Authentication & Profile"],
+        responses={200: UserSerializer}
+    )
     def get(self, request, *args, **kwargs):
         serializer = self.get_serializer(self.get_object())
         return Response({
@@ -131,7 +138,12 @@ class CurrentUserView(generics.RetrieveUpdateAPIView):
             "data": serializer.data
         })
 
-    @extend_schema(summary="Update Current User Profile")
+    @extend_schema(
+        summary="Update Current User Profile",
+        tags=["Authentication & Profile"],
+        request=UserUpdateSerializer,
+        responses={200: UserSerializer}
+    )
     def patch(self, request, *args, **kwargs):
         serializer = self.get_serializer(self.get_object(), data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
@@ -151,6 +163,7 @@ class ChangePasswordView(APIView):
 
     @extend_schema(
         summary="Change Password",
+        tags=["Authentication & Profile"],
         request=ChangePasswordSerializer,
         responses={200: OpenApiResponse(description="Password changed successfully")}
     )
@@ -174,7 +187,14 @@ class LogoutView(APIView):
     """
     permission_classes = [IsAuthenticated]
 
-    @extend_schema(summary="Logout User")
+    @extend_schema(
+        summary="Logout User",
+        tags=["Authentication & Profile"],
+        request=None,
+        responses={
+            200: OpenApiResponse(description="Logged out successfully. Purge client tokens.")
+        }
+    )
     def post(self, request):
         return Response({
             "success": True,

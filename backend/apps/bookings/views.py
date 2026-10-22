@@ -17,6 +17,7 @@ from .serializers import (
     AdminBookingStatusUpdateSerializer,
 )
 
+@extend_schema(tags=['Test Ride Bookings'])
 @extend_schema_view(
     list=extend_schema(summary="List Test Ride Bookings (Customer sees own, Admin sees all)"),
     retrieve=extend_schema(summary="Get Single Booking Details (Owner or Admin)"),

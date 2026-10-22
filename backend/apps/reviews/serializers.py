@@ -2,6 +2,7 @@
 Serializers for Vehicle Reviews and Customer Feedback.
 """
 from rest_framework import serializers
+from drf_spectacular.utils import extend_schema_field
 from django.contrib.auth import get_user_model
 from apps.reviews.models import VehicleReview
 from apps.reviews.services import ReviewService
@@ -20,6 +21,7 @@ class ReviewCustomerSummarySerializer(serializers.ModelSerializer):
         model = User
         fields = ['id', 'name', 'role']
 
+    @extend_schema_field(serializers.CharField())
     def get_name(self, obj):
         full_name = obj.get_full_name()
         if full_name:

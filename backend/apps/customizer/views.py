@@ -15,6 +15,7 @@ from .serializers import (
     PriceCalculationRequestSerializer,
 )
 
+@extend_schema(tags=['Customizer & Colours'])
 @extend_schema_view(
     list=extend_schema(summary="List Vehicle Colours (Public)"),
     retrieve=extend_schema(summary="Get Colour Details (Public)"),
@@ -43,6 +44,7 @@ class ColourViewSet(viewsets.ModelViewSet):
         })
 
 
+@extend_schema(tags=['Customizer & Colours'])
 @extend_schema_view(
     list=extend_schema(summary="List Colour Combinations (Public)"),
     retrieve=extend_schema(summary="Get Colour Combination Details (Public)"),
@@ -74,6 +76,7 @@ class ColourCombinationViewSet(viewsets.ModelViewSet):
         })
 
 
+@extend_schema(tags=['Customizer & Colours'])
 class VehicleColourConfigViewSet(viewsets.ModelViewSet):
     """
     Admin ViewSet for configuring vehicle colour options, images, and price adjustments.
@@ -98,6 +101,7 @@ class VariantCustomizationOptionsView(APIView):
     @extend_schema(
         summary="Get Vehicle Customizer Options",
         description="Returns available single-tone & dual-tone finishes with price adjustments and high-res images for a vehicle variant.",
+        tags=['Customizer & Colours'],
         responses={200: OpenApiResponse(description="Customization options loaded")}
     )
     def get(self, request, variant_id):
@@ -128,6 +132,7 @@ class CalculatePriceView(APIView):
     @extend_schema(
         summary="Calculate Dynamic Configuration Price",
         description="Validates variant and colour combination, calculates price adjustments, and returns authoritative total price and image.",
+        tags=['Customizer & Colours'],
         request=PriceCalculationRequestSerializer,
         responses={
             200: OpenApiResponse(description="Price calculated successfully"),

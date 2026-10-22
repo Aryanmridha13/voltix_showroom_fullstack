@@ -198,9 +198,27 @@ CORS_ALLOW_CREDENTIALS = True
 # DRF SPECTACULAR (SWAGGER / OPENAPI 3.0)
 # ------------------------------------------------------------------------------
 SPECTACULAR_SETTINGS = {
-    'TITLE': 'Electric Vehicle Showroom Management API',
-    'DESCRIPTION': 'Enterprise RESTful API for EV catalogue, dynamic colour customizer, bookings, parts, and reviews.',
+    'TITLE': 'Voltix EV Motors Showroom API',
+    'DESCRIPTION': (
+        'Enterprise RESTful API specification for the Voltix EV Motors management platform. '
+        'Includes vehicle catalogue, dynamic colour customizer, spare parts inventory, '
+        'test ride booking engine, and customer ratings & feedback.'
+    ),
     'VERSION': '1.0.0',
     'SERVE_INCLUDE_SCHEMA': False,
     'COMPONENT_SPLIT_REQUEST': True,
+    'SCHEMA_PATH_PREFIX': r'/api/v[0-9]',
+    'ENUM_NAME_OVERRIDES': {
+        'BookingStatusEnum': 'apps.bookings.models.TestRideBooking.Status',
+        'ReviewModerationStatusEnum': 'apps.reviews.models.VehicleReview.ModerationStatus',
+    },
+    'TAGS': [
+        {'name': 'Authentication & Profile', 'description': 'JWT authentication, customer registration, login, and user profile management.'},
+        {'name': 'Vehicles & Specifications', 'description': 'Electric vehicle categories, models, variants, specifications, and catalogue imagery.'},
+        {'name': 'Customizer & Colours', 'description': 'Single/dual-tone colour configurations, pricing delta calculators, and customization preview.'},
+        {'name': 'Spare Parts & Inventory', 'description': 'Component categories, spare parts stock status, inventory management, and low-stock alerts.'},
+        {'name': 'Test Ride Bookings', 'description': 'Test ride scheduling, slot availability queries, concurrency lock, and lifecycle management.'},
+        {'name': 'Customer Reviews & Feedback', 'description': 'Star ratings (1-5), verified rider badges, moderation actions, and statistical metrics.'},
+        {'name': 'System Health', 'description': 'Service readiness, database latency probes, and operational diagnostics.'},
+    ],
 }

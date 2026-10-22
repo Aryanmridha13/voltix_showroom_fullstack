@@ -18,6 +18,7 @@ from .serializers import (
     StockAdjustmentSerializer,
 )
 
+@extend_schema(tags=['Spare Parts & Inventory'])
 @extend_schema_view(
     list=extend_schema(summary="List Spare Part Categories (Public)"),
     retrieve=extend_schema(summary="Get Part Category Details (Public)"),
@@ -47,6 +48,7 @@ class PartCategoryViewSet(viewsets.ModelViewSet):
         })
 
 
+@extend_schema(tags=['Spare Parts & Inventory'])
 @extend_schema_view(
     list=extend_schema(summary="Search, Filter, & Paginate Spare Parts (Public)"),
     retrieve=extend_schema(summary="Get Single Spare Part Details (Public)"),
