@@ -30,9 +30,11 @@ eggs/
 .eggs/
 lib/
 lib64/
-parts/
+/parts/
+!backend/apps/parts/
 sdist/
 var/
+
 wheels/
 share/python-wheels/
 *.egg-info/
