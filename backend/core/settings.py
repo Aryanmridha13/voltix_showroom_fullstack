@@ -144,9 +144,11 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
 # ------------------------------------------------------------------------------
-# DEFAULT PRIMARY KEY FIELD TYPE
+# DEFAULT PRIMARY KEY FIELD TYPE & SYSTEM CHECKS
 # ------------------------------------------------------------------------------
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+SILENCED_SYSTEM_CHECKS = ['models.W036']
+
 
 # ------------------------------------------------------------------------------
 # DJANGO REST FRAMEWORK CONFIGURATION
