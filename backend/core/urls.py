@@ -27,6 +27,7 @@ urlpatterns = [
     path('api/v1/customizer/', include('apps.customizer.urls', namespace='customizer')),
     path('api/v1/parts/', include('apps.parts.urls', namespace='parts')),
     path('api/v1/bookings/', include('apps.bookings.urls', namespace='bookings')),
+    path('api/v1/reviews/', include('apps.reviews.urls', namespace='reviews')),
 ]
 
 # Serve media files in local development

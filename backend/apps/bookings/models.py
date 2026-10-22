@@ -82,10 +82,14 @@ class TestRideBooking(TimestampedModel):
 
     def clean(self):
         super().clean()
-        if self.booking_date and self.booking_date < timezone.now().date():
-            raise ValidationError({
-                'booking_date': _("Booking date cannot be in the past.")
-            })
+        if self.booking_date:
+            if isinstance(self.booking_date, str):
+                import datetime
+                self.booking_date = datetime.date.fromisoformat(self.booking_date)
+            if self.status in [self.Status.PENDING, self.Status.CONFIRMED] and self.booking_date < timezone.now().date():
+                raise ValidationError({
+                    'booking_date': _("Booking date cannot be in the past.")
+                })
 
     def save(self, *args, **kwargs):
         if not self.booking_reference:
