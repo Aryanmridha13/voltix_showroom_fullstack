@@ -12,13 +12,13 @@ import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import NotFound from './pages/NotFound';
-import PlaceholderPage from './pages/PlaceholderPage';
 import VehicleCatalogue from './pages/VehicleCatalogue';
 import VehicleDetail from './pages/VehicleDetail';
 import Customizer from './pages/Customizer';
 import BookTestRide from './pages/BookTestRide';
 import MyBookings from './pages/MyBookings';
 import SparePartsCatalogue from './pages/SparePartsCatalogue';
+import AdminDashboard from './pages/AdminDashboard';
 
 export default function App() {
   return (
@@ -56,18 +56,12 @@ export default function App() {
                   {/* Spare Parts Catalogue */}
                   <Route path="/parts" element={<SparePartsCatalogue />} />
 
-                  {/* Admin Management Portal (Phase 17) */}
+                  {/* Admin Management Portal */}
                   <Route
                     path="/admin"
                     element={
                       <ProtectedRoute allowedRoles={['ADMIN']}>
-                        <PlaceholderPage
-                          title="Admin Showroom Command Center"
-                          phase="Phase 17 Milestone"
-                          description="Inventory stock adjuster, review moderation queue, booking status manager, and showroom metrics."
-                          actionText="Back to Showroom"
-                          actionLink="/"
-                        />
+                        <AdminDashboard />
                       </ProtectedRoute>
                     }
                   />
