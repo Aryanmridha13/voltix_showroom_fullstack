@@ -83,7 +83,7 @@ export default function Register() {
           <div className="w-12 h-12 rounded-full bg-neutral-950 flex items-center justify-center shadow-md shadow-neutral-900/20 mx-auto">
             <Zap className="w-5 h-5 text-white fill-white" />
           </div>
-          <h2 className="text-3xl font-display font-black text-neutral-950 uppercase tracking-tight">Create Voltix Account</h2>
+          <h2 className="text-3xl font-section-title text-neutral-950 uppercase tracking-section">Create Voltix Account</h2>
           <p className="text-xs text-neutral-500 font-medium">
             Join the electric revolution. Book rides, customize trims, and track orders.
           </p>

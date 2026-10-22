@@ -83,7 +83,7 @@ export default function HorizontalVehicleShowcase({ vehicles = [] }) {
             <Sparkles className="w-3.5 h-3.5 text-emerald-400" />
             Performance Lineup
           </div>
-          <h2 className="text-3xl sm:text-5xl font-display font-black text-neutral-950 tracking-tight uppercase">
+          <h2 className="text-3xl sm:text-5xl font-section-title font-black text-neutral-950 tracking-section uppercase">
             Engineered <span className="text-emerald-600">Fleet</span>
           </h2>
           <p className="text-sm text-neutral-500 max-w-xl font-medium">
@@ -139,7 +139,7 @@ export default function HorizontalVehicleShowcase({ vehicles = [] }) {
                   <span className="text-[11px] font-bold text-emerald-700 uppercase tracking-widest block">
                     {variant.model_name || 'Voltix Series'}
                   </span>
-                  <h3 className="text-2xl font-display font-black text-neutral-950 tracking-tight group-hover:text-emerald-700 transition-colors">
+                  <h3 className="text-xl sm:text-2xl font-card-title text-neutral-950 tracking-card group-hover:text-emerald-700 transition-colors uppercase">
                     {variant.name}
                   </h3>
                 </div>

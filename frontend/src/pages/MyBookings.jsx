@@ -104,7 +104,7 @@ export default function MyBookings() {
             <Calendar className="w-3.5 h-3.5 text-emerald-400" />
             Rider Dashboard
           </div>
-          <h1 className="text-4xl sm:text-6xl font-display font-black text-neutral-950 tracking-tight uppercase">
+          <h1 className="text-4xl sm:text-6xl font-section-title font-black text-neutral-950 tracking-section uppercase">
             My Test Ride Bookings
           </h1>
           <p className="text-sm text-neutral-500 mt-1 font-medium max-w-2xl">
@@ -209,7 +209,7 @@ export default function MyBookings() {
                     <span className="text-[10px] uppercase font-bold text-emerald-700 block">
                       {b.model_name || 'Voltix Model'}
                     </span>
-                    <h3 className="text-xl font-display font-black text-neutral-950 truncate uppercase tracking-tight">{b.variant_name}</h3>
+                    <h3 className="text-lg sm:text-xl font-card-title text-neutral-950 truncate uppercase tracking-card">{b.variant_name}</h3>
                   </div>
                 </div>
 

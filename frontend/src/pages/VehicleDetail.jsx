@@ -213,7 +213,7 @@ export default function VehicleDetail() {
             <span className="text-xs uppercase font-bold text-emerald-700 tracking-wider">
               {variant.model_details?.tagline || 'Voltix Pure Electric'}
             </span>
-            <h1 className="text-3xl sm:text-5xl font-display font-black text-neutral-950 uppercase tracking-tight">
+            <h1 className="text-3xl sm:text-5xl font-section-title font-black text-neutral-950 uppercase tracking-section">
               {variant.model_details?.name} {variant.name}
             </h1>
             <p className="text-xs text-neutral-500 font-mono font-medium">SKU: {variant.sku}</p>
@@ -307,7 +307,7 @@ export default function VehicleDetail() {
       {/* Technical Specifications Matrix */}
       <section className="space-y-6 pt-8 border-t border-neutral-200">
         <div className="space-y-1">
-          <h2 className="text-2xl sm:text-4xl font-display font-black text-neutral-950 uppercase tracking-tight">Full Technical Specifications</h2>
+          <h2 className="text-2xl sm:text-4xl font-section-title font-black text-neutral-950 uppercase tracking-section">Full Technical Specifications</h2>
           <p className="text-xs text-neutral-500 font-medium">
             Certified technical benchmarks, motor architecture, and safety ratings.
           </p>
@@ -316,7 +316,7 @@ export default function VehicleDetail() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {/* Powertrain & Battery */}
           <div className="p-6 rounded-3xl bg-white border border-neutral-200/90 shadow-md space-y-4">
-            <div className="flex items-center gap-2 text-neutral-950 font-display font-black text-sm uppercase tracking-wider">
+            <div className="flex items-center gap-2 text-neutral-950 font-card-title text-sm uppercase tracking-card">
               <Zap className="w-4 h-4 text-emerald-600" />
               Powertrain & Battery
             </div>
@@ -342,7 +342,7 @@ export default function VehicleDetail() {
 
           {/* Performance & Dynamics */}
           <div className="p-6 rounded-3xl bg-white border border-neutral-200/90 shadow-md space-y-4">
-            <div className="flex items-center gap-2 text-neutral-950 font-display font-black text-sm uppercase tracking-wider">
+            <div className="flex items-center gap-2 text-neutral-950 font-card-title text-sm uppercase tracking-card">
               <Gauge className="w-4 h-4 text-neutral-950" />
               Performance & Dynamics
             </div>
@@ -368,7 +368,7 @@ export default function VehicleDetail() {
 
           {/* Warranty & Resilience */}
           <div className="p-6 rounded-3xl bg-white border border-neutral-200/90 shadow-md space-y-4">
-            <div className="flex items-center gap-2 text-neutral-950 font-display font-black text-sm uppercase tracking-wider">
+            <div className="flex items-center gap-2 text-neutral-950 font-card-title text-sm uppercase tracking-card">
               <ShieldCheck className="w-4 h-4 text-emerald-600" />
               Warranty & Resilience
             </div>
@@ -401,7 +401,7 @@ export default function VehicleDetail() {
             <MessageSquare className="w-4 h-4" />
             Rider Community Feedback
           </div>
-          <h2 className="text-2xl sm:text-4xl font-display font-black text-neutral-950 uppercase tracking-tight">Owner Reviews & Experiences</h2>
+          <h2 className="text-2xl sm:text-4xl font-section-title font-black text-neutral-950 uppercase tracking-section">Owner Reviews & Experiences</h2>
         </div>
 
         {/* Reviews Breakdown Card */}

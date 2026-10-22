@@ -18,7 +18,7 @@ export default function Footer() {
               <BatteryCharging className="w-6 h-6 text-emerald-600" />
             </div>
             <div>
-              <h4 className="text-sm font-display font-black text-neutral-950 uppercase tracking-tight">5-Year Battery Warranty</h4>
+              <h4 className="text-sm font-card-title text-neutral-950 uppercase tracking-card">5-Year Battery Warranty</h4>
               <p className="text-xs text-neutral-500 font-medium">Up to 80% capacity guarantee over 100,000 km.</p>
             </div>
           </div>
@@ -28,7 +28,7 @@ export default function Footer() {
               <ShieldCheck className="w-6 h-6 text-neutral-950" />
             </div>
             <div>
-              <h4 className="text-sm font-display font-black text-neutral-950 uppercase tracking-tight">100% Genuine Spare Parts</h4>
+              <h4 className="text-sm font-card-title text-neutral-950 uppercase tracking-card">100% Genuine Spare Parts</h4>
               <p className="text-xs text-neutral-500 font-medium">Direct from factory inventory with full traceability.</p>
             </div>
           </div>
@@ -38,7 +38,7 @@ export default function Footer() {
               <Clock className="w-6 h-6 text-emerald-700" />
             </div>
             <div>
-              <h4 className="text-sm font-display font-black text-neutral-950 uppercase tracking-tight">Instant Slot Booking</h4>
+              <h4 className="text-sm font-card-title text-neutral-950 uppercase tracking-card">Instant Slot Booking</h4>
               <p className="text-xs text-neutral-500 font-medium">Guaranteed 45-min experiential test ride booking.</p>
             </div>
           </div>
@@ -73,7 +73,7 @@ export default function Footer() {
 
         {/* Quick Links */}
         <div>
-          <h3 className="text-sm font-display font-black text-neutral-950 uppercase tracking-wider mb-4">Showroom</h3>
+          <h3 className="text-sm font-card-title text-neutral-950 uppercase tracking-card mb-4">Showroom</h3>
           <ul className="space-y-2.5 text-xs font-medium">
             <li>
               <Link to="/vehicles" className="hover:text-neutral-950 transition-colors">
@@ -100,7 +100,7 @@ export default function Footer() {
 
         {/* Support & Trust */}
         <div>
-          <h3 className="text-sm font-display font-black text-neutral-950 uppercase tracking-wider mb-4">Support & Trust</h3>
+          <h3 className="text-sm font-card-title text-neutral-950 uppercase tracking-card mb-4">Support & Trust</h3>
           <ul className="space-y-2.5 text-xs font-medium text-neutral-600">
             <li>
               <span>Roadside Assistance (24/7)</span>
@@ -119,7 +119,7 @@ export default function Footer() {
 
         {/* Showroom Contact */}
         <div>
-          <h3 className="text-sm font-display font-black text-neutral-950 uppercase tracking-wider mb-4">Flagship Experience Hub</h3>
+          <h3 className="text-sm font-card-title text-neutral-950 uppercase tracking-card mb-4">Flagship Experience Hub</h3>
           <ul className="space-y-3 text-xs font-medium">
             <li className="flex items-start gap-2.5">
               <MapPin className="w-4 h-4 text-emerald-700 shrink-0 mt-0.5" />

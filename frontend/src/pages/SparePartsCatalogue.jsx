@@ -252,7 +252,7 @@ export default function SparePartsCatalogue() {
           <Sparkles className="w-3.5 h-3.5 text-emerald-400" />
           100% Genuine OEM Certified Inventory
         </div>
-        <h1 className="text-4xl sm:text-6xl font-display font-black tracking-tight text-neutral-950 uppercase">
+        <h1 className="text-4xl sm:text-6xl font-section-title font-black tracking-section text-neutral-950 uppercase">
           EV Spare Parts & <span className="text-emerald-700">Components</span>
         </h1>
         <p className="text-neutral-500 text-sm font-medium leading-relaxed">
@@ -461,7 +461,7 @@ export default function SparePartsCatalogue() {
                   </div>
 
                   {/* Part Name & SKU */}
-                  <h3 className="text-xl font-display font-black text-neutral-950 group-hover:text-emerald-700 transition-colors line-clamp-2 mb-1.5 uppercase tracking-tight">
+                  <h3 className="text-lg sm:text-xl font-card-title text-neutral-950 group-hover:text-emerald-700 transition-colors line-clamp-2 mb-1.5 uppercase tracking-card">
                     {part.name}
                   </h3>
 

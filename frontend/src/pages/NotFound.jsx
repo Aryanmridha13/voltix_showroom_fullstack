@@ -20,7 +20,7 @@ export default function NotFound() {
         </div>
         <div className="space-y-2 relative z-10">
           <span className="text-7xl font-display font-black text-neutral-950 block">404</span>
-          <h2 className="text-2xl font-display font-black text-neutral-950 uppercase tracking-tight">Route Off-Grid</h2>
+          <h2 className="text-2xl font-section-title text-neutral-950 uppercase tracking-section">Route Off-Grid</h2>
           <p className="text-xs text-neutral-500 font-medium leading-relaxed">
             The page or vehicle configuration you are looking for has been relocated or does not exist.
           </p>

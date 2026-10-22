@@ -153,7 +153,7 @@ export default function Customizer() {
             <Sparkles className="w-3.5 h-3.5 text-emerald-400" />
             Interactive Studio
           </div>
-          <h1 className="text-4xl sm:text-6xl font-display font-black text-neutral-950 tracking-tight uppercase">
+          <h1 className="text-4xl sm:text-6xl font-section-title font-black text-neutral-950 tracking-section uppercase">
             Vehicle Finish Studio
           </h1>
           <p className="text-sm text-neutral-500 mt-1 font-medium max-w-2xl">

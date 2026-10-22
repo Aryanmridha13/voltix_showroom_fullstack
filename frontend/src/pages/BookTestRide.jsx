@@ -229,7 +229,7 @@ export default function BookTestRide() {
           <Calendar className="w-3.5 h-3.5 text-emerald-400" />
           Experiential Test Ride
         </div>
-        <h1 className="text-4xl sm:text-6xl font-display font-black text-neutral-950 tracking-tight uppercase">
+        <h1 className="text-4xl sm:text-6xl font-section-title font-black text-neutral-950 tracking-section uppercase">
           Schedule Your Test Ride
         </h1>
         <p className="text-sm text-neutral-500 max-w-2xl font-medium">
@@ -243,7 +243,7 @@ export default function BookTestRide() {
         <div className="lg:col-span-7 space-y-8">
           {/* Step 1: Select Vehicle */}
           <div className="p-6 rounded-3xl bg-white border border-neutral-200/90 shadow-md space-y-4">
-            <h3 className="text-sm font-display font-black text-neutral-950 uppercase tracking-wider flex items-center gap-2">
+            <h3 className="text-sm font-card-title text-neutral-950 uppercase tracking-card flex items-center gap-2">
               <span className="w-6 h-6 rounded-full bg-neutral-950 text-white flex items-center justify-center text-xs font-bold">
                 1
               </span>
@@ -294,7 +294,7 @@ export default function BookTestRide() {
 
           {/* Step 2: Choose Date & Time Slot */}
           <div className="p-6 rounded-3xl bg-white border border-neutral-200/90 shadow-md space-y-6">
-            <h3 className="text-sm font-display font-black text-neutral-950 uppercase tracking-wider flex items-center gap-2">
+            <h3 className="text-sm font-card-title text-neutral-950 uppercase tracking-card flex items-center gap-2">
               <span className="w-6 h-6 rounded-full bg-neutral-950 text-white flex items-center justify-center text-xs font-bold">
                 2
               </span>
@@ -361,7 +361,7 @@ export default function BookTestRide() {
         {/* Right Side: Rider Verification Form & Summary */}
         <div className="lg:col-span-5 space-y-6">
           <div className="p-6 rounded-3xl bg-white border border-neutral-200/90 shadow-md space-y-6">
-            <h3 className="text-sm font-display font-black text-neutral-950 uppercase tracking-wider flex items-center gap-2 border-b border-neutral-200 pb-3">
+            <h3 className="text-sm font-card-title text-neutral-950 uppercase tracking-card flex items-center gap-2 border-b border-neutral-200 pb-3">
               <span className="w-6 h-6 rounded-full bg-neutral-950 text-white flex items-center justify-center text-xs font-bold">
                 3
               </span>

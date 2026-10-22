@@ -85,10 +85,34 @@
   transform: translateY(-1px);
 }
 
-/* Automotive Bold Typography & 3D Stage Utilities */
+/* Automotive Bold Typography & Spacing Utilities */
 .font-display {
   font-family: 'Anton', 'Syne', -apple-system, BlinkMacSystemFont, sans-serif;
-  letter-spacing: -0.025em;
+  letter-spacing: 0.04em;
+  word-spacing: 0.35em;
+}
+
+.font-section-title {
+  font-family: 'Anton', 'Syne', -apple-system, BlinkMacSystemFont, sans-serif;
+  letter-spacing: 0.05em;
+  word-spacing: 0.38em;
+}
+
+.font-card-title {
+  font-family: 'Syne', 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-weight: 800;
+  letter-spacing: 0.035em;
+  word-spacing: 0.18em;
+}
+
+.tracking-section {
+  letter-spacing: 0.05em !important;
+  word-spacing: 0.38em !important;
+}
+
+.tracking-card {
+  letter-spacing: 0.035em !important;
+  word-spacing: 0.18em !important;
 }
 
 .perspective-1200 {
@@ -98,3 +122,4 @@
 .preserve-3d {
   transform-style: preserve-3d;
 }
+

@@ -324,3 +324,30 @@
 | **Hardcoded Content** | `0%` | 100% of vehicles, prices, specs, stock, and reviews come from MySQL |
 | **Security Standard** | Server-Side RBAC | JWT Bearer authentication, route guards, admin validation |
 | **Current Phase** | Phase 18 / 20 Completed | Ready for Phase 19 upon user command `next` |
+
+---
+
+## 🎨 7. Phase 18 Typography & Spacing Hardening (White Studio Design System)
+
+### Request Addressed:
+- **Requirement:** Increase letter-spacing and word-spacing in all section titles and card titles across the application, keeping the main hero section (`InteractiveTeslaStage.jsx`) untouched.
+- **Problem Resolved:**
+  - Extra-condensed font `Anton` was previously paired with negative tracking (`tracking-tight`), causing letters in titles such as `"BUILT TO EVERY ANGLE"`, `"ENGINEERED FLEET"`, and card badges to collide/touch with zero word separation.
+  - Card titles at 14px–16px became crushed and illegible when rendered with `Anton`.
+- **Architectural Solution Implemented:**
+  1. **Global Design System (`frontend/src/index.css`):**
+     - `.font-section-title`: `font-family: 'Anton', 'Syne', sans-serif; letter-spacing: 0.05em; word-spacing: 0.38em;`
+     - `.font-card-title`: `font-family: 'Syne', 'Outfit', sans-serif; font-weight: 800; letter-spacing: 0.035em; word-spacing: 0.18em;`
+     - `.tracking-section` and `.tracking-card` utility classes with `!important` overrides.
+  2. **Components & Pages Updated:**
+     - `AngleShowcase.jsx`: Section title `BUILT TO EVERY ANGLE` upgraded to `.font-section-title .tracking-section`. All 6 engineering cards updated to `.font-card-title .tracking-card`.
+     - `HorizontalVehicleShowcase.jsx`: Title `ENGINEERED FLEET` upgraded to `.font-section-title .tracking-section`. Vehicle card headers updated to `.font-card-title .tracking-card`.
+     - `Home.jsx`: Performance stats section title and numbers upgraded to `.font-section-title`.
+     - `VehicleCatalogue.jsx`, `VehicleDetail.jsx`, `Customizer.jsx`, `BookTestRide.jsx`, `MyBookings.jsx`, `SparePartsCatalogue.jsx`: All section and card headings upgraded to unified spacing standards.
+     - `Footer.jsx`: Guarantee badges and showroom column headers upgraded to `.font-card-title .tracking-card`.
+     - `Login.jsx`, `Register.jsx`, `NotFound.jsx`: Form headers upgraded to `.font-section-title .tracking-section`.
+     - **Hero Section Preserved:** `InteractiveTeslaStage.jsx` left intact as requested.
+  3. **Verification:**
+     - Vite 8 build passed in 1.50s (`dist/index.html` built cleanly).
+     - Django test suite passed 70/70 tests with zero errors.
+

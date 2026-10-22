@@ -78,7 +78,7 @@ export default function Home() {
             <span className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-neutral-900 text-white text-xs font-bold uppercase tracking-wider shadow-sm">
               Automotive Engineering Integrity
             </span>
-            <h2 className="text-3xl sm:text-5xl font-display font-black text-neutral-950 uppercase tracking-tight">
+            <h2 className="text-3xl sm:text-5xl font-section-title font-black text-neutral-950 uppercase tracking-section">
               Flawless Performance. <span className="text-emerald-700">Zero Compromise.</span>
             </h2>
             <p className="text-sm text-neutral-500 max-w-xl mx-auto font-medium">
@@ -88,26 +88,26 @@ export default function Home() {
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center divide-y md:divide-y-0 md:divide-x divide-neutral-200 relative z-10">
             <motion.div whileHover={{ scale: 1.05 }} className="space-y-2 pt-4 md:pt-0">
-              <span className="text-4xl sm:text-6xl font-display font-black text-neutral-950 tracking-tight block">160K+</span>
-              <p className="text-xs text-neutral-500 uppercase font-bold">Electric Km Logged</p>
+              <span className="text-4xl sm:text-6xl font-section-title font-black text-neutral-950 tracking-wide block">160K+</span>
+              <p className="text-xs text-neutral-500 uppercase font-bold tracking-wider">Electric Km Logged</p>
               <span className="text-[11px] text-emerald-700 block font-semibold">By Verified Riders</span>
             </motion.div>
 
             <motion.div whileHover={{ scale: 1.05 }} className="space-y-2 pt-4 md:pt-0 md:pl-6">
-              <span className="text-4xl sm:text-6xl font-display font-black text-neutral-950 tracking-tight block">0.18₹</span>
-              <p className="text-xs text-neutral-500 uppercase font-bold">Per KM Operating Cost</p>
+              <span className="text-4xl sm:text-6xl font-section-title font-black text-neutral-950 tracking-wide block">0.18₹</span>
+              <p className="text-xs text-neutral-500 uppercase font-bold tracking-wider">Per KM Operating Cost</p>
               <span className="text-[11px] text-emerald-700 block font-semibold">92% Petrol Savings</span>
             </motion.div>
 
             <motion.div whileHover={{ scale: 1.05 }} className="space-y-2 pt-4 md:pt-0 md:pl-6">
-              <span className="text-4xl sm:text-6xl font-display font-black text-neutral-950 tracking-tight block">45 Min</span>
-              <p className="text-xs text-neutral-500 uppercase font-bold">Fast Charge Window</p>
+              <span className="text-4xl sm:text-6xl font-section-title font-black text-neutral-950 tracking-wide block">45 Min</span>
+              <p className="text-xs text-neutral-500 uppercase font-bold tracking-wider">Fast Charge Window</p>
               <span className="text-[11px] text-emerald-700 block font-semibold">CCS2 Compatible</span>
             </motion.div>
 
             <motion.div whileHover={{ scale: 1.05 }} className="space-y-2 pt-4 md:pt-0 md:pl-6">
-              <span className="text-4xl sm:text-6xl font-display font-black text-neutral-950 tracking-tight block">98%</span>
-              <p className="text-xs text-neutral-500 uppercase font-bold">Customer Trust Score</p>
+              <span className="text-4xl sm:text-6xl font-section-title font-black text-neutral-950 tracking-wide block">98%</span>
+              <p className="text-xs text-neutral-500 uppercase font-bold tracking-wider">Customer Trust Score</p>
               <span className="text-[11px] text-emerald-700 block font-semibold">5-Year BMS Warranty</span>
             </motion.div>
           </div>

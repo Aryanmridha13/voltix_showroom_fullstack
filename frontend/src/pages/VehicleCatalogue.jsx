@@ -115,7 +115,7 @@ export default function VehicleCatalogue() {
             <Zap className="w-3.5 h-3.5 text-emerald-400" />
             Zero-Emission Fleet
           </div>
-          <h1 className="text-4xl sm:text-6xl font-display font-black text-neutral-950 tracking-tight uppercase">
+          <h1 className="text-4xl sm:text-6xl font-section-title font-black text-neutral-950 tracking-section uppercase">
             Vehicle Catalogue
           </h1>
           <p className="text-sm text-neutral-500 mt-1 font-medium max-w-2xl">
@@ -321,7 +321,7 @@ export default function VehicleCatalogue() {
                   <p className="text-[11px] font-bold text-emerald-700 uppercase tracking-widest">
                     {variant.model_name}
                   </p>
-                  <h3 className="text-2xl font-display font-black text-neutral-950 group-hover:text-emerald-700 transition-colors uppercase tracking-tight">
+                  <h3 className="text-xl sm:text-2xl font-card-title text-neutral-950 group-hover:text-emerald-700 transition-colors uppercase tracking-card">
                     {variant.name}
                   </h3>
                 </div>
