@@ -358,5 +358,13 @@
      - **Title Text Sizing:** Refined card titles (`variant.name`) from oversized `text-2xl` to balanced, legible `text-lg sm:text-xl font-bold font-card-title tracking-wide leading-snug`, eliminating awkward wrapping and preventing collisions with the vehicle cutouts.
      - **Background Watermark Visibility:** Elevated faint `[0.045]` opacities across all background watermarks (`MODEL 01`, `MODEL 02`, `INTEGRITY`, `VOLTIX`, `ACCESS`, `REGISTER`, `404`) to bold, rich visible black contrast (`text-neutral-950/20` / `text-neutral-950/15`).
 
+  5. **Footer Guarantee Badge Cards Enlargement:**
+     - Resized the three guarantee badges (`5-Year Battery Warranty`, `100% Genuine Spare Parts`, `Instant Slot Booking`) in `Footer.jsx` slightly:
+       - Increased card padding from `p-5` to `p-6`.
+       - Increased icon container from `w-12 h-12` to `w-14 h-14` with `w-7 h-7` icons.
+       - Enriched title size to `text-[15px]` and description to `text-xs sm:text-[13px]` with `leading-relaxed`.
+       - Increased grid padding to `py-10` with `gap-6 sm:gap-7`.
+
+
 
 

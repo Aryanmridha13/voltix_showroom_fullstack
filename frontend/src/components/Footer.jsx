@@ -12,34 +12,34 @@ export default function Footer() {
     <footer className="border-t border-neutral-200/90 bg-[#f4f4f6] text-neutral-600 mt-auto">
       {/* Feature Guarantee Badges */}
       <div className="border-b border-neutral-200/80 bg-white/60">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="flex items-center gap-4 p-5 rounded-2xl bg-white border border-neutral-200/90 shadow-sm hover:shadow-md transition-shadow">
-            <div className="w-12 h-12 rounded-xl bg-neutral-100 border border-neutral-200 flex items-center justify-center shrink-0">
-              <BatteryCharging className="w-6 h-6 text-emerald-600" />
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-7">
+          <div className="flex items-center gap-5 p-6 rounded-2xl bg-white border border-neutral-200/90 shadow-sm hover:shadow-md transition-all">
+            <div className="w-14 h-14 rounded-2xl bg-neutral-100 border border-neutral-200 flex items-center justify-center shrink-0">
+              <BatteryCharging className="w-7 h-7 text-emerald-600" />
             </div>
             <div>
-              <h4 className="text-sm font-card-title text-neutral-950 uppercase tracking-card">5-Year Battery Warranty</h4>
-              <p className="text-xs text-neutral-500 font-medium">Up to 80% capacity guarantee over 100,000 km.</p>
+              <h4 className="text-[15px] font-card-title text-neutral-950 uppercase tracking-card mb-0.5">5-Year Battery Warranty</h4>
+              <p className="text-xs sm:text-[13px] text-neutral-500 font-medium leading-relaxed">Up to 80% capacity guarantee over 100,000 km.</p>
             </div>
           </div>
 
-          <div className="flex items-center gap-4 p-5 rounded-2xl bg-white border border-neutral-200/90 shadow-sm hover:shadow-md transition-shadow">
-            <div className="w-12 h-12 rounded-xl bg-neutral-100 border border-neutral-200 flex items-center justify-center shrink-0">
-              <ShieldCheck className="w-6 h-6 text-neutral-950" />
+          <div className="flex items-center gap-5 p-6 rounded-2xl bg-white border border-neutral-200/90 shadow-sm hover:shadow-md transition-all">
+            <div className="w-14 h-14 rounded-2xl bg-neutral-100 border border-neutral-200 flex items-center justify-center shrink-0">
+              <ShieldCheck className="w-7 h-7 text-neutral-950" />
             </div>
             <div>
-              <h4 className="text-sm font-card-title text-neutral-950 uppercase tracking-card">100% Genuine Spare Parts</h4>
-              <p className="text-xs text-neutral-500 font-medium">Direct from factory inventory with full traceability.</p>
+              <h4 className="text-[15px] font-card-title text-neutral-950 uppercase tracking-card mb-0.5">100% Genuine Spare Parts</h4>
+              <p className="text-xs sm:text-[13px] text-neutral-500 font-medium leading-relaxed">Direct from factory inventory with full traceability.</p>
             </div>
           </div>
 
-          <div className="flex items-center gap-4 p-5 rounded-2xl bg-white border border-neutral-200/90 shadow-sm hover:shadow-md transition-shadow">
-            <div className="w-12 h-12 rounded-xl bg-neutral-100 border border-neutral-200 flex items-center justify-center shrink-0">
-              <Clock className="w-6 h-6 text-emerald-700" />
+          <div className="flex items-center gap-5 p-6 rounded-2xl bg-white border border-neutral-200/90 shadow-sm hover:shadow-md transition-all">
+            <div className="w-14 h-14 rounded-2xl bg-neutral-100 border border-neutral-200 flex items-center justify-center shrink-0">
+              <Clock className="w-7 h-7 text-emerald-700" />
             </div>
             <div>
-              <h4 className="text-sm font-card-title text-neutral-950 uppercase tracking-card">Instant Slot Booking</h4>
-              <p className="text-xs text-neutral-500 font-medium">Guaranteed 45-min experiential test ride booking.</p>
+              <h4 className="text-[15px] font-card-title text-neutral-950 uppercase tracking-card mb-0.5">Instant Slot Booking</h4>
+              <p className="text-xs sm:text-[13px] text-neutral-500 font-medium leading-relaxed">Guaranteed 45-min experiential test ride booking.</p>
             </div>
           </div>
         </div>
