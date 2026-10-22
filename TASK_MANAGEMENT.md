@@ -347,7 +347,10 @@
      - `Footer.jsx`: Guarantee badges and showroom column headers upgraded to `.font-card-title .tracking-card`.
      - `Login.jsx`, `Register.jsx`, `NotFound.jsx`: Form headers upgraded to `.font-section-title .tracking-section`.
      - **Hero Section Preserved:** `InteractiveTeslaStage.jsx` left intact as requested.
-  3. **Verification:**
-     - Vite 8 build passed in 1.50s (`dist/index.html` built cleanly).
+  3. **Verification & Hero Containment Fix:**
+     - Vite 8 build passed in 1.67s (`dist/index.html` built cleanly).
      - Django test suite passed 70/70 tests with zero errors.
+     - Restored `.font-display` to `letter-spacing: -0.025em; word-spacing: normal;` so the hero section background typography retains its original tight, compact editorial format.
+     - Contained the hero text (`text-[12vw] sm:text-[14vw] lg:text-[15vw]`) and optimized hero stage padding/heights so the text cannot touch or overflow into the bottom bar or subsequent sections.
+
 
