@@ -246,22 +246,22 @@ export default function SparePartsCatalogue() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 pt-24 pb-20">
+    <div className="min-h-screen bg-[#030d09] text-slate-100 pt-24 pb-20">
       {/* Background ambient lighting */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-cyan-500/10 rounded-full blur-[120px]" />
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-[120px]" />
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-emerald-500/15 rounded-full blur-[140px]" />
+        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-lime-500/10 rounded-full blur-[140px]" />
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Top Hero Section */}
         <div className="text-center max-w-3xl mx-auto mb-12">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-xs font-semibold uppercase tracking-wider mb-4">
-            <Sparkles className="w-3.5 h-3.5 animate-pulse" />
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 text-xs font-semibold uppercase tracking-wider mb-4">
+            <Sparkles className="w-3.5 h-3.5 text-lime-400 animate-pulse" />
             100% Genuine OEM Certified Inventory
           </div>
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-white mb-4">
-            EV Spare Parts & <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-emerald-400 to-teal-300">Components</span>
+            EV Spare Parts & <span className="text-gradient-emerald">Components</span>
           </h1>
           <p className="text-slate-400 text-base sm:text-lg leading-relaxed">
             High-density lithium battery modules, high-torque BLDC motors, smart digital clusters, and regenerative brake calipers engineered specifically for Voltix electric platforms.
@@ -358,7 +358,7 @@ export default function SparePartsCatalogue() {
               onClick={() => setSelectedCategory('')}
               className={`px-3.5 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-all ${
                 selectedCategory === ''
-                  ? 'bg-cyan-500 text-slate-950 font-bold shadow-md shadow-cyan-500/20'
+                  ? 'bg-gradient-to-r from-emerald-500 via-emerald-400 to-lime-400 text-slate-950 font-bold shadow-md shadow-emerald-500/25'
                   : 'bg-slate-800/80 text-slate-400 hover:text-slate-200 hover:bg-slate-800'
               }`}
             >
@@ -373,12 +373,12 @@ export default function SparePartsCatalogue() {
                   onClick={() => setSelectedCategory(cat.slug)}
                   className={`px-3.5 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap flex items-center gap-1.5 transition-all ${
                     isSelected
-                      ? 'bg-cyan-500 text-slate-950 font-bold shadow-md shadow-cyan-500/20'
+                      ? 'bg-gradient-to-r from-emerald-500 via-emerald-400 to-lime-400 text-slate-950 font-bold shadow-md shadow-emerald-500/25'
                       : 'bg-slate-800/80 text-slate-400 hover:text-slate-200 hover:bg-slate-800'
                   }`}
                 >
                   {cat.name}
-                  <span className={`text-[10px] px-1.5 py-0.2 rounded-full ${isSelected ? 'bg-cyan-900/30 text-slate-950 font-black' : 'bg-slate-900 text-slate-400'}`}>
+                  <span className={`text-[10px] px-1.5 py-0.2 rounded-full ${isSelected ? 'bg-slate-950/20 text-slate-950 font-black' : 'bg-slate-900 text-slate-400'}`}>
                     {count}
                   </span>
                 </button>
@@ -422,10 +422,10 @@ export default function SparePartsCatalogue() {
                 <div
                   key={part.id}
                   onClick={() => setSelectedPart(part)}
-                  className="group relative bg-slate-900/60 hover:bg-slate-900/90 border border-slate-800 hover:border-cyan-500/50 rounded-2xl p-5 flex flex-col justify-between transition-all duration-300 hover:shadow-2xl hover:shadow-cyan-500/10 cursor-pointer overflow-hidden"
+                  className="group relative bg-[#04120a]/80 hover:bg-[#06180d]/90 border border-emerald-950 hover:border-emerald-400/50 rounded-2xl p-5 flex flex-col justify-between transition-all duration-300 hover:shadow-2xl hover:shadow-emerald-500/15 cursor-pointer overflow-hidden"
                 >
                   {/* Neon Top Glow Effect */}
-                  <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-cyan-500/0 group-hover:via-cyan-400/80 to-transparent transition-all duration-500" />
+                  <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-lime-400/0 group-hover:via-lime-400/90 to-transparent transition-all duration-500" />
 
                   {/* Header: Category Badge & Stock Status */}
                   <div>

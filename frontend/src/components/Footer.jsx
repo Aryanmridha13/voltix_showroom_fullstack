@@ -4,13 +4,13 @@ import { Zap, ShieldCheck, BatteryCharging, Clock, Mail, Phone, MapPin, External
 
 export default function Footer() {
   return (
-    <footer className="border-t border-slate-800/80 bg-slate-950 text-slate-400 mt-auto">
+    <footer className="border-t border-emerald-950/60 bg-[#020b07] text-slate-400 mt-auto">
       {/* Feature Guarantee Badges */}
-      <div className="border-b border-slate-900 bg-slate-900/40">
+      <div className="border-b border-emerald-950/40 bg-[#030e09]/50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="flex items-center gap-4 p-4 rounded-2xl glass-card">
-            <div className="w-12 h-12 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center shrink-0">
-              <BatteryCharging className="w-6 h-6 text-cyan-400" />
+            <div className="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center shrink-0">
+              <BatteryCharging className="w-6 h-6 text-emerald-400" />
             </div>
             <div>
               <h4 className="text-sm font-semibold text-white">5-Year Battery Warranty</h4>
@@ -19,8 +19,8 @@ export default function Footer() {
           </div>
 
           <div className="flex items-center gap-4 p-4 rounded-2xl glass-card">
-            <div className="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center shrink-0">
-              <ShieldCheck className="w-6 h-6 text-emerald-400" />
+            <div className="w-12 h-12 rounded-xl bg-lime-500/10 border border-lime-500/20 flex items-center justify-center shrink-0">
+              <ShieldCheck className="w-6 h-6 text-lime-400" />
             </div>
             <div>
               <h4 className="text-sm font-semibold text-white">100% Genuine Spare Parts</h4>
@@ -45,7 +45,7 @@ export default function Footer() {
         {/* Brand Summary */}
         <div className="space-y-4">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-cyan-500 to-emerald-400 flex items-center justify-center shadow-md shadow-cyan-500/20">
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-emerald-500 via-teal-400 to-lime-400 flex items-center justify-center shadow-md shadow-emerald-500/25">
               <Zap className="w-5 h-5 text-slate-950 fill-slate-950" />
             </div>
             <span className="text-lg font-bold tracking-wider text-white">VOLTIX EV</span>
@@ -59,7 +59,7 @@ export default function Footer() {
               href="http://127.0.0.1:8000/api/docs/"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 text-xs font-semibold text-cyan-400 hover:text-cyan-300 transition-colors"
+              className="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-400 hover:text-lime-400 transition-colors"
             >
               OpenAPI Swagger UI <ExternalLink className="w-3 h-3" />
             </a>

@@ -31,21 +31,21 @@ export default function Navbar() {
   const navLinkClass = ({ isActive }) =>
     `text-sm font-medium transition-colors py-1 relative ${
       isActive
-        ? 'text-cyan-400 after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-gradient-to-r after:from-cyan-500 after:to-emerald-400'
+        ? 'text-emerald-400 after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-gradient-to-r after:from-emerald-400 after:to-lime-400'
         : 'text-slate-300 hover:text-white'
     }`;
 
   return (
-    <header className="sticky top-0 z-40 w-full glass-panel border-b border-slate-800/70 bg-slate-950/85 backdrop-blur-md">
+    <header className="sticky top-0 z-40 w-full glass-panel border-b border-emerald-950/60 bg-[#05140e]/90 backdrop-blur-md">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
         {/* Brand Logo */}
         <Link to="/" className="flex items-center gap-3 group">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-500 to-emerald-400 flex items-center justify-center shadow-lg shadow-cyan-500/20 group-hover:scale-105 transition-transform">
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-500 via-teal-400 to-lime-400 flex items-center justify-center shadow-lg shadow-emerald-500/25 group-hover:scale-105 transition-transform">
             <Zap className="w-5 h-5 text-slate-950 fill-slate-950" />
           </div>
           <div>
             <span className="text-xl font-bold tracking-wider text-white">VOLTIX</span>
-            <span className="text-xs font-semibold tracking-widest text-cyan-400 block -mt-1 uppercase">
+            <span className="text-xs font-semibold tracking-widest text-lime-400 block -mt-1 uppercase">
               EV Motors
             </span>
           </div>
@@ -58,7 +58,7 @@ export default function Navbar() {
           </NavLink>
           <NavLink to="/customizer" className={navLinkClass}>
             <span className="flex items-center gap-1.5">
-              <Sparkles className="w-4 h-4 text-cyan-400" />
+              <Sparkles className="w-4 h-4 text-lime-400" />
               Customizer
             </span>
           </NavLink>
@@ -70,14 +70,14 @@ export default function Navbar() {
           </NavLink>
           <NavLink to="/parts" className={navLinkClass}>
             <span className="flex items-center gap-1.5">
-              <Wrench className="w-4 h-4 text-slate-400" />
+              <Wrench className="w-4 h-4 text-teal-400" />
               Spare Parts
             </span>
           </NavLink>
           {isAdmin && (
             <NavLink
               to="/admin"
-              className="text-xs font-semibold px-2.5 py-1 rounded-full bg-cyan-500/10 text-cyan-400 border border-cyan-500/30 flex items-center gap-1"
+              className="text-xs font-semibold px-2.5 py-1 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-500/35 hover:border-lime-400/50 flex items-center gap-1"
             >
               <ShieldAlert className="w-3.5 h-3.5" />
               Admin Portal
@@ -91,9 +91,9 @@ export default function Navbar() {
             <div className="relative">
               <button
                 onClick={() => setProfileDropdownOpen(!profileDropdownOpen)}
-                className="flex items-center gap-2.5 px-3 py-1.5 rounded-full bg-slate-900 border border-slate-800 hover:border-slate-700 transition-colors text-slate-200"
+                className="flex items-center gap-2.5 px-3 py-1.5 rounded-full bg-slate-900 border border-emerald-900/60 hover:border-emerald-700 transition-colors text-slate-200"
               >
-                <div className="w-7 h-7 rounded-full bg-cyan-500/20 text-cyan-400 flex items-center justify-center font-bold text-xs uppercase">
+                <div className="w-7 h-7 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-xs uppercase">
                   {user?.first_name ? user.first_name[0] : (user?.username?.[0] || 'U')}
                 </div>
                 <span className="text-sm font-medium max-w-[120px] truncate">
@@ -105,13 +105,13 @@ export default function Navbar() {
               {/* Profile Dropdown */}
               {profileDropdownOpen && (
                 <div
-                  className="absolute right-0 mt-2 w-56 rounded-2xl glass-panel bg-slate-900/95 border border-slate-800 shadow-2xl py-2 z-50 animate-in fade-in slide-in-from-top-2"
+                  className="absolute right-0 mt-2 w-56 rounded-2xl glass-panel bg-[#05140e]/95 border border-emerald-900/50 shadow-2xl py-2 z-50 animate-in fade-in slide-in-from-top-2"
                   onMouseLeave={() => setProfileDropdownOpen(false)}
                 >
                   <div className="px-4 py-2 border-b border-slate-800">
                     <p className="text-xs font-semibold text-slate-400">Signed in as</p>
                     <p className="text-sm font-medium text-white truncate">{user?.email}</p>
-                    <span className="inline-block mt-1 text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded bg-cyan-500/20 text-cyan-300">
+                    <span className="inline-block mt-1 text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300">
                       {user?.role}
                     </span>
                   </div>
@@ -121,7 +121,7 @@ export default function Navbar() {
                       <Link
                         to="/my-bookings"
                         onClick={() => setProfileDropdownOpen(false)}
-                        className="flex items-center gap-2.5 px-4 py-2.5 text-sm text-slate-300 hover:bg-slate-800/60 hover:text-cyan-400 transition-colors"
+                        className="flex items-center gap-2.5 px-4 py-2.5 text-sm text-slate-300 hover:bg-slate-800/60 hover:text-emerald-400 transition-colors"
                       >
                         <Calendar className="w-4 h-4" />
                         My Test Rides
@@ -133,7 +133,7 @@ export default function Navbar() {
                     <Link
                       to="/admin"
                       onClick={() => setProfileDropdownOpen(false)}
-                      className="flex items-center gap-2.5 px-4 py-2.5 text-sm text-cyan-400 hover:bg-slate-800/60 transition-colors"
+                      className="flex items-center gap-2.5 px-4 py-2.5 text-sm text-emerald-400 hover:bg-slate-800/60 transition-colors"
                     >
                       <ShieldAlert className="w-4 h-4" />
                       Admin Control Panel
@@ -154,13 +154,13 @@ export default function Navbar() {
             <div className="flex items-center gap-3">
               <Link
                 to="/login"
-                className="text-sm font-medium text-slate-300 hover:text-white px-3 py-1.5 transition-colors"
+                className="text-sm font-medium text-slate-300 hover:text-emerald-400 px-3 py-1.5 transition-colors"
               >
                 Sign In
               </Link>
               <Link
                 to="/register"
-                className="text-sm font-semibold px-4 py-2 rounded-xl bg-gradient-to-r from-cyan-500 to-emerald-400 text-slate-950 hover:opacity-95 transition-all shadow-md shadow-cyan-500/20"
+                className="text-sm font-bold px-4 py-2 rounded-xl bg-gradient-to-r from-emerald-500 via-emerald-400 to-lime-400 text-slate-950 hover:opacity-95 transition-all shadow-md shadow-emerald-500/25"
               >
                 Register
               </Link>
@@ -186,14 +186,14 @@ export default function Navbar() {
           <NavLink
             to="/vehicles"
             onClick={() => setMobileMenuOpen(false)}
-            className="block text-slate-200 hover:text-cyan-400 text-base font-medium py-2"
+            className="block text-slate-200 hover:text-emerald-400 text-base font-medium py-2"
           >
             Vehicles
           </NavLink>
           <NavLink
             to="/customizer"
             onClick={() => setMobileMenuOpen(false)}
-            className="block text-slate-200 hover:text-cyan-400 text-base font-medium py-2"
+            className="block text-slate-200 hover:text-lime-400 text-base font-medium py-2"
           >
             Customizer
           </NavLink>
@@ -207,7 +207,7 @@ export default function Navbar() {
           <NavLink
             to="/parts"
             onClick={() => setMobileMenuOpen(false)}
-            className="block text-slate-200 hover:text-cyan-400 text-base font-medium py-2"
+            className="block text-slate-200 hover:text-teal-400 text-base font-medium py-2"
           >
             Spare Parts
           </NavLink>
@@ -215,7 +215,7 @@ export default function Navbar() {
             <NavLink
               to="/admin"
               onClick={() => setMobileMenuOpen(false)}
-              className="block text-cyan-400 text-base font-semibold py-2"
+              className="block text-emerald-400 text-base font-semibold py-2"
             >
               Admin Portal
             </NavLink>
@@ -225,7 +225,7 @@ export default function Navbar() {
             {isAuthenticated ? (
               <div className="space-y-3">
                 <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-full bg-cyan-500/20 text-cyan-400 flex items-center justify-center font-bold text-sm">
+                  <div className="w-8 h-8 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-sm">
                     {user?.first_name?.[0] || 'U'}
                   </div>
                   <div>
@@ -264,7 +264,7 @@ export default function Navbar() {
                 <Link
                   to="/register"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="w-full text-center py-2.5 rounded-xl bg-gradient-to-r from-cyan-500 to-emerald-400 text-slate-950 font-semibold"
+                  className="w-full text-center py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 via-emerald-400 to-lime-400 text-slate-950 font-bold shadow-lg shadow-emerald-500/25"
                 >
                   Register Account
                 </Link>

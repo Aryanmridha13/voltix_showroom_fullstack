@@ -33,19 +33,19 @@ export default function Home() {
       {/* Hero Section */}
       <section className="relative pt-12 pb-20 overflow-hidden">
         {/* Background Radial Glow */}
-        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[350px] bg-gradient-to-tr from-cyan-500/20 to-emerald-500/10 blur-[130px] rounded-full pointer-events-none" />
+        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[650px] h-[380px] bg-gradient-to-tr from-emerald-500/25 via-teal-500/15 to-lime-500/20 blur-[130px] rounded-full pointer-events-none" />
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10 space-y-8">
           {/* Tagline Badge */}
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass-panel border border-cyan-500/30 text-cyan-300 text-xs font-semibold uppercase tracking-wider animate-in fade-in">
-            <Zap className="w-3.5 h-3.5 text-cyan-400 fill-cyan-400" />
-            Next-Gen EV Engineering
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass-panel border border-emerald-500/30 text-emerald-300 text-xs font-semibold uppercase tracking-wider animate-in fade-in">
+            <Zap className="w-3.5 h-3.5 text-lime-400 fill-lime-400" />
+            Next-Gen Eco-Performance EV Engineering
           </div>
 
           {/* Main Headline */}
           <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-white max-w-5xl mx-auto leading-[1.1]">
             Unleash Pure Electric Power.{' '}
-            <span className="text-gradient-cyan block mt-2">Zero Emissions. Total Control.</span>
+            <span className="text-gradient-emerald block mt-2">Zero Emissions. Sustainable Velocity.</span>
           </h1>
 
           <p className="max-w-2xl mx-auto text-base sm:text-lg text-slate-300 leading-relaxed">
@@ -57,7 +57,7 @@ export default function Home() {
           <div className="flex flex-wrap items-center justify-center gap-4 pt-4">
             <Link
               to="/vehicles"
-              className="flex items-center gap-2 px-7 py-3.5 rounded-2xl bg-gradient-to-r from-cyan-500 to-emerald-400 text-slate-950 font-bold text-sm shadow-xl shadow-cyan-500/20 hover:scale-[1.02] transition-transform"
+              className="flex items-center gap-2 px-7 py-3.5 rounded-2xl bg-gradient-to-r from-emerald-500 via-emerald-400 to-lime-400 text-slate-950 font-bold text-sm shadow-xl shadow-emerald-500/25 hover:scale-[1.02] transition-transform"
             >
               Explore Showroom
               <ArrowRight className="w-4 h-4" />
@@ -65,26 +65,26 @@ export default function Home() {
 
             <Link
               to="/customizer"
-              className="flex items-center gap-2 px-7 py-3.5 rounded-2xl glass-panel text-white font-semibold text-sm hover:border-cyan-500/50 hover:bg-slate-900/80 transition-all"
+              className="flex items-center gap-2 px-7 py-3.5 rounded-2xl glass-panel text-white font-semibold text-sm hover:border-lime-400/50 hover:bg-[#051a11] transition-all"
             >
-              <Sparkles className="w-4 h-4 text-cyan-400" />
+              <Sparkles className="w-4 h-4 text-lime-400" />
               Configure in 3D
             </Link>
 
             <Link
               to="/book-test-ride"
-              className="flex items-center gap-2 px-7 py-3.5 rounded-2xl bg-slate-900 border border-slate-800 text-emerald-400 font-semibold text-sm hover:border-emerald-500/40 transition-all"
+              className="flex items-center gap-2 px-7 py-3.5 rounded-2xl bg-[#05140e] border border-emerald-900/60 text-emerald-300 font-semibold text-sm hover:border-emerald-500/60 transition-all"
             >
-              <Calendar className="w-4 h-4" />
+              <Calendar className="w-4 h-4 text-emerald-400" />
               Book Test Ride
             </Link>
           </div>
 
           {/* Backend Diagnostics Pill */}
           <div className="pt-8 flex justify-center">
-            <div className="inline-flex items-center gap-3 px-4 py-2 rounded-xl bg-slate-900/80 border border-slate-800/80 text-xs text-slate-400">
+            <div className="inline-flex items-center gap-3 px-4 py-2 rounded-xl bg-slate-900/80 border border-emerald-950 text-xs text-slate-400">
               <span className="flex items-center gap-1.5 font-medium">
-                <Activity className="w-3.5 h-3.5 text-cyan-400" />
+                <Activity className="w-3.5 h-3.5 text-lime-400" />
                 Live Showroom Service:
               </span>
               {health?.status === 'healthy' ? (

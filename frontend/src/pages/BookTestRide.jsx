@@ -277,12 +277,12 @@ export default function BookTestRide() {
                     </div>
                     <div className="flex-1 min-w-0">
                       <p className="text-xs font-bold text-white truncate">{v.name}</p>
-                      <span className="text-[11px] text-cyan-400 block font-medium">
+                      <span className="text-[11px] text-lime-400 block font-medium">
                         {v.model_name}
                       </span>
                     </div>
                     {isSelected && (
-                      <div className="w-5 h-5 rounded-full bg-cyan-400 text-slate-950 flex items-center justify-center shrink-0">
+                      <div className="w-5 h-5 rounded-full bg-lime-400 text-slate-950 flex items-center justify-center shrink-0">
                         <Check className="w-3 h-3 stroke-[3]" />
                       </div>
                     )}
@@ -292,10 +292,10 @@ export default function BookTestRide() {
             </div>
           </div>
 
-          {/* Step 2: Choose Date & Time Slot */}
-          <div className="p-6 rounded-3xl glass-panel border border-slate-800/80 space-y-6">
+            {/* Step 2: Choose Date & Time Slot */}
+          <div className="p-6 rounded-3xl glass-panel border border-emerald-950/80 space-y-6">
             <h3 className="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
-              <span className="w-6 h-6 rounded-full bg-cyan-500/20 text-cyan-400 flex items-center justify-center text-xs font-bold">
+              <span className="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-xs font-bold">
                 2
               </span>
               Choose Date & Available Time Slot
@@ -312,7 +312,7 @@ export default function BookTestRide() {
                 max={getMaxDateString()}
                 value={selectedDate}
                 onChange={(e) => setSelectedDate(e.target.value)}
-                className="w-full sm:w-64 px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-sm text-white focus:outline-none focus:border-cyan-500"
+                className="w-full sm:w-64 px-4 py-2.5 rounded-xl bg-slate-900 border border-emerald-950 text-sm text-white focus:outline-none focus:border-emerald-400"
               />
             </div>
 
@@ -323,7 +323,7 @@ export default function BookTestRide() {
                   Available 45-Min Showroom Slots
                 </span>
                 {loadingSlots && (
-                  <span className="text-xs text-cyan-400 flex items-center gap-1">
+                  <span className="text-xs text-lime-400 flex items-center gap-1">
                     <RotateCw className="w-3 h-3 animate-spin" /> Checking live availability...
                   </span>
                 )}
@@ -344,8 +344,8 @@ export default function BookTestRide() {
                         !isAvailable
                           ? 'bg-slate-900/40 border border-slate-800/40 text-slate-600 cursor-not-allowed line-through'
                           : isSelected
-                          ? 'bg-gradient-to-r from-cyan-500 to-emerald-400 text-slate-950 shadow-md shadow-cyan-500/20 ring-2 ring-cyan-400/50'
-                          : 'bg-slate-900 border border-slate-800 text-slate-200 hover:border-cyan-500/50 hover:bg-slate-850'
+                          ? 'bg-gradient-to-r from-emerald-500 via-emerald-400 to-lime-400 text-slate-950 shadow-md shadow-emerald-500/25 ring-2 ring-lime-400/60'
+                          : 'bg-slate-900 border border-emerald-950 text-slate-200 hover:border-emerald-500/50 hover:bg-[#05140e]'
                       }`}
                     >
                       <Clock className="w-3.5 h-3.5 mx-auto mb-1 opacity-70" />
@@ -442,7 +442,7 @@ export default function BookTestRide() {
                 <button
                   type="submit"
                   disabled={submitting || !selectedSlot}
-                  className="w-full flex items-center justify-center gap-2 py-3.5 rounded-xl bg-gradient-to-r from-cyan-500 to-emerald-400 text-slate-950 font-bold text-xs hover:opacity-95 transition-opacity disabled:opacity-40 shadow-lg shadow-cyan-500/20"
+                  className="w-full flex items-center justify-center gap-2 py-3.5 rounded-xl bg-gradient-to-r from-emerald-500 via-emerald-400 to-lime-400 text-slate-950 font-bold text-xs hover:opacity-95 transition-opacity disabled:opacity-40 shadow-lg shadow-emerald-500/25"
                 >
                   {submitting ? 'Locking Slot...' : 'Confirm Test Ride Booking'}
                   <ArrowRight className="w-4 h-4" />
@@ -451,7 +451,7 @@ export default function BookTestRide() {
                 <div className="space-y-2 pt-2">
                   <button
                     type="submit"
-                    className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-slate-800 text-cyan-400 font-bold text-xs hover:bg-slate-750 transition-colors"
+                    className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-[#05140e] border border-emerald-900/60 text-emerald-400 font-bold text-xs hover:bg-[#082218] transition-colors"
                   >
                     Sign In to Confirm Slot
                   </button>

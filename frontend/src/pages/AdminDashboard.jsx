@@ -254,23 +254,23 @@ export default function AdminDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 pt-24 pb-20">
+    <div className="min-h-screen bg-[#030d09] text-slate-100 pt-24 pb-20">
       {/* Background ambient lighting */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
-        <div className="absolute top-10 right-1/4 w-96 h-96 bg-cyan-500/10 rounded-full blur-[140px]" />
-        <div className="absolute bottom-10 left-1/4 w-96 h-96 bg-emerald-500/10 rounded-full blur-[140px]" />
+        <div className="absolute top-10 right-1/4 w-96 h-96 bg-emerald-500/15 rounded-full blur-[140px]" />
+        <div className="absolute bottom-10 left-1/4 w-96 h-96 bg-lime-500/10 rounded-full blur-[140px]" />
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Command Center Header */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
           <div>
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-xs font-semibold uppercase tracking-wider mb-2">
-              <ShieldAlert className="w-3.5 h-3.5" />
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 text-xs font-semibold uppercase tracking-wider mb-2">
+              <ShieldAlert className="w-3.5 h-3.5 text-lime-400" />
               Administrative Level 1 Access
             </div>
             <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black text-white tracking-tight">
-              Showroom <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-emerald-400 to-teal-300">Command Center</span>
+              Showroom <span className="text-gradient-emerald">Command Center</span>
             </h1>
             <p className="text-slate-400 text-sm">
               Live fleet telemetry, inventory allocation, test ride dispatch, and verified rider moderation.
