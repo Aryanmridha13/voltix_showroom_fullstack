@@ -321,7 +321,7 @@ export default function VehicleCatalogue() {
                   <p className="text-[11px] font-extrabold text-emerald-700 uppercase tracking-widest mb-1.5">
                     {variant.model_name}
                   </p>
-                  <h3 className="text-lg sm:text-xl font-bold font-card-title text-neutral-950 group-hover:text-emerald-700 transition-colors uppercase tracking-wide leading-snug">
+                  <h3 className="text-xl sm:text-[22px] font-bold font-sans text-neutral-950 group-hover:text-emerald-700 transition-colors tracking-tight leading-snug">
                     {variant.name}
                   </h3>
                 </div>

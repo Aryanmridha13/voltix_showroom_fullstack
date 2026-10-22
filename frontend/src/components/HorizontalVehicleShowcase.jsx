@@ -139,7 +139,7 @@ export default function HorizontalVehicleShowcase({ vehicles = [] }) {
                   <span className="text-[11px] font-extrabold text-emerald-700 uppercase tracking-widest block mb-1.5">
                     {variant.model_name || 'Voltix Series'}
                   </span>
-                  <h3 className="text-lg sm:text-xl font-bold font-card-title text-neutral-950 tracking-wide group-hover:text-emerald-700 transition-colors uppercase leading-snug">
+                  <h3 className="text-xl sm:text-[22px] font-bold font-sans text-neutral-950 tracking-tight group-hover:text-emerald-700 transition-colors leading-snug">
                     {variant.name}
                   </h3>
                 </div>

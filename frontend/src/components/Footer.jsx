@@ -73,7 +73,7 @@ export default function Footer() {
 
         {/* Quick Links */}
         <div>
-          <h3 className="text-sm font-card-title text-neutral-950 uppercase tracking-card mb-4">Showroom</h3>
+          <h3 className="text-[16px] sm:text-[17px] font-bold font-sans text-neutral-950 tracking-tight leading-snug mb-4">Showroom</h3>
           <ul className="space-y-2.5 text-xs font-medium">
             <li>
               <Link to="/vehicles" className="hover:text-neutral-950 transition-colors">
@@ -100,7 +100,7 @@ export default function Footer() {
 
         {/* Support & Trust */}
         <div>
-          <h3 className="text-sm font-card-title text-neutral-950 uppercase tracking-card mb-4">Support & Trust</h3>
+          <h3 className="text-[16px] sm:text-[17px] font-bold font-sans text-neutral-950 tracking-tight leading-snug mb-4">Support & Trust</h3>
           <ul className="space-y-2.5 text-xs font-medium text-neutral-600">
             <li>
               <span>Roadside Assistance (24/7)</span>
@@ -119,7 +119,7 @@ export default function Footer() {
 
         {/* Showroom Contact */}
         <div>
-          <h3 className="text-sm font-card-title text-neutral-950 uppercase tracking-card mb-4">Flagship Experience Hub</h3>
+          <h3 className="text-[16px] sm:text-[17px] font-bold font-sans text-neutral-950 tracking-tight leading-snug mb-4">Flagship Experience Hub</h3>
           <ul className="space-y-3 text-xs font-medium">
             <li className="flex items-start gap-2.5">
               <MapPin className="w-4 h-4 text-emerald-700 shrink-0 mt-0.5" />

@@ -378,6 +378,13 @@
        - Styled with `font-sans font-bold text-[16px] sm:text-[17px] text-neutral-950 tracking-tight leading-snug mb-1`.
        - Preserved description styling and expanded card proportions.
 
+  8. **Vehicle Card Titles & Footer Section Headers Typography Pattern:**
+     - Applied the reference modern Title Case geometric sans format to card and section headers:
+       - **Vehicle Catalogue (`VehicleCatalogue.jsx`)**: Updated variant title (`variant.name`) from uppercase `font-card-title` to `text-xl sm:text-[22px] font-bold font-sans text-neutral-950 tracking-tight leading-snug`.
+       - **Horizontal Fleet Showcase (`HorizontalVehicleShowcase.jsx`)**: Updated variant title (`variant.name`) to `text-xl sm:text-[22px] font-bold font-sans text-neutral-950 tracking-tight leading-snug`.
+       - **Footer Section Columns (`Footer.jsx`)**: Updated `Showroom`, `Support & Trust`, and `Flagship Experience Hub` headers to `text-[16px] sm:text-[17px] font-bold font-sans text-neutral-950 tracking-tight leading-snug mb-4`.
+
+
 
 
 
