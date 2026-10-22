@@ -42,3 +42,5 @@ export const partsService = {
     return response.data?.data || response.data;
   },
 };
+
+export default partsService;

@@ -1,0 +1,25 @@
+{
+  "name": "voltix-ev-showroom-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Voltix EV Motors - Full-Stack Electric Vehicle Showroom Management System",
+  "scripts": {
+    "install": "npm install --prefix frontend",
+    "install:all": "npm install --prefix frontend",
+    "dev": "npm run dev --prefix frontend",
+    "build": "npm run build --prefix frontend",
+    "preview": "npm run preview --prefix frontend",
+    "server": "powershell -Command \"venv\\Scripts\\python backend\\manage.py runserver 127.0.0.1:8000\"",
+    "test:backend": "powershell -Command \"venv\\Scripts\\python backend\\manage.py test apps\""
+  },
+  "keywords": [
+    "ev",
+    "showroom",
+    "django",
+    "react",
+    "vite",
+    "mysql"
+  ],
+  "author": "Voltix Engineering Team",
+  "license": "MIT"
+}

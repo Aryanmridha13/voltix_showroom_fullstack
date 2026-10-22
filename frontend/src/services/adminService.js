@@ -87,3 +87,5 @@ export const adminService = {
     return response.data?.data || response.data;
   },
 };
+
+export default adminService;
