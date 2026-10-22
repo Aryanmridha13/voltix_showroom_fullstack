@@ -27,7 +27,7 @@
 | **15** | Test Ride Booking & History UI | ✅ Completed | `feature/phase-15-booking-ui` | `2df8e6a` | Slot availability grid, license validation, customer ride history |
 | **16** | Spare Parts & Inventory Catalogue UI | ✅ Completed | `feature/phase-16-parts-ui` | `0cef901` | Live stock badges, SKU 1-click copy, part reservation hold modal |
 | **17** | Admin Portal & Command Center | ✅ Completed | `feature/phase-17-admin-portal` | `e02df74` | 4 KPI cards, stock adjuster modal, ride dispatch, review moderation |
-| **18** | System Hardening & Error Recovery | ✅ Completed | `feature/phase-18-system-hardening` | `a9aca21` | Root npm delegation, resilient service exports, alert context alias |
+| **18** | System Hardening & Error Recovery | ✅ Completed | `feature/phase-18-system-hardening` | `9a4c2c0` | Root npm delegation, Eco-Performance theme, registration error recovery |
 | **19** | Production Build & Deployment Prep | ⏳ *Next* | `feature/phase-19-deployment` | Pending | Production config, static assets bundling, security checklist |
 | **20** | Final System Verification & Delivery | ⏳ *Upcoming* | `main` | Pending | Final E2E smoke tests, documentation wrap-up, presentation |
 
@@ -211,36 +211,89 @@
 
 ---
 
-### Phase 18: System Hardening & Error Recovery
+### Phase 18: System Hardening, Eco-Performance Re-theming & Error Recovery
 - **What was implemented:**
-  - Created root `package.json` with npm delegation scripts (`install`, `dev`, `build`, `server`) to prevent root `ENOENT` directory confusion.
-  - Added dual-signature `addAlert` alias to `AlertContext.jsx`.
-  - Added default and named exports across all frontend service layers.
-  - Created superuser `admin@voltix.com` / `Admin@12345` with verified admin privileges.
+  1. **Root NPM Delegation (`package.json`):**
+     - Created root-level `package.json` with scripts (`npm run dev`, `npm run build`, `npm run server`) so commands run cleanly from root without directory mismatch errors (`ENOENT`).
+  2. **Resilient Service Layer Exports:**
+     - Standardized both default and named exports across all frontend service files (`auth.js`, `vehicles.js`, `bookings.js`, `parts.js`, `reviews.js`, `customizer.js`, `admin.js`).
+     - Added dual-signature `addAlert(type, message)` alias to `AlertContext.jsx` for universal backwards compatibility.
+  3. **Eco-Performance UI Theme (Sleek Emerald & Lime Green):**
+     - Redesigned color palette across the entire application from cyan/blue to **Emerald & Lime Green** (`#10b981`, `#84cc16`, `#05140e`) reflecting modern EV sustainability.
+     - Updated: `index.css`, `App.jsx`, `Navbar.jsx`, `Footer.jsx`, `Home.jsx`, `VehicleCatalogue.jsx`, `BookTestRide.jsx`, `SparePartsCatalogue.jsx`, `AdminDashboard.jsx`, `Login.jsx`, `Register.jsx`.
+  4. **Registration Error Resolution ("Invalid input or validation failed"):**
+     - *Issue:* When user tried registering `rohan123@gmail.com`, DRF returned a generic top-level message masking the duplicate email conflict.
+     - *Fix in `backend/apps/common/exceptions.py`:* Extracted the first specific field validation error (e.g. `"A user with that email already exists."`) directly into the top-level `error.message`.
+     - *Fix in `frontend/src/services/api.js`:* Updated response interceptor to extract nested `errorPayload.details` into `error.customMessage`.
+     - *Fix in `frontend/src/pages/Register.jsx`:* Added an inline duplicate account banner with an instant 1-click **"Sign In"** button.
+     - *Fix in `frontend/src/pages/Login.jsx`:* Added 1-click demo login buttons for **Admin** and **Customer**.
 - **Why it was implemented:**
-  - Eliminates developer friction and guarantees zero runtime crashes across all user flows.
+  - Guarantees seamless developer experience, prevents cryptic validation errors from confusing customers, and aligns the visual aesthetic with premium EV brands.
+- **Git Commit:** `9a4c2c0` on branch `feature/phase-18-system-hardening`.
 
 ---
 
-## 💡 3. Beginner-Friendly Hinglish Summary
+## 🛑 3. Current Stopping Point & Next Steps (Resume Checkpoint)
 
-> **Bhai simple shabdon mein ab tak ka safar:**
->
-> 1. **Phase 1-4 (Foundation & Database):** Humne plan banaya, Python + Django + MySQL 8 connect kiya aur clean API response format banaya.
-> 2. **Phase 5-11 (Backend Engine):** Humne Email login + JWT banaya, 11 real EV models seed kiye, 3D color customizer engine banaya, parts inventory ka stock status dynamic banaya, test ride booking mein double-booking lock lagaya, aur 70 automated tests pass karwaye.
-> 3. **Phase 12-16 (Customer Frontend):** Humne modern dark-mode glassmorphic website banayi jisme vehicle catalog, 360 specs sheet, live color studio with glow, 45-minute test ride booking slot picker, aur spare parts shop shamil hai.
-> 4. **Phase 17-18 (Admin Command Center & Hardening):** Manager ke liye `/admin` portal banaya jahan se stock badhana-ghatana (`+`/`-`), test ride confirm karna, aur customer reviews ko approve/reject karna 1 click mein hota hai. Saath hi root par commands chalane ke liye scripts set kiye.
->
-> Ab bas **Phase 19 (Production deployment prep)** aur **Phase 20 (Final delivery)** baki hain!
+> ### 📍 CURRENT STATUS: **Phase 18 COMPLETED** | Ready for **Phase 19**
+> - **Active Git Branch:** `feature/phase-18-system-hardening` (Commit: `9a4c2c0`)
+> - **Working Tree:** Clean (all changes committed and verified)
+> - **Test Suite:** `70 / 70` Backend tests passing (`Ran 70 tests in 68.857s, OK`)
+> - **Frontend Build:** `dist/` built cleanly via Vite in `1.12s` (0 errors)
+> - **Last Action Performed:** Diagnosed and resolved the registration error shown in user's screenshot (`rohan123@gmail.com` duplicate handling + human-readable error extraction).
+
+### ⏩ What Happens When We Resume (Phase 19 & 20):
+1. **Phase 19: Production Build & Deployment Prep**
+   - Create feature branch: `feature/phase-19-deployment`.
+   - Production settings (`.env.production`, WhiteNoise for static asset serving, security headers `SECURE_BROWSER_XSS_FILTER`, `X_FRAME_OPTIONS`, strict CORS).
+   - Bundling optimization and production smoke tests.
+   - Deliver complete Milestone Report (Sections A through M).
+2. **Phase 20: Final System Verification & Delivery**
+   - Merge all feature branches into `main`.
+   - Final End-to-End smoke run across all user journeys.
+   - Comprehensive project delivery documentation.
 
 ---
 
-## 📈 4. Project Vital Statistics
+## 🔑 4. Active Accounts & Server Ports Reference
+
+| Role / Service | URL / Port | Identifier / Email | Password | Status |
+| :--- | :--- | :--- | :--- | :---: |
+| **Frontend UI** | [http://127.0.0.1:5173/](http://127.0.0.1:5173/) | — | — | 🟢 Running (Vite 8) |
+| **Backend API** | [http://127.0.0.1:8000/](http://127.0.0.1:8000/) | — | — | 🟢 Running (Django 5.1) |
+| **Swagger Docs** | [http://127.0.0.1:8000/api/docs/](http://127.0.0.1:8000/api/docs/) | — | — | 🟢 Active |
+| **Admin Superuser** | `/admin` or `/login` | `admin@voltix.com` | `Admin@12345` | 🟢 Active (`ADMIN`) |
+| **Demo Customer 1** | `/login` | `vikram.rao@example.com` | `Customer@123` | 🟢 Active (`CUSTOMER`) |
+| **Customer (Rohan)**| `/login` | `rohan123@gmail.com` | *(User password)* | 🟢 Active (`CUSTOMER`) |
+
+---
+
+## 💡 5. Beginner-Friendly Hinglish Summary
+
+> **Bhai simple shabdon mein exact status:**
+>
+> 1. **Pichla Kaam Kya Hua (Last Action):**
+>    - Screenshot mein jo error aa raha tha (`Invalid input or validation failed.`), uska root cause yeh tha ki `rohan123@gmail.com` pehle se database mein register tha, par backend ka error message generic tha.
+>    - Humne backend (`exceptions.py`) aur frontend (`api.js`, `Register.jsx`) ko update kiya taaki ab clear message dikhe: *"A user with that email already exists"* aur saath mein 1-click **"Sign In"** button bhi aa jaye.
+>    - Login page par 1-click **Admin** aur **Customer** demo buttons bhi add kar diye.
+> 2. **Abhi Hum Kahan Par Ruke Hain (Exact Stopping Point):**
+>    - Hum **Phase 18 (System Hardening & Error Recovery)** complete kar chuke hain.
+>    - Branch: `feature/phase-18-system-hardening` (Commit: `9a4c2c0`).
+>    - Dono servers (Frontend port 5173 aur Django port 8000) live chal rahe hain.
+>    - 70 ke 70 backend tests pass hain, frontend build 1.12s mein pass hai.
+> 3. **Next Step Kya Hoga:**
+>    - Jab aap bolenge **`next`**, hum **Phase 19 (Production Deployment Prep)** shuru karenge (production settings, security headers, WhiteNoise static files).
+>    - Uske baad **Phase 20** mein sabhi branches `main` mein merge karke final delivery karenge.
+
+---
+
+## 📈 6. Project Vital Statistics
 
 | Metric | Measured Value | Notes |
 | :--- | :---: | :--- |
-| **Backend Unit Tests** | `70 / 70` Passing | 100% test pass rate across all 7 Django apps |
-| **Frontend Modules** | `2,018` Transformed | Built cleanly via Vite 8 in `< 1.2s` |
-| **Database Architecture** | 100% 3NF Normalized | Zero data duplication, foreign key cascades & checks |
+| **Backend Unit Tests** | `70 / 70` Passing | 100% test pass rate across all 7 Django apps (68.8s) |
+| **Frontend Modules** | `2,018` Transformed | Built cleanly via Vite 8 in `1.12s` with Tailwind CSS 4 |
+| **Database Architecture** | 100% 3NF Normalized | Zero data duplication, foreign key cascades & ACID locks |
 | **Hardcoded Content** | `0%` | 100% of vehicles, prices, specs, stock, and reviews come from MySQL |
 | **Security Standard** | Server-Side RBAC | JWT Bearer authentication, route guards, admin validation |
+| **Current Phase** | Phase 18 / 20 Completed | Ready for Phase 19 upon user command `next` |
