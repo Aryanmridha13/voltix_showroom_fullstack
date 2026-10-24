@@ -17,9 +17,9 @@ load_dotenv(dotenv_path=env_path)
 # ------------------------------------------------------------------------------
 # CORE SECURITY SETTINGS
 # ------------------------------------------------------------------------------
-SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'django-insecure-dev-fallback-key-change-in-production')
+SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'w)i@p^7#e34=#ajsr7b83fitqe)#zils*qdt@pcsg0s72#)3=a')
 
-DEBUG = os.getenv('DJANGO_DEBUG', 'True').lower() in ('true', '1', 'yes')
+DEBUG = os.getenv('DJANGO_DEBUG', 'False').lower() in ('true', '1', 'yes')
 
 ALLOWED_HOSTS = [
     host.strip()
