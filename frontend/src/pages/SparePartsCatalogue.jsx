@@ -132,7 +132,7 @@ export default function SparePartsCatalogue() {
     setError(null);
     try {
       const [partsData, catsData] = await Promise.all([
-        partsService.getParts(),
+        partsService.getParts({ page_size: 100 }),
         partsService.getCategories(),
       ]);
       const items = Array.isArray(partsData)
@@ -536,6 +536,12 @@ export default function SparePartsCatalogue() {
                       <img
                         src={part.image}
                         alt={part.name}
+                        onError={(e) => {
+                          const filename = (part.image || '').split('/').pop();
+                          if (filename && !e.target.src.endsWith(`/parts/${filename}`)) {
+                            e.target.src = `/parts/${filename}`;
+                          }
+                        }}
                         className="max-h-full max-w-full object-contain filter group-hover:scale-105 transition-transform duration-300 drop-shadow-sm"
                       />
                     ) : (
@@ -546,7 +552,7 @@ export default function SparePartsCatalogue() {
                   </div>
 
                   {/* Part Name & SKU */}
-                  <h3 className={`text-lg sm:text-xl font-card-title transition-colors line-clamp-2 mb-1.5 uppercase tracking-card ${
+                  <h3 className={`text-lg sm:text-xl font-sparepart-title transition-colors line-clamp-2 mb-1.5 ${
                     isDarkMode
                       ? 'text-white group-hover:text-emerald-400'
                       : 'text-neutral-950 group-hover:text-emerald-700'
@@ -674,10 +680,31 @@ export default function SparePartsCatalogue() {
 
             {/* Modal Body */}
             <div className="p-6 overflow-y-auto space-y-6">
+              {/* Product preview image in modal */}
+              {selectedPart.image && (
+                <div className={`h-48 sm:h-56 rounded-2xl border flex items-center justify-center p-4 overflow-hidden ${
+                  isDarkMode
+                    ? 'bg-gradient-to-b from-[#020b05] to-[#04150c] border-emerald-950/80'
+                    : 'bg-gradient-to-b from-[#fafafa] to-[#f2f2f4] border-neutral-200/80'
+                }`}>
+                  <img
+                    src={selectedPart.image}
+                    alt={selectedPart.name}
+                    onError={(e) => {
+                      const filename = (selectedPart.image || '').split('/').pop();
+                      if (filename && !e.target.src.endsWith(`/parts/${filename}`)) {
+                        e.target.src = `/parts/${filename}`;
+                      }
+                    }}
+                    className="max-h-full max-w-full object-contain filter drop-shadow-md"
+                  />
+                </div>
+              )}
+
               {/* Product overview header */}
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
-                  <h2 className={`text-2xl font-display font-black uppercase mb-1 ${
+                  <h2 className={`text-2xl font-sparepart-title mb-1 ${
                     isDarkMode ? 'text-white' : 'text-neutral-950'
                   }`}>{selectedPart.name}</h2>
                   <div className={`flex items-center gap-2 text-xs font-mono font-bold ${

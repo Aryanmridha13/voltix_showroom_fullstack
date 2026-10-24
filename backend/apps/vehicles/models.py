@@ -29,9 +29,14 @@ class VehicleCategory(TimestampedModel):
 
 class VehicleModel(TimestampedModel):
     """
-    EV Model Series (e.g., 'X-One', 'SE', 'Ranger', 'MX16', 'XR7').
+    Vehicle Model Series (e.g., 'X-One', 'SE', 'Continental GT 650', 'Panigale 899').
     A model belongs to a category and contains multiple variants with different specs/prices.
     """
+    FUEL_TYPE_CHOICES = (
+        ('electric', _('Electric Vehicle')),
+        ('petrol', _('Petrol Vehicle')),
+    )
+
     category = models.ForeignKey(
         VehicleCategory,
         on_delete=models.PROTECT,
@@ -40,6 +45,13 @@ class VehicleModel(TimestampedModel):
     )
     name = models.CharField(_('model name'), max_length=120)
     slug = models.SlugField(_('slug'), max_length=150, unique=True, blank=True)
+    fuel_type = models.CharField(
+        _('fuel type'),
+        max_length=20,
+        choices=FUEL_TYPE_CHOICES,
+        default='electric',
+        db_index=True
+    )
     tagline = models.CharField(_('tagline'), max_length=255, blank=True, default='')
     description = models.TextField(_('description'), blank=True, default='')
     is_featured = models.BooleanField(_('featured model'), default=False, db_index=True)
@@ -118,7 +130,7 @@ class VehicleVariant(TimestampedModel):
 class VehicleSpecification(TimestampedModel):
     """
     Technical and Performance Specifications for a Vehicle Variant.
-    One-to-One relationship with VehicleVariant.
+    One-to-One relationship with VehicleVariant. Supports both Electric and Petrol powertrains.
     """
     variant = models.OneToOneField(
         VehicleVariant,
@@ -126,33 +138,14 @@ class VehicleSpecification(TimestampedModel):
         related_name='specification',
         verbose_name=_('vehicle variant')
     )
-    battery_type = models.CharField(
-        _('battery type'),
-        max_length=100,
-        help_text=_('e.g., Graphene, LiFePO4, Advance Lithium')
-    )
-    battery_capacity = models.CharField(
-        _('battery capacity'),
-        max_length=60,
-        help_text=_('e.g., 72V 32Ah, 3.2 kWh')
-    )
+    # Common performance specs
     driving_range_km = models.PositiveIntegerField(
-        _('driving range (km)'),
-        help_text=_('Full charge estimated range (e.g., 60, 100, 322)')
+        _('driving range / tank range (km)'),
+        help_text=_('Full charge or tank range (e.g., 60, 140, 320, 480)')
     )
     top_speed_kmh = models.PositiveIntegerField(
         _('top speed (km/h)'),
-        help_text=_('e.g., 25, 65, 80')
-    )
-    charging_time_hours = models.DecimalField(
-        _('charging time (hours)'),
-        max_digits=4,
-        decimal_places=1,
-        help_text=_('e.g., 4.5')
-    )
-    motor_power_watt = models.PositiveIntegerField(
-        _('motor power (Watts)'),
-        help_text=_('e.g., 1200, 2500, 4000')
+        help_text=_('e.g., 25, 80, 169, 303')
     )
     warranty_years = models.PositiveIntegerField(
         _('warranty period (years)'),
@@ -160,17 +153,92 @@ class VehicleSpecification(TimestampedModel):
     )
     brakes_type = models.CharField(
         _('brakes type'),
-        max_length=100,
+        max_length=150,
         default='Front Disc, Rear Drum'
     )
     tyres_type = models.CharField(
         _('tyres type'),
-        max_length=100,
-        default='Tubeless 90/90-12'
+        max_length=150,
+        default='Tubeless'
     )
     carrying_capacity_kg = models.PositiveIntegerField(
         _('carrying capacity (kg)'),
         default=150
+    )
+
+    # Electric Powertrain Specs (optional for petrol)
+    battery_type = models.CharField(
+        _('battery type'),
+        max_length=100,
+        blank=True,
+        default='',
+        help_text=_('e.g., Graphene, LiFePO4, Advance Lithium')
+    )
+    battery_capacity = models.CharField(
+        _('battery capacity'),
+        max_length=60,
+        blank=True,
+        default='',
+        help_text=_('e.g., 72V 32Ah, 3.2 kWh')
+    )
+    charging_time_hours = models.DecimalField(
+        _('charging time (hours)'),
+        max_digits=4,
+        decimal_places=1,
+        blank=True,
+        null=True,
+        help_text=_('e.g., 4.5')
+    )
+    motor_power_watt = models.PositiveIntegerField(
+        _('motor power (Watts)'),
+        blank=True,
+        null=True,
+        help_text=_('e.g., 1200, 2500, 4000')
+    )
+
+    # Petrol / Internal Combustion Specs (optional for electric)
+    engine_displacement_cc = models.PositiveIntegerField(
+        _('engine displacement (cc)'),
+        blank=True,
+        null=True,
+        help_text=_('e.g., 349, 373, 648, 898, 999')
+    )
+    max_power_bhp = models.CharField(
+        _('max power'),
+        max_length=100,
+        blank=True,
+        default='',
+        help_text=_('e.g., 47 bhp @ 7,250 rpm, 205 bhp @ 13,000 rpm')
+    )
+    max_torque_nm = models.CharField(
+        _('max torque'),
+        max_length=100,
+        blank=True,
+        default='',
+        help_text=_('e.g., 52 Nm @ 5,250 rpm, 113 Nm @ 11,000 rpm')
+    )
+    transmission = models.CharField(
+        _('transmission'),
+        max_length=100,
+        blank=True,
+        default='',
+        help_text=_('e.g., 6-Speed Manual with Slipper Clutch')
+    )
+    fuel_tank_capacity_l = models.DecimalField(
+        _('fuel tank capacity (litres)'),
+        max_digits=5,
+        decimal_places=1,
+        blank=True,
+        null=True,
+        help_text=_('e.g., 12.5, 17.0')
+    )
+    mileage_kmpl = models.DecimalField(
+        _('mileage (km/l)'),
+        max_digits=5,
+        decimal_places=1,
+        blank=True,
+        null=True,
+        help_text=_('e.g., 16.5, 25.0, 37.0')
     )
 
     class Meta:

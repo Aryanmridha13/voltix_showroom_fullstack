@@ -39,6 +39,7 @@ class VehicleModelSerializer(serializers.ModelSerializer):
             'category_slug',
             'name',
             'slug',
+            'fuel_type',
             'tagline',
             'description',
             'is_featured',
@@ -59,6 +60,12 @@ class VehicleSpecificationSerializer(serializers.ModelSerializer):
             'top_speed_kmh',
             'charging_time_hours',
             'motor_power_watt',
+            'engine_displacement_cc',
+            'max_power_bhp',
+            'max_torque_nm',
+            'transmission',
+            'fuel_tank_capacity_l',
+            'mileage_kmpl',
             'warranty_years',
             'brakes_type',
             'tyres_type',
@@ -82,13 +89,17 @@ class VehicleImageSerializer(serializers.ModelSerializer):
 class VehicleVariantListSerializer(serializers.ModelSerializer):
     """
     Optimized serializer for catalogue card grids.
-    Mirrors the exact card fields seen in real EV showrooms:
-    Name, Price, Discount/Strikethrough, Battery Type, Range, Top Speed.
+    Mirrors the exact card fields seen in real showrooms:
+    Name, Price, Discount/Strikethrough, Fuel Type, Battery / Engine, Range / Mileage, Top Speed.
     """
     model_name = serializers.CharField(source='model.name', read_only=True)
     category_name = serializers.CharField(source='model.category.name', read_only=True)
     category_slug = serializers.CharField(source='model.category.slug', read_only=True)
+    fuel_type = serializers.CharField(source='model.fuel_type', read_only=True)
     battery_type = serializers.CharField(source='specification.battery_type', read_only=True)
+    engine_displacement_cc = serializers.IntegerField(source='specification.engine_displacement_cc', read_only=True)
+    mileage_kmpl = serializers.DecimalField(source='specification.mileage_kmpl', max_digits=5, decimal_places=1, read_only=True)
+    max_power_bhp = serializers.CharField(source='specification.max_power_bhp', read_only=True)
     driving_range_km = serializers.IntegerField(source='specification.driving_range_km', read_only=True)
     top_speed_kmh = serializers.IntegerField(source='specification.top_speed_kmh', read_only=True)
 
@@ -100,6 +111,7 @@ class VehicleVariantListSerializer(serializers.ModelSerializer):
             'model_name',
             'category_name',
             'category_slug',
+            'fuel_type',
             'name',
             'slug',
             'sku',
@@ -107,6 +119,9 @@ class VehicleVariantListSerializer(serializers.ModelSerializer):
             'original_price',
             'default_image',
             'battery_type',
+            'engine_displacement_cc',
+            'mileage_kmpl',
+            'max_power_bhp',
             'driving_range_km',
             'top_speed_kmh',
             'is_active',

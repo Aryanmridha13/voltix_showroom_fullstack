@@ -6,7 +6,10 @@ import * as THREE from 'three';
  * High-performance 3D ambient particle constellation and rotating holographic
  * showroom pedestal powered by Three.js. Includes mouse-tracking interactive lighting.
  */
-export default function ThreeVehicleStage({ accentColor = '#10b981' }) {
+export default function ThreeVehicleStage({
+  accentColor = '#FF5500',
+  secondaryColor = '#FFFFFF',
+}) {
   const mountRef = useRef(null);
 
   useEffect(() => {
@@ -17,39 +20,53 @@ export default function ThreeVehicleStage({ accentColor = '#10b981' }) {
     const height = container.clientHeight || 500;
 
     // Scene, Camera, Renderer
+    let renderer;
+    try {
+      renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true, powerPreference: 'high-performance' });
+    } catch (err) {
+      console.warn('WebGL is not supported or context could not be created:', err);
+      return;
+    }
+
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
     camera.position.set(0, 3, 11);
     camera.lookAt(0, 0, 0);
 
-    const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true, powerPreference: 'high-performance' });
     renderer.setSize(width, height);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     container.appendChild(renderer.domElement);
 
-    // Dynamic Color
-    const colorThree = new THREE.Color(accentColor);
+    // Dynamic Colors for Livery Combination
+    const colorPrimary = new THREE.Color(accentColor);
+    const colorSecondary = new THREE.Color(secondaryColor);
 
-    // 1. Particle Cloud Constellation
+    // 1. Particle Cloud Constellation (Dual-Tone)
     const particleCount = 280;
     const particleGeometry = new THREE.BufferGeometry();
     const positions = new Float32Array(particleCount * 3);
-    const scales = new Float32Array(particleCount);
+    const colors = new Float32Array(particleCount * 3);
 
     for (let i = 0; i < particleCount; i++) {
       positions[i * 3] = (Math.random() - 0.5) * 22;
       positions[i * 3 + 1] = (Math.random() - 0.3) * 12;
       positions[i * 3 + 2] = (Math.random() - 0.5) * 18;
-      scales[i] = Math.random() * 0.08 + 0.03;
+
+      // 70% primary color, 30% secondary color for rich contrasting particle field
+      const pickColor = Math.random() > 0.3 ? colorPrimary : colorSecondary;
+      colors[i * 3] = pickColor.r;
+      colors[i * 3 + 1] = pickColor.g;
+      colors[i * 3 + 2] = pickColor.b;
     }
 
     particleGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    particleGeometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
 
     const particleMaterial = new THREE.PointsMaterial({
-      color: colorThree,
       size: 0.09,
+      vertexColors: true,
       transparent: true,
-      opacity: 0.65,
+      opacity: 0.7,
       blending: THREE.AdditiveBlending,
     });
 
@@ -63,26 +80,26 @@ export default function ThreeVehicleStage({ accentColor = '#10b981' }) {
 
     const outerRingGeo = new THREE.RingGeometry(3.6, 3.65, 64);
     const ringMat = new THREE.MeshBasicMaterial({
-      color: colorThree,
+      color: colorPrimary,
       side: THREE.DoubleSide,
       transparent: true,
-      opacity: 0.45,
+      opacity: 0.6,
     });
     const outerRing = new THREE.Mesh(outerRingGeo, ringMat);
     ringGroup.add(outerRing);
 
     const innerRingGeo = new THREE.RingGeometry(2.4, 2.44, 48);
     const innerRingMat = new THREE.MeshBasicMaterial({
-      color: colorThree,
+      color: colorSecondary,
       side: THREE.DoubleSide,
       transparent: true,
-      opacity: 0.3,
+      opacity: 0.45,
     });
     const innerRing = new THREE.Mesh(innerRingGeo, innerRingMat);
     ringGroup.add(innerRing);
 
-    // Subtle Radial Spokes
-    const spokeCount = 12;
+    // Radial Spokes in contrasting color
+    const spokeCount = 16;
     for (let i = 0; i < spokeCount; i++) {
       const angle = (i / spokeCount) * Math.PI * 2;
       const spokeGeo = new THREE.BufferGeometry().setFromPoints([
@@ -90,9 +107,9 @@ export default function ThreeVehicleStage({ accentColor = '#10b981' }) {
         new THREE.Vector3(Math.cos(angle) * 3.5, Math.sin(angle) * 3.5, 0),
       ]);
       const spokeMat = new THREE.LineBasicMaterial({
-        color: colorThree,
+        color: i % 2 === 0 ? colorPrimary : colorSecondary,
         transparent: true,
-        opacity: 0.2,
+        opacity: 0.25,
       });
       const spoke = new THREE.Line(spokeGeo, spokeMat);
       ringGroup.add(spoke);
@@ -104,7 +121,7 @@ export default function ThreeVehicleStage({ accentColor = '#10b981' }) {
     const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
     scene.add(ambientLight);
 
-    const spotLight = new THREE.PointLight(colorThree, 3, 20);
+    const spotLight = new THREE.PointLight(colorPrimary, 3, 20);
     spotLight.position.set(0, 4, 3);
     scene.add(spotLight);
 
@@ -170,18 +187,22 @@ export default function ThreeVehicleStage({ accentColor = '#10b981' }) {
       cancelAnimationFrame(animationFrameId);
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('resize', handleResize);
-      if (container && renderer.domElement) {
-        container.removeChild(renderer.domElement);
+      try {
+        if (container && renderer?.domElement && container.contains(renderer.domElement)) {
+          container.removeChild(renderer.domElement);
+        }
+        particleGeometry?.dispose();
+        particleMaterial?.dispose();
+        outerRingGeo?.dispose();
+        ringMat?.dispose();
+        innerRingGeo?.dispose();
+        innerRingMat?.dispose();
+        renderer?.dispose();
+      } catch (_e) {
+        // Safe disposal fallback
       }
-      particleGeometry.dispose();
-      particleMaterial.dispose();
-      outerRingGeo.dispose();
-      ringMat.dispose();
-      innerRingGeo.dispose();
-      innerRingMat.dispose();
-      renderer.dispose();
     };
-  }, [accentColor]);
+  }, [accentColor, secondaryColor]);
 
   return (
     <div

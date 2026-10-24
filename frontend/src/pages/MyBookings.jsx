@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 import bookingService from '../services/bookingService';
 import { useAlert } from '../context/AlertContext';
+import { resolveVehicleImage } from '../utils/vehicleImageHelper';
 
 /**
  * MyBookings Page
@@ -195,12 +196,12 @@ export default function MyBookings() {
                 <div className="flex items-center gap-4">
                   <div className="w-20 h-16 rounded-2xl bg-neutral-100 border border-neutral-200 p-1 flex items-center justify-center shrink-0">
                     <img
-                      src={b.variant_image || '/vehicles/scooter_blue.png'}
+                      src={resolveVehicleImage(b.variant_image, b.variant_name, b.model_name)}
                       alt={b.variant_name}
                       className="max-h-full object-contain drop-shadow"
                       onError={(e) => {
                         e.target.onerror = null;
-                        e.target.src = '/vehicles/scooter_blue.png';
+                        e.target.src = resolveVehicleImage(null, b.variant_name, b.model_name);
                       }}
                     />
                   </div>

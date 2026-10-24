@@ -15,6 +15,7 @@ import vehicleService from '../services/vehicleService';
 import bookingService from '../services/bookingService';
 import { useAuth } from '../context/AuthContext';
 import { useAlert } from '../context/AlertContext';
+import { resolveVehicleImage } from '../utils/vehicleImageHelper';
 
 /**
  * BookTestRide Page
@@ -31,17 +32,24 @@ export default function BookTestRide() {
     searchParams.get('variant') ? parseInt(searchParams.get('variant'), 10) : null
   );
 
-  // Date selection (default to tomorrow)
+  // Local date formatting avoiding UTC timezone shift
+  const formatLocalDate = (d) => {
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  };
+
   const getTomorrowString = () => {
     const d = new Date();
     d.setDate(d.getDate() + 1);
-    return d.toISOString().split('T')[0];
+    return formatLocalDate(d);
   };
 
   const getMaxDateString = () => {
     const d = new Date();
     d.setDate(d.getDate() + 14);
-    return d.toISOString().split('T')[0];
+    return formatLocalDate(d);
   };
 
   const [selectedDate, setSelectedDate] = useState(getTomorrowString());
@@ -80,7 +88,13 @@ export default function BookTestRide() {
     setSelectedSlot('');
     try {
       const res = await bookingService.getAvailableSlots(vId, dateStr);
-      setSlotsData(res.slots || []);
+      const slots = res.slots || [];
+      setSlotsData(slots);
+      // Automatically preselect first available slot
+      const firstAvailable = slots.find((s) => s.available);
+      if (firstAvailable) {
+        setSelectedSlot(firstAvailable.slot);
+      }
     } catch (_err) {
       showError('Could not check slot availability for selected date.');
     } finally {
@@ -165,6 +179,19 @@ export default function BookTestRide() {
             <p className="text-xs text-neutral-500 max-w-md mx-auto font-medium">
               Your 45-minute experiential test ride has been locked into the showroom schedule.
             </p>
+          </div>
+
+          {/* Confirmed Vehicle Visual */}
+          <div className="w-36 h-24 mx-auto rounded-2xl bg-neutral-50 border border-neutral-200 p-2 flex items-center justify-center">
+            <img
+              src={resolveVehicleImage(confirmedBooking.variant_image, confirmedBooking.variant_name, confirmedBooking.model_name)}
+              alt={confirmedBooking.variant_name}
+              className="max-h-full object-contain drop-shadow"
+              onError={(e) => {
+                e.target.onerror = null;
+                e.target.src = resolveVehicleImage(null, confirmedBooking.variant_name, confirmedBooking.model_name);
+              }}
+            />
           </div>
 
           {/* Booking Summary Box */}
@@ -266,12 +293,12 @@ export default function BookTestRide() {
                   >
                     <div className="w-14 h-12 bg-neutral-100 rounded-xl overflow-hidden flex items-center justify-center p-1 shrink-0">
                       <img
-                        src={v.default_image || '/vehicles/scooter_blue.png'}
+                        src={resolveVehicleImage(v.default_image, v.name, v.model_name)}
                         alt={v.name}
                         className="max-h-full object-contain drop-shadow"
                         onError={(e) => {
                           e.target.onerror = null;
-                          e.target.src = '/vehicles/scooter_blue.png';
+                          e.target.src = resolveVehicleImage(null, v.name, v.model_name);
                         }}
                       />
                     </div>
@@ -441,7 +468,7 @@ export default function BookTestRide() {
               {isAuthenticated ? (
                 <button
                   type="submit"
-                  disabled={submitting || !selectedSlot}
+                  disabled={submitting}
                   className="w-full flex items-center justify-center gap-2 py-3.5 rounded-full bg-neutral-950 text-white font-bold text-xs uppercase tracking-wider hover:bg-neutral-800 transition-all disabled:opacity-40 shadow-md shadow-neutral-900/20 active:scale-98"
                 >
                   {submitting ? 'Locking Slot...' : 'Confirm Test Ride Booking'}

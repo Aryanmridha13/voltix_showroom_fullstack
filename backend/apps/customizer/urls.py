@@ -17,6 +17,7 @@ router.register(r'configs', VehicleColourConfigViewSet, basename='config')
 
 urlpatterns = [
     path('variants/<int:variant_id>/options/', VariantCustomizationOptionsView.as_view(), name='variant-options'),
+    path('options/<int:variant_id>/', VariantCustomizationOptionsView.as_view(), name='variant-options-alias'),
     path('calculate-price/', CalculatePriceView.as_view(), name='calculate-price'),
     path('', include(router.urls)),
 ]

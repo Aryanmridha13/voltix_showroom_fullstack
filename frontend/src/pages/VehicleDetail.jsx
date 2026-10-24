@@ -10,6 +10,8 @@ import {
   CheckCircle2,
   Clock,
   Zap,
+  Fuel,
+  Flame,
   ArrowLeft,
   MessageSquare,
   Send,
@@ -132,6 +134,7 @@ export default function VehicleDetail() {
   }
 
   const specs = variant.specification || {};
+  const isPetrol = variant.model_details?.fuel_type === 'petrol' || specs.engine_displacement_cc != null;
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-16">
@@ -172,8 +175,27 @@ export default function VehicleDetail() {
                 e.target.src = '/vehicles/scooter_blue.png';
               }}
             />
-            <div className="absolute top-4 left-4 px-3.5 py-1.5 rounded-full text-xs font-bold bg-white/95 text-neutral-900 border border-neutral-300 shadow-xs z-20">
-              {variant.model_details?.category_name || 'Electric Vehicle'}
+            <div className="absolute top-4 left-4 flex flex-wrap gap-2 z-20">
+              <span className="px-3.5 py-1.5 rounded-full text-xs font-bold bg-white/95 text-neutral-900 border border-neutral-300 shadow-xs">
+                {variant.model_details?.category_name || 'Vehicle'}
+              </span>
+              <span className={`px-3 py-1.5 rounded-full text-xs font-black uppercase tracking-wider flex items-center gap-1.5 shadow-xs border ${
+                isPetrol
+                  ? 'bg-amber-100 text-amber-900 border-amber-300'
+                  : 'bg-emerald-100 text-emerald-900 border-emerald-300'
+              }`}>
+                {isPetrol ? (
+                  <>
+                    <Fuel className="w-3.5 h-3.5 text-amber-600" />
+                    Petrol (ICE)
+                  </>
+                ) : (
+                  <>
+                    <Zap className="w-3.5 h-3.5 text-emerald-600 fill-current" />
+                    Electric (EV)
+                  </>
+                )}
+              </span>
             </div>
           </div>
 
@@ -210,8 +232,10 @@ export default function VehicleDetail() {
         {/* Right: Technical Summary & Purchase/Customizer Actions */}
         <div className="lg:col-span-5 space-y-6">
           <div className="space-y-2">
-            <span className="text-xs uppercase font-bold text-emerald-700 tracking-wider">
-              {variant.model_details?.tagline || 'Voltix Pure Electric'}
+            <span className={`text-xs uppercase font-bold tracking-wider ${
+              isPetrol ? 'text-amber-700' : 'text-emerald-700'
+            }`}>
+              {variant.model_details?.tagline || (isPetrol ? 'High-Octane Performance' : 'Voltix Pure Electric')}
             </span>
             <h1 className="text-3xl sm:text-5xl font-section-title font-black text-neutral-950 uppercase tracking-section">
               {variant.model_details?.name} {variant.name}
@@ -251,36 +275,70 @@ export default function VehicleDetail() {
                 </span>
               )}
             </div>
-            <p className="text-[11px] text-emerald-700 font-semibold leading-relaxed pt-1">
-              *Eligible for State EV Subsidies & Zero Road-Tax registration benefits.
+            <p className={`text-[11px] font-semibold leading-relaxed pt-1 ${
+              isPetrol ? 'text-neutral-500' : 'text-emerald-700'
+            }`}>
+              {isPetrol
+                ? '*Standard ex-showroom price excluding state taxes, RTO registration, and comprehensive insurance.'
+                : '*Eligible for State EV Subsidies & Zero Road-Tax registration benefits.'}
             </p>
           </div>
 
           {/* Key Specs Highlights Row */}
           <div className="grid grid-cols-3 gap-3">
-            <div className="p-4 rounded-2xl bg-neutral-100/80 border border-neutral-200 text-center space-y-1">
-              <div className="flex items-center justify-center gap-1 text-emerald-700 text-sm font-black">
-                <BatteryCharging className="w-4 h-4" />
-                {specs.driving_range_km || 140} km
-              </div>
-              <span className="text-[10px] text-neutral-500 uppercase font-bold">True Range</span>
-            </div>
+            {isPetrol ? (
+              <>
+                <div className="p-4 rounded-2xl bg-neutral-100/80 border border-neutral-200 text-center space-y-1">
+                  <div className="flex items-center justify-center gap-1 text-amber-700 text-sm font-black">
+                    <Flame className="w-4 h-4 text-amber-600" />
+                    {specs.engine_displacement_cc || 650} cc
+                  </div>
+                  <span className="text-[10px] text-neutral-500 uppercase font-bold">Engine</span>
+                </div>
 
-            <div className="p-4 rounded-2xl bg-neutral-100/80 border border-neutral-200 text-center space-y-1">
-              <div className="flex items-center justify-center gap-1 text-neutral-950 text-sm font-black">
-                <Gauge className="w-4 h-4" />
-                {specs.top_speed_kmh || 95} km/h
-              </div>
-              <span className="text-[10px] text-neutral-500 uppercase font-bold">Top Speed</span>
-            </div>
+                <div className="p-4 rounded-2xl bg-neutral-100/80 border border-neutral-200 text-center space-y-1">
+                  <div className="flex items-center justify-center gap-1 text-neutral-950 text-sm font-black">
+                    <Gauge className="w-4 h-4" />
+                    {specs.top_speed_kmh || 170} km/h
+                  </div>
+                  <span className="text-[10px] text-neutral-500 uppercase font-bold">Top Speed</span>
+                </div>
 
-            <div className="p-4 rounded-2xl bg-neutral-100/80 border border-neutral-200 text-center space-y-1">
-              <div className="flex items-center justify-center gap-1 text-neutral-900 text-sm font-black">
-                <Clock className="w-4 h-4" />
-                {specs.charging_time_hours || 4.5} hrs
-              </div>
-              <span className="text-[10px] text-neutral-500 uppercase font-bold">Fast Charge</span>
-            </div>
+                <div className="p-4 rounded-2xl bg-neutral-100/80 border border-neutral-200 text-center space-y-1">
+                  <div className="flex items-center justify-center gap-1 text-amber-700 text-sm font-black truncate px-1">
+                    <Fuel className="w-4 h-4 text-amber-600" />
+                    {specs.mileage_kmpl ? `${specs.mileage_kmpl} km/l` : `${specs.driving_range_km || 300} km`}
+                  </div>
+                  <span className="text-[10px] text-neutral-500 uppercase font-bold">Fuel Economy</span>
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="p-4 rounded-2xl bg-neutral-100/80 border border-neutral-200 text-center space-y-1">
+                  <div className="flex items-center justify-center gap-1 text-emerald-700 text-sm font-black">
+                    <BatteryCharging className="w-4 h-4" />
+                    {specs.driving_range_km || 140} km
+                  </div>
+                  <span className="text-[10px] text-neutral-500 uppercase font-bold">True Range</span>
+                </div>
+
+                <div className="p-4 rounded-2xl bg-neutral-100/80 border border-neutral-200 text-center space-y-1">
+                  <div className="flex items-center justify-center gap-1 text-neutral-950 text-sm font-black">
+                    <Gauge className="w-4 h-4" />
+                    {specs.top_speed_kmh || 95} km/h
+                  </div>
+                  <span className="text-[10px] text-neutral-500 uppercase font-bold">Top Speed</span>
+                </div>
+
+                <div className="p-4 rounded-2xl bg-neutral-100/80 border border-neutral-200 text-center space-y-1">
+                  <div className="flex items-center justify-center gap-1 text-neutral-900 text-sm font-black">
+                    <Clock className="w-4 h-4" />
+                    {specs.charging_time_hours || 4.5} hrs
+                  </div>
+                  <span className="text-[10px] text-neutral-500 uppercase font-bold">Fast Charge</span>
+                </div>
+              </>
+            )}
           </div>
 
           {/* Action CTAs */}
@@ -290,14 +348,14 @@ export default function VehicleDetail() {
               className="w-full flex items-center justify-center gap-2 py-3.5 rounded-full bg-neutral-950 text-white font-bold text-xs uppercase tracking-wider hover:bg-neutral-800 shadow-md shadow-neutral-900/20 active:scale-98 transition-all"
             >
               <Sparkles className="w-4 h-4 text-emerald-400" />
-              Configure Dual-Tone Finish in 3D
+              Configure Finish in Customizer
             </Link>
 
             <Link
               to={`/book-test-ride?variant=${variant.id}`}
-              className="w-full flex items-center justify-center gap-2 py-3.5 rounded-full bg-white hover:bg-neutral-50 border border-neutral-300 text-neutral-900 font-bold text-xs uppercase tracking-wider shadow-xs transition-colors"
+              className="w-full flex items-center justify-center gap-2 py-3.5 rounded-full bg-neutral-950 hover:bg-neutral-800 text-white font-bold text-xs uppercase tracking-wider shadow-md shadow-neutral-900/20 active:scale-98 transition-all"
             >
-              <Calendar className="w-4 h-4" />
+              <Calendar className="w-4 h-4 text-emerald-400" />
               Schedule 45-Min Test Ride
             </Link>
           </div>
@@ -309,34 +367,72 @@ export default function VehicleDetail() {
         <div className="space-y-1">
           <h2 className="text-2xl sm:text-4xl font-section-title font-black text-neutral-950 uppercase tracking-section">Full Technical Specifications</h2>
           <p className="text-xs text-neutral-500 font-medium">
-            Certified technical benchmarks, motor architecture, and safety ratings.
+            {isPetrol
+              ? 'Certified displacement, combustion engineering, and performance parameters.'
+              : 'Certified technical benchmarks, motor architecture, and safety ratings.'}
           </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {/* Powertrain & Battery */}
+          {/* Powertrain / Engine */}
           <div className="p-6 rounded-3xl bg-white border border-neutral-200/90 shadow-md space-y-4">
             <div className="flex items-center gap-2 text-neutral-950 font-card-title text-sm uppercase tracking-card">
-              <Zap className="w-4 h-4 text-emerald-600" />
-              Powertrain & Battery
+              {isPetrol ? (
+                <>
+                  <Flame className="w-4 h-4 text-amber-600" />
+                  Engine & Powertrain
+                </>
+              ) : (
+                <>
+                  <Zap className="w-4 h-4 text-emerald-600" />
+                  Powertrain & Battery
+                </>
+              )}
             </div>
             <dl className="space-y-3 text-xs">
-              <div className="flex justify-between py-2 border-b border-neutral-200/80">
-                <dt className="text-neutral-500 font-medium">Battery Chemistry</dt>
-                <dd className="text-neutral-950 font-bold">{specs.battery_type || 'LiFePO4 Safe Cells'}</dd>
-              </div>
-              <div className="flex justify-between py-2 border-b border-neutral-200/80">
-                <dt className="text-neutral-500 font-medium">Battery Capacity</dt>
-                <dd className="text-neutral-950 font-bold">{specs.battery_capacity || '3.7 kWh'}</dd>
-              </div>
-              <div className="flex justify-between py-2 border-b border-neutral-200/80">
-                <dt className="text-neutral-500 font-medium">Motor Peak Power</dt>
-                <dd className="text-neutral-950 font-bold">{specs.motor_power_watt || 6000} W</dd>
-              </div>
-              <div className="flex justify-between py-2">
-                <dt className="text-neutral-500 font-medium">Full Charge Time</dt>
-                <dd className="text-neutral-950 font-bold">{specs.charging_time_hours || 4.5} Hours</dd>
-              </div>
+              {isPetrol ? (
+                <>
+                  <div className="flex justify-between py-2 border-b border-neutral-200/80">
+                    <dt className="text-neutral-500 font-medium">Displacement</dt>
+                    <dd className="text-neutral-950 font-bold">{specs.engine_displacement_cc ? `${specs.engine_displacement_cc} CC` : 'N/A'}</dd>
+                  </div>
+                  <div className="flex justify-between py-2 border-b border-neutral-200/80">
+                    <dt className="text-neutral-500 font-medium">Max Power</dt>
+                    <dd className="text-neutral-950 font-bold">{specs.max_power_bhp || 'N/A'}</dd>
+                  </div>
+                  <div className="flex justify-between py-2 border-b border-neutral-200/80">
+                    <dt className="text-neutral-500 font-medium">Max Torque</dt>
+                    <dd className="text-neutral-950 font-bold">{specs.max_torque_nm || 'N/A'}</dd>
+                  </div>
+                  <div className="flex justify-between py-2 border-b border-neutral-200/80">
+                    <dt className="text-neutral-500 font-medium">Transmission</dt>
+                    <dd className="text-neutral-950 font-bold">{specs.transmission || 'Manual'}</dd>
+                  </div>
+                  <div className="flex justify-between py-2">
+                    <dt className="text-neutral-500 font-medium">Fuel Tank</dt>
+                    <dd className="text-neutral-950 font-bold">{specs.fuel_tank_capacity_l ? `${specs.fuel_tank_capacity_l} Litres` : 'N/A'}</dd>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="flex justify-between py-2 border-b border-neutral-200/80">
+                    <dt className="text-neutral-500 font-medium">Battery Chemistry</dt>
+                    <dd className="text-neutral-950 font-bold">{specs.battery_type || 'LiFePO4 Safe Cells'}</dd>
+                  </div>
+                  <div className="flex justify-between py-2 border-b border-neutral-200/80">
+                    <dt className="text-neutral-500 font-medium">Battery Capacity</dt>
+                    <dd className="text-neutral-950 font-bold">{specs.battery_capacity || '3.7 kWh'}</dd>
+                  </div>
+                  <div className="flex justify-between py-2 border-b border-neutral-200/80">
+                    <dt className="text-neutral-500 font-medium">Motor Peak Power</dt>
+                    <dd className="text-neutral-950 font-bold">{specs.motor_power_watt || 6000} W</dd>
+                  </div>
+                  <div className="flex justify-between py-2">
+                    <dt className="text-neutral-500 font-medium">Full Charge Time</dt>
+                    <dd className="text-neutral-950 font-bold">{specs.charging_time_hours || 4.5} Hours</dd>
+                  </div>
+                </>
+              )}
             </dl>
           </div>
 
@@ -348,7 +444,7 @@ export default function VehicleDetail() {
             </div>
             <dl className="space-y-3 text-xs">
               <div className="flex justify-between py-2 border-b border-neutral-200/80">
-                <dt className="text-neutral-500 font-medium">Certified Range</dt>
+                <dt className="text-neutral-500 font-medium">{isPetrol ? 'Estimated Tank Range' : 'Certified Range'}</dt>
                 <dd className="text-neutral-950 font-bold">{specs.driving_range_km || 140} KM</dd>
               </div>
               <div className="flex justify-between py-2 border-b border-neutral-200/80">
@@ -356,12 +452,12 @@ export default function VehicleDetail() {
                 <dd className="text-neutral-950 font-bold">{specs.top_speed_kmh || 95} KM/H</dd>
               </div>
               <div className="flex justify-between py-2 border-b border-neutral-200/80">
-                <dt className="text-neutral-500 font-medium">Braking System</dt>
-                <dd className="text-neutral-950 font-bold">{specs.brakes_type || 'Dual Disc with CBS'}</dd>
+                <dt className="text-neutral-500 font-medium">{isPetrol ? 'Fuel Economy' : 'Braking System'}</dt>
+                <dd className="text-neutral-950 font-bold">{isPetrol ? (specs.mileage_kmpl ? `${specs.mileage_kmpl} KM/L` : 'ARAI Certified') : (specs.brakes_type || 'Dual Disc with CBS')}</dd>
               </div>
               <div className="flex justify-between py-2">
                 <dt className="text-neutral-500 font-medium">Tyres</dt>
-                <dd className="text-neutral-950 font-bold">{specs.tyres_type || '90/90-12 Tubeless'}</dd>
+                <dd className="text-neutral-950 font-bold">{specs.tyres_type || 'Tubeless'}</dd>
               </div>
             </dl>
           </div>
@@ -370,24 +466,24 @@ export default function VehicleDetail() {
           <div className="p-6 rounded-3xl bg-white border border-neutral-200/90 shadow-md space-y-4">
             <div className="flex items-center gap-2 text-neutral-950 font-card-title text-sm uppercase tracking-card">
               <ShieldCheck className="w-4 h-4 text-emerald-600" />
-              Warranty & Resilience
+              Warranty & Build
             </div>
             <dl className="space-y-3 text-xs">
               <div className="flex justify-between py-2 border-b border-neutral-200/80">
                 <dt className="text-neutral-500 font-medium">Vehicle Warranty</dt>
-                <dd className="text-neutral-950 font-bold">{specs.warranty_years || 3} Years / 50,000 KM</dd>
+                <dd className="text-neutral-950 font-bold">{specs.warranty_years || 3} Years</dd>
               </div>
               <div className="flex justify-between py-2 border-b border-neutral-200/80">
-                <dt className="text-neutral-500 font-medium">Battery Warranty</dt>
-                <dd className="text-neutral-950 font-bold">5 Years / 100,000 KM</dd>
+                <dt className="text-neutral-500 font-medium">{isPetrol ? 'Braking Setup' : 'Battery Warranty'}</dt>
+                <dd className="text-neutral-950 font-bold">{isPetrol ? (specs.brakes_type || 'Dual Channel ABS') : '5 Years / 100,000 KM'}</dd>
               </div>
               <div className="flex justify-between py-2 border-b border-neutral-200/80">
                 <dt className="text-neutral-500 font-medium">Payload Capacity</dt>
                 <dd className="text-neutral-950 font-bold">{specs.carrying_capacity_kg || 150} KG</dd>
               </div>
               <div className="flex justify-between py-2">
-                <dt className="text-neutral-500 font-medium">Water Resistance</dt>
-                <dd className="text-neutral-950 font-bold">IP67 Battery & Motor</dd>
+                <dt className="text-neutral-500 font-medium">{isPetrol ? 'Compliance' : 'Water Resistance'}</dt>
+                <dd className="text-neutral-950 font-bold">{isPetrol ? 'BS6 Phase 2 / OBD-II' : 'IP67 Battery & Motor'}</dd>
               </div>
             </dl>
           </div>

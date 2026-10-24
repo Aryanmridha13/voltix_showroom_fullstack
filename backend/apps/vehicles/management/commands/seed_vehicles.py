@@ -98,16 +98,16 @@ class Command(BaseCommand):
                     },
                 ]
             },
-            # SE Series (High Speed)
+            # MG Pro Series (High Speed)
             {
                 'category': cat_high_speed,
-                'model_name': 'SE',
+                'model_name': 'MG Pro',
                 'tagline': 'Power Packed Performance',
                 'is_featured': True,
                 'variants': [
                     {
-                        'name': 'SE Li',
-                        'sku': 'VOLT-SE-LI',
+                        'name': 'MG Pro Li',
+                        'sku': 'VOLT-MG-PRO-LI',
                         'base_price': Decimal('75999.00'),
                         'original_price': Decimal('76999.00'),
                         'specs': {
@@ -120,8 +120,8 @@ class Command(BaseCommand):
                         }
                     },
                     {
-                        'name': 'SE Pro',
-                        'sku': 'VOLT-SE-PRO',
+                        'name': 'MG Pro',
+                        'sku': 'VOLT-MG-PRO',
                         'base_price': Decimal('97999.00'),
                         'original_price': None,
                         'specs': {
@@ -134,8 +134,8 @@ class Command(BaseCommand):
                         }
                     },
                     {
-                        'name': 'SE Ultra',
-                        'sku': 'VOLT-SE-ULTRA',
+                        'name': 'MG Pro +',
+                        'sku': 'VOLT-MG-PRO-PLUS',
                         'base_price': Decimal('121999.00'),
                         'original_price': None,
                         'specs': {
@@ -209,16 +209,16 @@ class Command(BaseCommand):
                     },
                 ]
             },
-            # XR7 (High Speed)
+            # X3 (High Speed)
             {
                 'category': cat_high_speed,
-                'model_name': 'XR7',
+                'model_name': 'X3',
                 'tagline': '322KM Range - Flagship Scooter',
                 'is_featured': True,
                 'variants': [
                     {
-                        'name': 'XR7 Flagship',
-                        'sku': 'VOLT-XR7-FLAGSHIP',
+                        'name': 'X3 Flagship',
+                        'sku': 'VOLT-X3-FLAGSHIP',
                         'base_price': Decimal('95999.00'),
                         'original_price': None,
                         'specs': {

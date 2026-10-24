@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "receiptId": "a8f9a3d0-b0a3-48e4-92bc-e683fe4879cc",
+  "status": "current",
+  "command": "deliver",
+  "type": "sequence",
+  "input": "C:\\Users\\Lenovo\\Desktop\\task\\.archify\\sequence-web-request-cache-miss-20261024-031100\\candidate.json",
+  "output": "C:\\Users\\Lenovo\\Desktop\\task\\.archify\\sequence-web-request-cache-miss-20261024-031100\\web-request-cache-miss.html",
+  "specification": {
+    "sha256": "dce6bc58156c1c8dc8d7bffaae02bae0cabfbaae351332ee58d4a2a6c0146ed1",
+    "bytes": 4046
+  },
+  "artifact": {
+    "sha256": "e91f24fb24d0693bb0093738562c7cca62abc2636748c0e8868b93706e4dc9ca",
+    "bytes": 820854
+  }
+}

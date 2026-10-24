@@ -11,6 +11,8 @@ import {
   RotateCcw,
   Tag,
   Zap,
+  Fuel,
+  Flame,
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import vehicleService from '../services/vehicleService';
@@ -30,26 +32,34 @@ export default function VehicleCatalogue() {
   const [categories, setCategories] = useState([]);
   const [vehicles, setVehicles] = useState([]);
   const [meta, setMeta] = useState({ page: 1, total_pages: 1, total_records: 0 });
+  const [totalVehiclesCount, setTotalVehiclesCount] = useState(16);
   const [loading, setLoading] = useState(true);
 
   // Filter States initialized from URL params
   const [selectedCategory, setSelectedCategory] = useState(searchParams.get('category') || '');
+  const [fuelType, setFuelType] = useState(searchParams.get('fuel_type') || '');
   const [searchQuery, setSearchQuery] = useState(searchParams.get('search') || '');
   const [minRange, setMinRange] = useState(searchParams.get('min_range') || '');
   const [ordering, setOrdering] = useState(searchParams.get('ordering') || 'base_price');
   const [page, setPage] = useState(parseInt(searchParams.get('page') || '1', 10));
 
-  // Load Categories on mount
+  // Load Categories & Total Fleet Count on mount
   useEffect(() => {
-    const fetchCats = async () => {
+    const fetchInitialData = async () => {
       try {
-        const catData = await vehicleService.getCategories();
+        const [catData, countData] = await Promise.all([
+          vehicleService.getCategories(),
+          vehicleService.getVariants({ page_size: 1 }),
+        ]);
         setCategories(catData || []);
+        if (countData?.meta?.total_records) {
+          setTotalVehiclesCount(countData.meta.total_records);
+        }
       } catch (_err) {
-        showError('Could not load vehicle categories.');
+        showError('Could not load vehicle catalogue data.');
       }
     };
-    fetchCats();
+    fetchInitialData();
   }, [showError]);
 
   // Load Variants whenever filters change
@@ -59,8 +69,10 @@ export default function VehicleCatalogue() {
       const params = {
         page,
         ordering,
+        page_size: 50, // Display all vehicles across categories without artificial cutoff
       };
       if (selectedCategory) params.category = selectedCategory;
+      if (fuelType) params.fuel_type = fuelType;
       if (searchQuery.trim()) params.search = searchQuery.trim();
       if (minRange) params.min_range = minRange;
 
@@ -72,7 +84,7 @@ export default function VehicleCatalogue() {
     } finally {
       setLoading(false);
     }
-  }, [selectedCategory, searchQuery, minRange, ordering, page, showError]);
+  }, [selectedCategory, fuelType, searchQuery, minRange, ordering, page, showError]);
 
   useEffect(() => {
     fetchVehicles();
@@ -82,16 +94,18 @@ export default function VehicleCatalogue() {
   useEffect(() => {
     const nextParams = {};
     if (selectedCategory) nextParams.category = selectedCategory;
+    if (fuelType) nextParams.fuel_type = fuelType;
     if (searchQuery.trim()) nextParams.search = searchQuery.trim();
     if (minRange) nextParams.min_range = minRange;
     if (ordering && ordering !== 'base_price') nextParams.ordering = ordering;
     if (page > 1) nextParams.page = page.toString();
 
     setSearchParams(nextParams, { replace: true });
-  }, [selectedCategory, searchQuery, minRange, ordering, page, setSearchParams]);
+  }, [selectedCategory, fuelType, searchQuery, minRange, ordering, page, setSearchParams]);
 
   const handleResetFilters = () => {
     setSelectedCategory('');
+    setFuelType('');
     setSearchQuery('');
     setMinRange('');
     setOrdering('base_price');
@@ -134,7 +148,7 @@ export default function VehicleCatalogue() {
         </div>
         <div className={`text-xs font-semibold ${isDarkMode ? 'text-slate-400' : 'text-neutral-500'}`}>
           Showing <span className={`font-bold ${isDarkMode ? 'text-white' : 'text-neutral-950'}`}>{vehicles.length}</span> of{' '}
-          <span className={`font-bold ${isDarkMode ? 'text-white' : 'text-neutral-950'}`}>{meta.total_records}</span> configured models
+          <span className={`font-bold ${isDarkMode ? 'text-white' : 'text-neutral-950'}`}>{selectedCategory ? meta.total_records : (totalVehiclesCount || meta.total_records)}</span> configured models
         </div>
       </div>
 
@@ -206,7 +220,7 @@ export default function VehicleCatalogue() {
           </div>
 
           {/* Clear Filters Button */}
-          {(selectedCategory || searchQuery || minRange || ordering !== 'base_price') && (
+          {(selectedCategory || fuelType || searchQuery || minRange || ordering !== 'base_price') && (
             <button
               onClick={handleResetFilters}
               className={`px-5 py-2.5 rounded-full text-xs font-bold flex items-center justify-center gap-1.5 border shadow-xs transition-colors ${
@@ -219,6 +233,82 @@ export default function VehicleCatalogue() {
               Reset
             </button>
           )}
+        </div>
+
+        {/* Powertrain Type Filter Toggle: All vs Electric vs Petrol */}
+        <div className={`p-2.5 rounded-2xl border flex flex-wrap items-center justify-between gap-3 transition-colors ${
+          isDarkMode
+            ? 'bg-[#030d08]/80 border-emerald-950/80 shadow-xs'
+            : 'bg-neutral-50/90 border-neutral-200 shadow-xs'
+        }`}>
+          <div className="flex items-center gap-2">
+            <span className={`text-[11px] font-black uppercase tracking-wider flex items-center gap-1.5 pl-2 ${
+              isDarkMode ? 'text-slate-400' : 'text-neutral-500'
+            }`}>
+              <SlidersHorizontal className="w-3.5 h-3.5" />
+              Powertrain:
+            </span>
+
+            <div className="inline-flex p-1 rounded-full bg-black/10 dark:bg-black/40 border border-neutral-200/50 dark:border-emerald-950/60 gap-1">
+              <button
+                onClick={() => {
+                  setFuelType('');
+                  setPage(1);
+                }}
+                className={`px-3.5 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all ${
+                  fuelType === ''
+                    ? isDarkMode
+                      ? 'bg-white text-black shadow-sm font-black'
+                      : 'bg-neutral-950 text-white shadow-sm font-black'
+                    : isDarkMode
+                      ? 'text-slate-300 hover:text-white'
+                      : 'text-neutral-600 hover:text-neutral-950'
+                }`}
+              >
+                All Powertrains
+              </button>
+
+              <button
+                onClick={() => {
+                  setFuelType('electric');
+                  setPage(1);
+                }}
+                className={`px-3.5 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 transition-all ${
+                  fuelType === 'electric'
+                    ? 'bg-emerald-500 text-black shadow-md shadow-emerald-500/30 font-black'
+                    : isDarkMode
+                      ? 'text-emerald-400 hover:text-emerald-300'
+                      : 'text-emerald-700 hover:text-emerald-950'
+                }`}
+              >
+                <Zap className="w-3.5 h-3.5 fill-current" />
+                Electric (EV)
+              </button>
+
+              <button
+                onClick={() => {
+                  setFuelType('petrol');
+                  setPage(1);
+                }}
+                className={`px-3.5 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 transition-all ${
+                  fuelType === 'petrol'
+                    ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-black shadow-md shadow-orange-500/30 font-black'
+                    : isDarkMode
+                      ? 'text-amber-400 hover:text-amber-300'
+                      : 'text-amber-800 hover:text-amber-950'
+                }`}
+              >
+                <Fuel className="w-3.5 h-3.5" />
+                Petrol (ICE)
+              </button>
+            </div>
+          </div>
+
+          <div className={`text-xs font-semibold pr-2 hidden sm:block ${
+            isDarkMode ? 'text-slate-400' : 'text-neutral-500'
+          }`}>
+            Filter by zero-emission electric or internal combustion performance
+          </div>
         </div>
 
         {/* Category Pill Tabs */}
@@ -238,7 +328,7 @@ export default function VehicleCatalogue() {
                   : 'bg-white text-neutral-700 hover:text-neutral-950 border border-neutral-300 hover:border-neutral-400 shadow-xs'
             }`}
           >
-            All Categories ({meta.total_records})
+            All Categories ({totalVehiclesCount || 21})
           </button>
 
           {categories.map((cat) => (
@@ -367,13 +457,36 @@ export default function VehicleCatalogue() {
                     e.target.src = '/vehicles/scooter_blue.png';
                   }}
                 />
-                <span className={`absolute top-4 left-4 px-3 py-1 rounded-full text-[11px] font-bold border shadow-xs z-20 ${
-                  isDarkMode
-                    ? 'bg-[#030d08]/90 text-emerald-300 border-emerald-950'
-                    : 'bg-white/95 text-neutral-900 border-neutral-300'
-                }`}>
-                  {variant.category_name}
-                </span>
+                <div className="absolute top-4 left-4 flex flex-wrap gap-1.5 z-20">
+                  <span className={`px-3 py-1 rounded-full text-[11px] font-bold border shadow-xs ${
+                    isDarkMode
+                      ? 'bg-[#030d08]/90 text-slate-200 border-emerald-950'
+                      : 'bg-white/95 text-neutral-900 border-neutral-300'
+                  }`}>
+                    {variant.category_name}
+                  </span>
+                  <span className={`px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider flex items-center gap-1 shadow-xs border ${
+                    variant.fuel_type === 'petrol'
+                      ? isDarkMode
+                        ? 'bg-amber-500/20 text-amber-300 border-amber-500/40'
+                        : 'bg-amber-100 text-amber-900 border-amber-300'
+                      : isDarkMode
+                        ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40'
+                        : 'bg-emerald-100 text-emerald-900 border-emerald-300'
+                  }`}>
+                    {variant.fuel_type === 'petrol' ? (
+                      <>
+                        <Fuel className="w-3 h-3 text-amber-500" />
+                        Petrol
+                      </>
+                    ) : (
+                      <>
+                        <Zap className="w-3 h-3 text-emerald-500 fill-current" />
+                        Electric
+                      </>
+                    )}
+                  </span>
+                </div>
                 {variant.original_price && (
                   <span className={`absolute top-4 right-4 px-3 py-1 rounded-full text-[11px] font-bold shadow-xs flex items-center gap-1 z-20 ${
                     isDarkMode
@@ -393,7 +506,9 @@ export default function VehicleCatalogue() {
               }`}>
                 <div>
                   <p className={`text-[11px] font-extrabold uppercase tracking-widest mb-1.5 ${
-                    isDarkMode ? 'text-emerald-400' : 'text-emerald-700'
+                    variant.fuel_type === 'petrol'
+                      ? isDarkMode ? 'text-amber-400' : 'text-amber-700'
+                      : isDarkMode ? 'text-emerald-400' : 'text-emerald-700'
                   }`}>
                     {variant.model_name}
                   </p>
@@ -404,46 +519,89 @@ export default function VehicleCatalogue() {
                   </h3>
                 </div>
 
-                {/* Key Spec Badges */}
+                {/* Key Spec Badges (Adaptive Electric vs Petrol) */}
                 <div className={`grid grid-cols-3 gap-2 py-3 px-3 rounded-2xl border text-center transition-colors ${
                   isDarkMode
                     ? 'bg-[#030d08]/90 border-emerald-950'
                     : 'bg-neutral-100/80 border-neutral-200'
                 }`}>
-                  <div>
-                    <div className={`flex items-center justify-center gap-1 text-xs font-black ${
-                      isDarkMode ? 'text-emerald-400' : 'text-emerald-700'
-                    }`}>
-                      <BatteryCharging className="w-3.5 h-3.5" />
-                      {variant.driving_range_km || 140} km
-                    </div>
-                    <span className={`text-[10px] uppercase font-bold ${
-                      isDarkMode ? 'text-slate-400' : 'text-neutral-500'
-                    }`}>True Range</span>
-                  </div>
+                  {variant.fuel_type === 'petrol' ? (
+                    <>
+                      <div>
+                        <div className={`flex items-center justify-center gap-1 text-xs font-black ${
+                          isDarkMode ? 'text-amber-400' : 'text-amber-800'
+                        }`}>
+                          <Flame className="w-3.5 h-3.5 text-amber-500" />
+                          {variant.engine_displacement_cc ? `${variant.engine_displacement_cc} cc` : 'ICE Engine'}
+                        </div>
+                        <span className={`text-[10px] uppercase font-bold ${
+                          isDarkMode ? 'text-slate-400' : 'text-neutral-500'
+                        }`}>Displacement</span>
+                      </div>
 
-                  <div className={`border-x ${isDarkMode ? 'border-emerald-950' : 'border-neutral-300'}`}>
-                    <div className={`flex items-center justify-center gap-1 text-xs font-black ${
-                      isDarkMode ? 'text-white' : 'text-neutral-950'
-                    }`}>
-                      <Gauge className="w-3.5 h-3.5" />
-                      {variant.top_speed_kmh || 90} km/h
-                    </div>
-                    <span className={`text-[10px] uppercase font-bold ${
-                      isDarkMode ? 'text-slate-400' : 'text-neutral-500'
-                    }`}>Top Speed</span>
-                  </div>
+                      <div className={`border-x ${isDarkMode ? 'border-emerald-950' : 'border-neutral-300'}`}>
+                        <div className={`flex items-center justify-center gap-1 text-xs font-black ${
+                          isDarkMode ? 'text-white' : 'text-neutral-950'
+                        }`}>
+                          <Gauge className="w-3.5 h-3.5" />
+                          {variant.top_speed_kmh || 170} km/h
+                        </div>
+                        <span className={`text-[10px] uppercase font-bold ${
+                          isDarkMode ? 'text-slate-400' : 'text-neutral-500'
+                        }`}>Top Speed</span>
+                      </div>
 
-                  <div>
-                    <div className={`text-xs font-black truncate px-1 ${
-                      isDarkMode ? 'text-slate-200' : 'text-neutral-900'
-                    }`}>
-                      {variant.battery_type || 'LiFePO4'}
-                    </div>
-                    <span className={`text-[10px] uppercase font-bold ${
-                      isDarkMode ? 'text-slate-400' : 'text-neutral-500'
-                    }`}>Chemistry</span>
-                  </div>
+                      <div>
+                        <div className={`text-xs font-black truncate px-1 ${
+                          isDarkMode ? 'text-slate-200' : 'text-neutral-900'
+                        }`}>
+                          {variant.max_power_bhp
+                            ? variant.max_power_bhp.split('@')[0].trim()
+                            : (variant.mileage_kmpl ? `${variant.mileage_kmpl} km/l` : `${variant.driving_range_km || 350} km`)}
+                        </div>
+                        <span className={`text-[10px] uppercase font-bold ${
+                          isDarkMode ? 'text-slate-400' : 'text-neutral-500'
+                        }`}>Output</span>
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <div>
+                        <div className={`flex items-center justify-center gap-1 text-xs font-black ${
+                          isDarkMode ? 'text-emerald-400' : 'text-emerald-700'
+                        }`}>
+                          <BatteryCharging className="w-3.5 h-3.5" />
+                          {variant.driving_range_km || 140} km
+                        </div>
+                        <span className={`text-[10px] uppercase font-bold ${
+                          isDarkMode ? 'text-slate-400' : 'text-neutral-500'
+                        }`}>True Range</span>
+                      </div>
+
+                      <div className={`border-x ${isDarkMode ? 'border-emerald-950' : 'border-neutral-300'}`}>
+                        <div className={`flex items-center justify-center gap-1 text-xs font-black ${
+                          isDarkMode ? 'text-white' : 'text-neutral-950'
+                        }`}>
+                          <Gauge className="w-3.5 h-3.5" />
+                          {variant.top_speed_kmh || 90} km/h
+                        </div>
+                        <span className={`text-[10px] uppercase font-bold ${
+                          isDarkMode ? 'text-slate-400' : 'text-neutral-500'
+                        }`}>Top Speed</span>
+                      </div>
+
+                      <div>
+                        <div className={`text-xs font-black truncate px-1 ${
+                          isDarkMode ? 'text-slate-200' : 'text-neutral-900'
+                        }`}>
+                          {variant.battery_type || 'LiFePO4'}
+                        </div>
+                        <span className={`text-[10px] uppercase font-bold ${
+                          isDarkMode ? 'text-slate-400' : 'text-neutral-500'
+                        }`}>Chemistry</span>
+                      </div>
+                    </>
+                  )}
                 </div>
 
                 {/* Pricing & CTAs */}
@@ -472,11 +630,11 @@ export default function VehicleCatalogue() {
                     )}
                   </div>
 
-                  {/* Actions Grid */}
-                  <div className="grid grid-cols-2 gap-2 pt-1">
+                  {/* Actions */}
+                  <div className="flex flex-col gap-2 pt-1">
                     <Link
                       to={`/vehicles/${variant.id}`}
-                      className={`flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-full border text-xs font-bold transition-colors shadow-xs ${
+                      className={`w-full flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-full border text-xs font-bold transition-colors shadow-xs ${
                         isDarkMode
                           ? 'bg-[#06180f] hover:bg-[#030d08] border-emerald-950 text-white'
                           : 'bg-white hover:bg-neutral-100 border-neutral-300 text-neutral-900'

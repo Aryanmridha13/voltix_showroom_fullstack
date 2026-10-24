@@ -49,8 +49,8 @@ export default function Login() {
   const handleFillDemo = (type) => {
     setFormError(null);
     if (type === 'admin') {
-      setEmail('admin@voltix.com');
-      setPassword('Admin@12345');
+      setEmail('');
+      setPassword('');
     } else {
       setEmail('vikram.rao@example.com');
       setPassword('Customer@123');

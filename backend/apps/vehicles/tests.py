@@ -209,3 +209,41 @@ class VehicleCatalogueAPITests(APITestCase):
         response = self.client.delete(self.detail_url)
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertFalse(VehicleVariant.objects.filter(pk=self.variant_se_pro.pk).exists())
+
+    def test_filter_variants_by_fuel_type(self):
+        # Create a petrol model and variant
+        petrol_model = VehicleModel.objects.create(
+            category=self.category_cruiser,
+            name='Continental GT 650',
+            slug='cruiser-continental-gt-650',
+            fuel_type='petrol',
+            is_active=True
+        )
+        petrol_variant = VehicleVariant.objects.create(
+            model=petrol_model,
+            name='Mr Clean',
+            sku='TEST-GT650-CLEAN',
+            base_price=Decimal('345000.00'),
+            is_active=True
+        )
+        VehicleSpecification.objects.create(
+            variant=petrol_variant,
+            engine_displacement_cc=648,
+            max_power_bhp='47 bhp',
+            driving_range_km=310,
+            top_speed_kmh=169
+        )
+
+        # Test filtering for petrol
+        response_petrol = self.client.get(f"{self.list_url}?fuel_type=petrol")
+        self.assertEqual(response_petrol.status_code, status.HTTP_200_OK)
+        items = response_petrol.data['data']
+        self.assertEqual(len(items), 1)
+        self.assertEqual(items[0]['sku'], 'TEST-GT650-CLEAN')
+        self.assertEqual(items[0]['fuel_type'], 'petrol')
+
+        # Test filtering for electric
+        response_electric = self.client.get(f"{self.list_url}?fuel_type=electric")
+        self.assertEqual(response_electric.status_code, status.HTTP_200_OK)
+        electric_items = response_electric.data['data']
+        self.assertTrue(all(item['fuel_type'] == 'electric' for item in electric_items))

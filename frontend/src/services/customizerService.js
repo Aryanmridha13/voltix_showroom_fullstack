@@ -3,7 +3,7 @@ import api from './api';
 export const customizerService = {
   // Fetch available color options and images for a variant
   async getOptions(variantId) {
-    const response = await api.get(`/customizer/options/${variantId}/`);
+    const response = await api.get(`/customizer/variants/${variantId}/options/`);
     return response.data?.data || response.data;
   },
 

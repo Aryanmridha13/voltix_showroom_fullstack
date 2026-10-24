@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "receiptId": "88081362-dd17-42eb-bf0d-2e4b437a60fa",
+  "status": "current",
+  "command": "deliver",
+  "type": "architecture",
+  "input": "C:\\Users\\Lenovo\\Desktop\\task\\.archify\\voltix-system-architecture\\candidate.json",
+  "output": "C:\\Users\\Lenovo\\Desktop\\task\\.archify\\voltix-system-architecture\\voltix-architecture.html",
+  "specification": {
+    "sha256": "327a711280a9100d50de1ac7f45bcc363bb2d74663bc8b1c436716f82cbd568e",
+    "bytes": 6541
+  },
+  "artifact": {
+    "sha256": "22485a0b0219a4f8c64b561d706edd49d42925ec0092a7a9c1b57bd94d39f695",
+    "bytes": 846694
+  }
+}

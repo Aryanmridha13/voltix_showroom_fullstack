@@ -60,6 +60,11 @@ class VehicleVariantFilter(django_filters.FilterSet):
         field_name='model__is_featured',
         label='Featured Models Only'
     )
+    fuel_type = django_filters.CharFilter(
+        field_name='model__fuel_type',
+        lookup_expr='iexact',
+        label='Fuel Type (electric or petrol)'
+    )
 
     class Meta:
         model = VehicleVariant
@@ -67,6 +72,7 @@ class VehicleVariantFilter(django_filters.FilterSet):
             'category',
             'category_id',
             'model',
+            'fuel_type',
             'battery_type',
             'min_price',
             'max_price',

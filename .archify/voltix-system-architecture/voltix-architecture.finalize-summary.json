@@ -1,0 +1,248 @@
+{
+  "schemaVersion": 1,
+  "ok": true,
+  "command": "finalize",
+  "status": "pass",
+  "type": "architecture",
+  "quality": "showcase",
+  "specification": {
+    "path": "C:\\Users\\Lenovo\\Desktop\\task\\.archify\\voltix-system-architecture\\candidate.json",
+    "sha256": "327a711280a9100d50de1ac7f45bcc363bb2d74663bc8b1c436716f82cbd568e",
+    "bytes": 6541
+  },
+  "artifact": {
+    "path": "C:\\Users\\Lenovo\\Desktop\\task\\.archify\\voltix-system-architecture\\voltix-architecture.html",
+    "sha256": "22485a0b0219a4f8c64b561d706edd49d42925ec0092a7a9c1b57bd94d39f695",
+    "bytes": 846694
+  },
+  "gates": {
+    "validate": "pass",
+    "deliver": "pass",
+    "check": "pass",
+    "browser-check": "pass"
+  },
+  "diagnostics": [],
+  "diagnosticSummary": {
+    "total": 0,
+    "shown": 0,
+    "truncated": false
+  },
+  "evidence": {
+    "receipt": "C:\\Users\\Lenovo\\Desktop\\task\\.archify\\voltix-system-architecture\\voltix-architecture.finalize.json",
+    "summaryReceipt": "C:\\Users\\Lenovo\\Desktop\\task\\.archify\\voltix-system-architecture\\voltix-architecture.finalize-summary.json",
+    "browserCheckReceipt": "C:\\Users\\Lenovo\\Desktop\\task\\.archify\\voltix-system-architecture\\voltix-architecture.browser-check.json"
+  },
+  "update": {
+    "status": "current",
+    "installedVersion": "3.2.0",
+    "availableVersion": "3.2.0",
+    "releaseNotes": null,
+    "checkedAt": "2026-10-23T21:41:56.584Z",
+    "source": "cache",
+    "noticeRequired": false,
+    "noticeText": null
+  },
+  "visualReview": "not-requested",
+  "durationMs": 7960,
+  "browserCheck": {
+    "requested": true,
+    "ran": true
+  },
+  "visualReviewRecommendation": {
+    "action": "inspect-route-readability",
+    "signals": {
+      "resolvedCrossovers": 5,
+      "routesOverSuggestedBends": 5
+    },
+    "reason": "Automated gates passed, but crossings or detours still need perceptual review before claiming visual quality.",
+    "affectedRoutes": {
+      "crossings": [
+        {
+          "left": {
+            "id": "gateway-to-vehicles",
+            "from": "django_gateway",
+            "to": "vehicles_service",
+            "label": "/api/vehicles/",
+            "collectionIndex": 4,
+            "artifactIndex": 5
+          },
+          "right": {
+            "id": "spa-to-media",
+            "from": "react_spa",
+            "to": "media_storage",
+            "label": "Static Assets",
+            "collectionIndex": 13,
+            "artifactIndex": 14
+          },
+          "point": [
+            615,
+            204.5
+          ]
+        },
+        {
+          "left": {
+            "id": "gateway-to-bookings",
+            "from": "django_gateway",
+            "to": "bookings_service",
+            "label": "/api/bookings/",
+            "collectionIndex": 6,
+            "artifactIndex": 7
+          },
+          "right": {
+            "id": "gateway-to-parts",
+            "from": "django_gateway",
+            "to": "parts_service",
+            "label": "/api/parts/",
+            "collectionIndex": 7,
+            "artifactIndex": 8
+          },
+          "point": [
+            734,
+            354
+          ],
+          "sharedNode": "django_gateway"
+        },
+        {
+          "left": {
+            "id": "customizer-to-db",
+            "from": "customizer_service",
+            "to": "database",
+            "label": "Django ORM",
+            "collectionIndex": 9,
+            "artifactIndex": 10
+          },
+          "right": {
+            "id": "spa-to-media",
+            "from": "react_spa",
+            "to": "media_storage",
+            "label": "Static Assets",
+            "collectionIndex": 13,
+            "artifactIndex": 14
+          },
+          "point": [
+            872.5,
+            204.5
+          ]
+        },
+        {
+          "left": {
+            "id": "bookings-to-db",
+            "from": "bookings_service",
+            "to": "database",
+            "label": "Django ORM",
+            "collectionIndex": 10,
+            "artifactIndex": 11
+          },
+          "right": {
+            "id": "customizer-to-media",
+            "from": "customizer_service",
+            "to": "media_storage",
+            "label": "Layer Renders",
+            "collectionIndex": 12,
+            "artifactIndex": 13
+          },
+          "point": [
+            1016,
+            374.5
+          ]
+        },
+        {
+          "left": {
+            "id": "bookings-to-db",
+            "from": "bookings_service",
+            "to": "database",
+            "label": "Django ORM",
+            "collectionIndex": 10,
+            "artifactIndex": 11
+          },
+          "right": {
+            "id": "spa-to-media",
+            "from": "react_spa",
+            "to": "media_storage",
+            "label": "Static Assets",
+            "collectionIndex": 13,
+            "artifactIndex": 14
+          },
+          "point": [
+            1037,
+            254.5
+          ]
+        }
+      ],
+      "detours": [
+        {
+          "relationship": {
+            "id": "browser-to-stage",
+            "from": "browser",
+            "to": "customizer_stage",
+            "label": "Customizer Controls",
+            "collectionIndex": 1,
+            "artifactIndex": 2
+          },
+          "bends": 3,
+          "stretch": 1.27
+        },
+        {
+          "relationship": {
+            "id": "spa-to-gateway",
+            "from": "react_spa",
+            "to": "django_gateway",
+            "label": "REST API Calls",
+            "collectionIndex": 2,
+            "artifactIndex": 3
+          },
+          "bends": 3,
+          "stretch": 1
+        },
+        {
+          "relationship": {
+            "id": "customizer-to-db",
+            "from": "customizer_service",
+            "to": "database",
+            "label": "Django ORM",
+            "collectionIndex": 9,
+            "artifactIndex": 10
+          },
+          "bends": 3,
+          "stretch": 1.255
+        },
+        {
+          "relationship": {
+            "id": "bookings-to-db",
+            "from": "bookings_service",
+            "to": "database",
+            "label": "Django ORM",
+            "collectionIndex": 10,
+            "artifactIndex": 11
+          },
+          "bends": 3,
+          "stretch": 1.159
+        },
+        {
+          "relationship": {
+            "id": "spa-to-media",
+            "from": "react_spa",
+            "to": "media_storage",
+            "label": "Static Assets",
+            "collectionIndex": 13,
+            "artifactIndex": 14
+          },
+          "bends": 3,
+          "stretch": 1
+        }
+      ],
+      "truncated": false
+    },
+    "hints": [
+      "django_gateway → vehicles_service crosses react_spa → media_storage: move the node of whichever is a branch, return, or second entrance to the other side of the main path, so that relationship runs through an empty corridor.",
+      "django_gateway → bookings_service and django_gateway → parts_service cross next to django_gateway: move node bookings_service or parts_service so the two reach django_gateway from different sides (for example one level with it, one directly above or below it).",
+      "customizer_service → database crosses react_spa → media_storage: move the node of whichever is a branch, return, or second entrance to the other side of the main path, so that relationship runs through an empty corridor.",
+      "bookings_service → database crosses customizer_service → media_storage: move the node of whichever is a branch, return, or second entrance to the other side of the main path, so that relationship runs through an empty corridor.",
+      "bookings_service → database crosses react_spa → media_storage: move the node of whichever is a branch, return, or second entrance to the other side of the main path, so that relationship runs through an empty corridor.",
+      "browser → customizer_stage needs 3 bends: move node browser or customizer_stage so they share a row or column with matching centers, or sit diagonally with a clear corner.",
+      "react_spa → django_gateway needs 3 bends: move node react_spa or django_gateway so they share a row or column with matching centers, or sit diagonally with a clear corner.",
+      "customizer_service → database needs 3 bends: move node customizer_service or database so they share a row or column with matching centers, or sit diagonally with a clear corner."
+    ],
+    "repair": "Trace these relationships at the desktop viewport. For Architecture, use references/architecture-layout-repair.md: reflow a blocked main path or tangled connected scene, and repair an isolated defect locally only when the surrounding composition is accepted. Preserve all semantic content and user-fixed geometry. Rerun finalize once after the edit."
+  }
+}

@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowLeft, ArrowRight, BatteryCharging, Gauge, Sparkles, Tag } from 'lucide-react';
+import { ArrowLeft, ArrowRight, BatteryCharging, Gauge, Sparkles, Tag, Fuel, Flame } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
 
 /**
@@ -160,11 +160,23 @@ export default function HorizontalVehicleShowcase({ vehicles = [] }) {
               {/* Card Header & Badges with Proper Spacing */}
               <div className="p-7 pb-2 relative z-10 flex items-start justify-between min-h-[95px]">
                 <div>
-                  <span className={`text-[11px] font-extrabold uppercase tracking-widest block mb-1.5 ${
-                    isDarkMode ? 'text-emerald-400' : 'text-emerald-700'
-                  }`}>
-                    {variant.model_name || 'Voltix Series'}
-                  </span>
+                  <div className="flex items-center gap-2 mb-1.5">
+                    <span className={`text-[11px] font-extrabold uppercase tracking-widest ${
+                      variant.fuel_type === 'petrol'
+                        ? isDarkMode ? 'text-amber-400' : 'text-amber-700'
+                        : isDarkMode ? 'text-emerald-400' : 'text-emerald-700'
+                    }`}>
+                      {variant.model_name || 'Voltix Series'}
+                    </span>
+                    <span className={`px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider flex items-center gap-0.5 border ${
+                      variant.fuel_type === 'petrol'
+                        ? 'bg-amber-500/10 text-amber-500 border-amber-500/30'
+                        : 'bg-emerald-500/10 text-emerald-500 border-emerald-500/30'
+                    }`}>
+                      {variant.fuel_type === 'petrol' ? <Fuel className="w-2.5 h-2.5" /> : <BatteryCharging className="w-2.5 h-2.5" />}
+                      {variant.fuel_type === 'petrol' ? 'Petrol' : 'EV'}
+                    </span>
+                  </div>
                   <h3 className={`text-xl sm:text-[22px] font-bold font-sans tracking-tight leading-snug transition-colors ${
                     isDarkMode ? 'text-white group-hover:text-emerald-400' : 'text-neutral-950 group-hover:text-emerald-700'
                   }`}>
@@ -217,19 +229,29 @@ export default function HorizontalVehicleShowcase({ vehicles = [] }) {
                 }`}>
                   <div className="flex items-center gap-2.5">
                     <div className={`w-8 h-8 rounded-xl border flex items-center justify-center shrink-0 shadow-xs ${
-                      isDarkMode
-                        ? 'bg-[#06180f] border-emerald-950 text-emerald-400'
-                        : 'bg-white border-neutral-200 text-neutral-900'
+                      variant.fuel_type === 'petrol'
+                        ? isDarkMode ? 'bg-[#06180f] border-amber-950 text-amber-400' : 'bg-white border-amber-200 text-amber-700'
+                        : isDarkMode ? 'bg-[#06180f] border-emerald-950 text-emerald-400' : 'bg-white border-neutral-200 text-neutral-900'
                     }`}>
-                      <BatteryCharging className="w-4 h-4 text-emerald-400" />
+                      {variant.fuel_type === 'petrol' ? (
+                        <Flame className="w-4 h-4 text-amber-500" />
+                      ) : (
+                        <BatteryCharging className="w-4 h-4 text-emerald-400" />
+                      )}
                     </div>
                     <div>
                       <p className={`text-[10px] uppercase font-bold ${
                         isDarkMode ? 'text-slate-400' : 'text-neutral-500'
-                      }`}>Certified Range</p>
+                      }`}>
+                        {variant.fuel_type === 'petrol' ? 'Engine' : 'Certified Range'}
+                      </p>
                       <p className={`text-sm font-black ${
                         isDarkMode ? 'text-white' : 'text-neutral-950'
-                      }`}>{variant.driving_range_km || 140} km</p>
+                      }`}>
+                        {variant.fuel_type === 'petrol'
+                          ? (variant.engine_displacement_cc ? `${variant.engine_displacement_cc} cc` : 'ICE Engine')
+                          : `${variant.driving_range_km || 140} km`}
+                      </p>
                     </div>
                   </div>
 

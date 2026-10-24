@@ -1,0 +1,249 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Voltix EV Studio - Full-Stack System Architecture",
+    "subtitle": "React 18 + Vite SPA, Django 5 REST Backend, Customizer Stage, Bookings & Persistence",
+    "output": ".archify/voltix-system-architecture/voltix-architecture.html",
+    "quality_profile": "showcase"
+  },
+  "components": [
+    {
+      "id": "browser",
+      "type": "external",
+      "label": "Client Browser",
+      "sublabel": "Desktop & Mobile Users",
+      "pos": [40, 270],
+      "size": [150, 70],
+      "tag": "HTTPS / WebP"
+    },
+    {
+      "id": "react_spa",
+      "type": "frontend",
+      "label": "Voltix React SPA",
+      "sublabel": "React 18 + Vite 8",
+      "pos": [260, 160],
+      "size": [180, 75],
+      "tag": "Tailwind CSS"
+    },
+    {
+      "id": "customizer_stage",
+      "type": "frontend",
+      "label": "3D Canvas Studio",
+      "sublabel": "Vehicle Customizer Stage",
+      "pos": [260, 270],
+      "size": [180, 75],
+      "tag": "Dynamic Finishes"
+    },
+    {
+      "id": "auth_context",
+      "type": "security",
+      "label": "Auth & Session Context",
+      "sublabel": "JWT Authentication",
+      "pos": [260, 380],
+      "size": [180, 75],
+      "tag": "Bearer Tokens"
+    },
+    {
+      "id": "django_gateway",
+      "type": "backend",
+      "label": "Django REST Gateway",
+      "sublabel": "Django 5.1 + DRF Router",
+      "pos": [520, 270],
+      "size": [190, 75],
+      "tag": "CORS & Auth Middleware"
+    },
+    {
+      "id": "vehicles_service",
+      "type": "backend",
+      "label": "Vehicles Catalogue",
+      "sublabel": "apps.vehicles",
+      "pos": [780, 120],
+      "size": [185, 68],
+      "tag": "Models & Specs"
+    },
+    {
+      "id": "customizer_service",
+      "type": "backend",
+      "label": "Customizer Engine",
+      "sublabel": "apps.customizer",
+      "pos": [780, 220],
+      "size": [185, 68],
+      "tag": "Finishes & Pricing"
+    },
+    {
+      "id": "bookings_service",
+      "type": "backend",
+      "label": "Test Ride Engine",
+      "sublabel": "apps.bookings",
+      "pos": [780, 320],
+      "size": [185, 68],
+      "tag": "Slots & DL Validation"
+    },
+    {
+      "id": "parts_service",
+      "type": "backend",
+      "label": "Spare Parts Catalogue",
+      "sublabel": "apps.parts",
+      "pos": [780, 420],
+      "size": [185, 68],
+      "tag": "OEM Parts & Accessories"
+    },
+    {
+      "id": "database",
+      "type": "database",
+      "label": "Primary Database",
+      "sublabel": "SQLite / PostgreSQL",
+      "brand": "postgresql",
+      "pos": [1040, 210],
+      "size": [170, 75],
+      "tag": "Relational Persistence"
+    },
+    {
+      "id": "media_storage",
+      "type": "cloud",
+      "label": "Media & Asset Storage",
+      "sublabel": "Renders & Static Files",
+      "pos": [1040, 330],
+      "size": [170, 75],
+      "tag": "Vehicles & Parts Assets"
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "Frontend Client Tier (Port :5173)",
+      "wraps": ["react_spa", "customizer_stage", "auth_context"]
+    },
+    {
+      "kind": "security-group",
+      "label": "Django Application Tier (Port :8000)",
+      "wraps": ["django_gateway", "vehicles_service", "customizer_service", "bookings_service", "parts_service"]
+    },
+    {
+      "kind": "region",
+      "label": "Data & Media Storage Tier",
+      "wraps": ["database", "media_storage"]
+    }
+  ],
+  "connections": [
+    {
+      "id": "browser-to-spa",
+      "from": "browser",
+      "to": "react_spa",
+      "label": "User Interaction",
+      "variant": "emphasis"
+    },
+    {
+      "id": "browser-to-stage",
+      "from": "browser",
+      "to": "customizer_stage",
+      "label": "Customizer Controls"
+    },
+    {
+      "id": "spa-to-gateway",
+      "from": "react_spa",
+      "to": "django_gateway",
+      "label": "REST API Calls",
+      "variant": "emphasis"
+    },
+    {
+      "id": "auth-to-gateway",
+      "from": "auth_context",
+      "to": "django_gateway",
+      "label": "JWT Auth Header",
+      "variant": "security"
+    },
+    {
+      "id": "gateway-to-vehicles",
+      "from": "django_gateway",
+      "to": "vehicles_service",
+      "label": "/api/vehicles/"
+    },
+    {
+      "id": "gateway-to-customizer",
+      "from": "django_gateway",
+      "to": "customizer_service",
+      "label": "/api/customizer/"
+    },
+    {
+      "id": "gateway-to-bookings",
+      "from": "django_gateway",
+      "to": "bookings_service",
+      "label": "/api/bookings/"
+    },
+    {
+      "id": "gateway-to-parts",
+      "from": "django_gateway",
+      "to": "parts_service",
+      "label": "/api/parts/"
+    },
+    {
+      "id": "vehicles-to-db",
+      "from": "vehicles_service",
+      "to": "database",
+      "label": "Django ORM"
+    },
+    {
+      "id": "customizer-to-db",
+      "from": "customizer_service",
+      "to": "database",
+      "label": "Django ORM"
+    },
+    {
+      "id": "bookings-to-db",
+      "from": "bookings_service",
+      "to": "database",
+      "label": "Django ORM"
+    },
+    {
+      "id": "parts-to-db",
+      "from": "parts_service",
+      "to": "database",
+      "label": "Django ORM"
+    },
+    {
+      "id": "customizer-to-media",
+      "from": "customizer_service",
+      "to": "media_storage",
+      "label": "Layer Renders",
+      "variant": "dashed"
+    },
+    {
+      "id": "spa-to-media",
+      "from": "react_spa",
+      "to": "media_storage",
+      "label": "Static Assets",
+      "variant": "dashed"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "emerald",
+      "title": "Frontend Architecture",
+      "items": [
+        "React 18 SPA built with Vite for lightning-fast HMR and bundling",
+        "Interactive 3D Customizer Stage with real-time color and accessory preview",
+        "Authentication context with JWT lifecycle and route authorization guards"
+      ]
+    },
+    {
+      "dot": "cyan",
+      "title": "Backend Services",
+      "items": [
+        "Django 5.1 REST framework with modular domain apps and OpenAPI docs",
+        "Test ride engine with time-slot management and driving license checks",
+        "Flexible spare parts catalogue with category filtering and vehicle compatibility"
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "Persistence & Media",
+      "items": [
+        "Relational database schema with relational models and query optimization",
+        "Dedicated media directories for multi-angle vehicle and customizer renders",
+        "Client-side image resolver providing robust static asset fallbacks"
+      ]
+    }
+  ]
+}

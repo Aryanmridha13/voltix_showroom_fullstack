@@ -115,6 +115,15 @@
   word-spacing: 0.18em !important;
 }
 
+.font-sparepart-title {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.025em !important;
+  word-spacing: normal !important;
+  line-height: 1.25 !important;
+  text-transform: none !important;
+}
+
 .perspective-1200 {
   perspective: 1200px;
 }
