@@ -96,6 +96,20 @@ class VehicleVariantListSerializer(serializers.ModelSerializer):
     category_name = serializers.CharField(source='model.category.name', read_only=True)
     category_slug = serializers.CharField(source='model.category.slug', read_only=True)
     fuel_type = serializers.CharField(source='model.fuel_type', read_only=True)
+    default_image = serializers.SerializerMethodField()
+
+    def get_default_image(self, obj):
+        if not obj.default_image:
+            return None
+
+        value = str(obj.default_image.name)
+
+        if value.startswith("http://") or value.startswith("https://"):
+            return value
+
+        filename = value.split("/")[-1]
+        return f"https://res.cloudinary.com/qvvc6hmq/image/upload/{filename}"
+
     battery_type = serializers.CharField(source='specification.battery_type', read_only=True)
     engine_displacement_cc = serializers.IntegerField(source='specification.engine_displacement_cc', read_only=True)
     mileage_kmpl = serializers.DecimalField(source='specification.mileage_kmpl', max_digits=5, decimal_places=1, read_only=True)
@@ -137,6 +151,19 @@ class VehicleVariantDetailSerializer(serializers.ModelSerializer):
     model_details = VehicleModelSerializer(source='model', read_only=True)
     specification = VehicleSpecificationSerializer(read_only=True)
     gallery_images = VehicleImageSerializer(many=True, read_only=True)
+    default_image = serializers.SerializerMethodField()
+
+    def get_default_image(self, obj):
+        if not obj.default_image:
+            return None
+
+        value = str(obj.default_image.name)
+
+        if value.startswith("http://") or value.startswith("https://"):
+            return value
+
+        filename = value.split("/")[-1]
+        return f"https://res.cloudinary.com/qvvc6hmq/image/upload/{filename}"
 
     class Meta:
         model = VehicleVariant
