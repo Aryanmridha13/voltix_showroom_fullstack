@@ -123,27 +123,55 @@ export default function VehicleCatalogue() {
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-10">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10 space-y-6 sm:space-y-10">
       {/* Catalogue Header */}
-      <div className={`flex flex-col md:flex-row md:items-end justify-between gap-4 border-b pb-8 transition-colors ${
+      <div className={`flex flex-col md:flex-row md:items-end justify-between gap-4 border-b pb-6 sm:pb-8 transition-colors ${
         isDarkMode ? 'border-emerald-950/80' : 'border-neutral-200/90'
       }`}>
         <div>
-          <div className={`inline-flex items-center gap-2 px-3.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider mb-2 shadow-sm transition-colors ${
-            isDarkMode ? 'bg-[#06180f] text-emerald-300 border border-emerald-950/80' : 'bg-neutral-900 text-white'
+          <div className={`inline-flex items-center gap-2 px-3.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider mb-2 shadow-sm transition-colors border ${
+            fuelType === 'petrol'
+              ? isDarkMode
+                ? 'bg-amber-500/20 text-amber-300 border-amber-500/40'
+                : 'bg-amber-100 text-amber-900 border-amber-300'
+              : fuelType === 'electric'
+                ? isDarkMode
+                  ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40'
+                  : 'bg-emerald-100 text-emerald-900 border-emerald-300'
+                : isDarkMode
+                  ? 'bg-[#06180f] text-emerald-300 border-emerald-950/80'
+                  : 'bg-neutral-900 text-white border-neutral-900'
           }`}>
-            <Zap className="w-3.5 h-3.5 text-emerald-400" />
-            Zero-Emission Fleet
+            {fuelType === 'petrol' ? (
+              <>
+                <Fuel className="w-3.5 h-3.5 text-amber-500" />
+                High-Octane ICE Fleet
+              </>
+            ) : fuelType === 'electric' ? (
+              <>
+                <Zap className="w-3.5 h-3.5 text-emerald-400 fill-current" />
+                Zero-Emission Electric Fleet
+              </>
+            ) : (
+              <>
+                <Zap className="w-3.5 h-3.5 text-emerald-400" />
+                Complete Showroom Fleet
+              </>
+            )}
           </div>
-          <h1 className={`text-4xl sm:text-6xl font-section-title font-black tracking-section uppercase transition-colors ${
+          <h1 className={`text-3xl sm:text-6xl font-section-title font-black tracking-section uppercase transition-colors ${
             isDarkMode ? 'text-white' : 'text-neutral-950'
           }`}>
             Vehicle Catalogue
           </h1>
-          <p className={`text-sm mt-1 font-medium max-w-2xl transition-colors ${
+          <p className={`text-xs sm:text-sm mt-1 font-medium max-w-2xl transition-colors ${
             isDarkMode ? 'text-slate-400' : 'text-neutral-500'
           }`}>
-            Engineered for pure electric performance, intelligent range, and unmatched acceleration.
+            {fuelType === 'petrol'
+              ? 'Engineered for high-torque combustion performance, long-distance stamina, and precision engineering.'
+              : fuelType === 'electric'
+                ? 'Engineered for pure electric performance, intelligent range, and unmatched acceleration.'
+                : 'Engineered for cutting-edge electric mobility and precision petrol internal combustion performance.'}
           </p>
         </div>
         <div className={`text-xs font-semibold ${isDarkMode ? 'text-slate-400' : 'text-neutral-500'}`}>
@@ -236,26 +264,45 @@ export default function VehicleCatalogue() {
         </div>
 
         {/* Powertrain Type Filter Toggle: All vs Electric vs Petrol */}
-        <div className={`p-2.5 rounded-2xl border flex flex-wrap items-center justify-between gap-3 transition-colors ${
+        <div className={`p-2 sm:p-2.5 rounded-2xl border transition-colors ${
           isDarkMode
             ? 'bg-[#030d08]/80 border-emerald-950/80 shadow-xs'
             : 'bg-neutral-50/90 border-neutral-200 shadow-xs'
         }`}>
-          <div className="flex items-center gap-2">
-            <span className={`text-[11px] font-black uppercase tracking-wider flex items-center gap-1.5 pl-2 ${
-              isDarkMode ? 'text-slate-400' : 'text-neutral-500'
-            }`}>
-              <SlidersHorizontal className="w-3.5 h-3.5" />
-              Powertrain:
-            </span>
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 sm:gap-4">
+            <div className="flex items-center justify-between sm:justify-start gap-2 pl-1 sm:pl-2">
+              <span className={`text-[11px] sm:text-xs font-black uppercase tracking-wider flex items-center gap-1.5 ${
+                isDarkMode ? 'text-slate-400' : 'text-neutral-500'
+              }`}>
+                <SlidersHorizontal className="w-3.5 h-3.5 text-emerald-500" />
+                Powertrain:
+              </span>
 
-            <div className="inline-flex p-1 rounded-full bg-black/10 dark:bg-black/40 border border-neutral-200/50 dark:border-emerald-950/60 gap-1">
+              <span className={`text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full sm:hidden border ${
+                fuelType === 'electric'
+                  ? isDarkMode
+                    ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/40'
+                    : 'bg-emerald-100 text-emerald-900 border-emerald-300'
+                  : fuelType === 'petrol'
+                    ? isDarkMode
+                      ? 'bg-amber-500/20 text-amber-400 border-amber-500/40'
+                      : 'bg-amber-100 text-amber-900 border-amber-300'
+                    : isDarkMode
+                      ? 'bg-[#06180f] text-slate-300 border-emerald-950'
+                      : 'bg-neutral-200 text-neutral-700 border-neutral-300'
+              }`}>
+                {fuelType === 'electric' ? 'EV Only' : fuelType === 'petrol' ? 'Petrol ICE' : 'All Fleet'}
+              </span>
+            </div>
+
+            <div className="grid grid-cols-3 sm:flex sm:items-center p-1 rounded-xl sm:rounded-full bg-black/10 dark:bg-black/40 border border-neutral-200/50 dark:border-emerald-950/60 gap-1 w-full sm:w-auto">
               <button
+                type="button"
                 onClick={() => {
                   setFuelType('');
                   setPage(1);
                 }}
-                className={`px-3.5 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all ${
+                className={`w-full sm:w-auto px-2 sm:px-4 py-2 sm:py-1.5 rounded-lg sm:rounded-full text-[11px] sm:text-xs font-bold uppercase tracking-wider text-center flex items-center justify-center transition-all ${
                   fuelType === ''
                     ? isDarkMode
                       ? 'bg-white text-black shadow-sm font-black'
@@ -265,15 +312,17 @@ export default function VehicleCatalogue() {
                       : 'text-neutral-600 hover:text-neutral-950'
                 }`}
               >
-                All Powertrains
+                <span className="sm:hidden">All</span>
+                <span className="hidden sm:inline">All Powertrains</span>
               </button>
 
               <button
+                type="button"
                 onClick={() => {
                   setFuelType('electric');
                   setPage(1);
                 }}
-                className={`px-3.5 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 transition-all ${
+                className={`w-full sm:w-auto px-2 sm:px-4 py-2 sm:py-1.5 rounded-lg sm:rounded-full text-[11px] sm:text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-1 sm:gap-1.5 text-center transition-all ${
                   fuelType === 'electric'
                     ? 'bg-emerald-500 text-black shadow-md shadow-emerald-500/30 font-black'
                     : isDarkMode
@@ -281,16 +330,18 @@ export default function VehicleCatalogue() {
                       : 'text-emerald-700 hover:text-emerald-950'
                 }`}
               >
-                <Zap className="w-3.5 h-3.5 fill-current" />
-                Electric (EV)
+                <Zap className="w-3.5 h-3.5 fill-current shrink-0" />
+                <span className="sm:hidden">Electric</span>
+                <span className="hidden sm:inline">Electric (EV)</span>
               </button>
 
               <button
+                type="button"
                 onClick={() => {
                   setFuelType('petrol');
                   setPage(1);
                 }}
-                className={`px-3.5 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 transition-all ${
+                className={`w-full sm:w-auto px-2 sm:px-4 py-2 sm:py-1.5 rounded-lg sm:rounded-full text-[11px] sm:text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-1 sm:gap-1.5 text-center transition-all ${
                   fuelType === 'petrol'
                     ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-black shadow-md shadow-orange-500/30 font-black'
                     : isDarkMode
@@ -298,27 +349,28 @@ export default function VehicleCatalogue() {
                       : 'text-amber-800 hover:text-amber-950'
                 }`}
               >
-                <Fuel className="w-3.5 h-3.5" />
-                Petrol (ICE)
+                <Fuel className="w-3.5 h-3.5 shrink-0" />
+                <span className="sm:hidden">Petrol</span>
+                <span className="hidden sm:inline">Petrol (ICE)</span>
               </button>
             </div>
-          </div>
 
-          <div className={`text-xs font-semibold pr-2 hidden sm:block ${
-            isDarkMode ? 'text-slate-400' : 'text-neutral-500'
-          }`}>
-            Filter by zero-emission electric or internal combustion performance
+            <div className={`text-xs font-semibold pr-2 hidden lg:block ${
+              isDarkMode ? 'text-slate-400' : 'text-neutral-500'
+            }`}>
+              Filter by zero-emission electric or internal combustion performance
+            </div>
           </div>
         </div>
 
         {/* Category Pill Tabs */}
-        <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none">
+        <div className="flex items-center gap-2 overflow-x-auto pb-2 -mx-4 px-4 sm:mx-0 sm:px-0 scrollbar-none">
           <button
             onClick={() => {
               setSelectedCategory('');
               setPage(1);
             }}
-            className={`px-5 py-2 rounded-full text-xs font-bold uppercase tracking-wider whitespace-nowrap transition-all ${
+            className={`px-4 sm:px-5 py-2 rounded-full text-xs font-bold uppercase tracking-wider whitespace-nowrap transition-all shrink-0 ${
               selectedCategory === ''
                 ? isDarkMode
                   ? 'bg-emerald-500 text-black shadow-md shadow-emerald-500/20 scale-102'
@@ -338,7 +390,7 @@ export default function VehicleCatalogue() {
                 setSelectedCategory(cat.slug);
                 setPage(1);
               }}
-              className={`px-5 py-2 rounded-full text-xs font-bold uppercase tracking-wider whitespace-nowrap transition-all flex items-center gap-1.5 ${
+              className={`px-4 sm:px-5 py-2 rounded-full text-xs font-bold uppercase tracking-wider whitespace-nowrap transition-all flex items-center gap-1.5 shrink-0 ${
                 selectedCategory === cat.slug
                   ? isDarkMode
                     ? 'bg-emerald-500 text-black shadow-md shadow-emerald-500/20 scale-102'
@@ -413,7 +465,7 @@ export default function VehicleCatalogue() {
           </button>
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
           {vehicles.map((variant, index) => (
             <motion.div
               key={variant.id}
@@ -428,20 +480,20 @@ export default function VehicleCatalogue() {
               }`}
             >
               {/* Image Container with Watermark Typography and Ground Shadow */}
-              <div className={`h-60 relative flex items-center justify-center p-6 overflow-hidden border-b ${
+              <div className={`h-52 sm:h-60 relative flex items-center justify-center p-4 sm:p-6 overflow-hidden border-b ${
                 isDarkMode
                   ? 'bg-gradient-to-b from-[#020b05] to-[#04150c] border-emerald-950/80'
                   : 'bg-gradient-to-b from-[#fafafa] to-[#f2f2f4] border-neutral-200/80'
               }`}>
                 {/* Background Watermark Model Name */}
-                <div className={`absolute top-3 left-1/2 -translate-x-1/2 font-display text-5xl sm:text-6xl font-black uppercase tracking-tighter select-none pointer-events-none whitespace-nowrap z-0 transition-colors ${
+                <div className={`absolute top-3 left-1/2 -translate-x-1/2 font-display text-4xl sm:text-6xl font-black uppercase tracking-tighter select-none pointer-events-none whitespace-nowrap z-0 transition-colors ${
                   isDarkMode ? 'text-white/10' : 'text-neutral-950/20'
                 }`}>
                   {variant.model_name}
                 </div>
 
                 {/* Soft ground shadow ellipse beneath wheels */}
-                <div className={`absolute bottom-4 w-48 h-6 rounded-[100%] blur-md pointer-events-none ${
+                <div className={`absolute bottom-4 w-44 sm:w-48 h-6 rounded-[100%] blur-md pointer-events-none ${
                   isDarkMode ? 'bg-black/50' : 'bg-neutral-900/15'
                 }`} />
 
@@ -457,15 +509,15 @@ export default function VehicleCatalogue() {
                     e.target.src = '/vehicles/scooter_blue.png';
                   }}
                 />
-                <div className="absolute top-4 left-4 flex flex-wrap gap-1.5 z-20">
-                  <span className={`px-3 py-1 rounded-full text-[11px] font-bold border shadow-xs ${
+                <div className="absolute top-3 sm:top-4 left-3 sm:left-4 flex flex-wrap gap-1.5 z-20">
+                  <span className={`px-2.5 sm:px-3 py-1 rounded-full text-[10px] sm:text-[11px] font-bold border shadow-xs ${
                     isDarkMode
                       ? 'bg-[#030d08]/90 text-slate-200 border-emerald-950'
                       : 'bg-white/95 text-neutral-900 border-neutral-300'
                   }`}>
                     {variant.category_name}
                   </span>
-                  <span className={`px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider flex items-center gap-1 shadow-xs border ${
+                  <span className={`px-2 sm:px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider flex items-center gap-1 shadow-xs border ${
                     variant.fuel_type === 'petrol'
                       ? isDarkMode
                         ? 'bg-amber-500/20 text-amber-300 border-amber-500/40'
@@ -488,7 +540,7 @@ export default function VehicleCatalogue() {
                   </span>
                 </div>
                 {variant.original_price && (
-                  <span className={`absolute top-4 right-4 px-3 py-1 rounded-full text-[11px] font-bold shadow-xs flex items-center gap-1 z-20 ${
+                  <span className={`absolute top-3 sm:top-4 right-3 sm:right-4 px-2.5 sm:px-3 py-1 rounded-full text-[10px] sm:text-[11px] font-bold shadow-xs flex items-center gap-1 z-20 ${
                     isDarkMode
                       ? 'bg-emerald-500 text-black font-extrabold'
                       : 'bg-neutral-950 text-white'
@@ -499,20 +551,20 @@ export default function VehicleCatalogue() {
               </div>
 
               {/* Card Body */}
-              <div className={`p-6 flex-1 flex flex-col justify-between space-y-5 ${
+              <div className={`p-4 sm:p-6 flex-1 flex flex-col justify-between space-y-4 sm:space-y-5 ${
                 isDarkMode
                   ? 'bg-gradient-to-t from-[#030d08]/80 via-[#06180f] to-transparent'
                   : 'bg-gradient-to-t from-neutral-50/50 via-white to-transparent'
               }`}>
                 <div>
-                  <p className={`text-[11px] font-extrabold uppercase tracking-widest mb-1.5 ${
+                  <p className={`text-[11px] font-extrabold uppercase tracking-widest mb-1 ${
                     variant.fuel_type === 'petrol'
                       ? isDarkMode ? 'text-amber-400' : 'text-amber-700'
                       : isDarkMode ? 'text-emerald-400' : 'text-emerald-700'
                   }`}>
                     {variant.model_name}
                   </p>
-                  <h3 className={`text-xl sm:text-[22px] font-bold font-sans tracking-tight leading-snug transition-colors ${
+                  <h3 className={`text-lg sm:text-[22px] font-bold font-sans tracking-tight leading-snug transition-colors ${
                     isDarkMode ? 'text-white group-hover:text-emerald-400' : 'text-neutral-950 group-hover:text-emerald-700'
                   }`}>
                     {variant.name}
@@ -520,7 +572,7 @@ export default function VehicleCatalogue() {
                 </div>
 
                 {/* Key Spec Badges (Adaptive Electric vs Petrol) */}
-                <div className={`grid grid-cols-3 gap-2 py-3 px-3 rounded-2xl border text-center transition-colors ${
+                <div className={`grid grid-cols-3 gap-1 sm:gap-2 py-2 sm:py-3 px-1.5 sm:px-3 rounded-2xl border text-center transition-colors ${
                   isDarkMode
                     ? 'bg-[#030d08]/90 border-emerald-950'
                     : 'bg-neutral-100/80 border-neutral-200'
@@ -528,38 +580,38 @@ export default function VehicleCatalogue() {
                   {variant.fuel_type === 'petrol' ? (
                     <>
                       <div>
-                        <div className={`flex items-center justify-center gap-1 text-xs font-black ${
+                        <div className={`flex items-center justify-center gap-0.5 sm:gap-1 text-[11px] sm:text-xs font-black ${
                           isDarkMode ? 'text-amber-400' : 'text-amber-800'
                         }`}>
-                          <Flame className="w-3.5 h-3.5 text-amber-500" />
-                          {variant.engine_displacement_cc ? `${variant.engine_displacement_cc} cc` : 'ICE Engine'}
+                          <Flame className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-amber-500" />
+                          {variant.engine_displacement_cc ? `${variant.engine_displacement_cc} cc` : 'ICE'}
                         </div>
-                        <span className={`text-[10px] uppercase font-bold ${
+                        <span className={`text-[9px] sm:text-[10px] uppercase font-bold ${
                           isDarkMode ? 'text-slate-400' : 'text-neutral-500'
-                        }`}>Displacement</span>
+                        }`}>Engine</span>
                       </div>
 
                       <div className={`border-x ${isDarkMode ? 'border-emerald-950' : 'border-neutral-300'}`}>
-                        <div className={`flex items-center justify-center gap-1 text-xs font-black ${
+                        <div className={`flex items-center justify-center gap-0.5 sm:gap-1 text-[11px] sm:text-xs font-black ${
                           isDarkMode ? 'text-white' : 'text-neutral-950'
                         }`}>
-                          <Gauge className="w-3.5 h-3.5" />
+                          <Gauge className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
                           {variant.top_speed_kmh || 170} km/h
                         </div>
-                        <span className={`text-[10px] uppercase font-bold ${
+                        <span className={`text-[9px] sm:text-[10px] uppercase font-bold ${
                           isDarkMode ? 'text-slate-400' : 'text-neutral-500'
                         }`}>Top Speed</span>
                       </div>
 
                       <div>
-                        <div className={`text-xs font-black truncate px-1 ${
+                        <div className={`text-[11px] sm:text-xs font-black truncate px-0.5 sm:px-1 ${
                           isDarkMode ? 'text-slate-200' : 'text-neutral-900'
                         }`}>
                           {variant.max_power_bhp
                             ? variant.max_power_bhp.split('@')[0].trim()
                             : (variant.mileage_kmpl ? `${variant.mileage_kmpl} km/l` : `${variant.driving_range_km || 350} km`)}
                         </div>
-                        <span className={`text-[10px] uppercase font-bold ${
+                        <span className={`text-[9px] sm:text-[10px] uppercase font-bold ${
                           isDarkMode ? 'text-slate-400' : 'text-neutral-500'
                         }`}>Output</span>
                       </div>
@@ -567,38 +619,38 @@ export default function VehicleCatalogue() {
                   ) : (
                     <>
                       <div>
-                        <div className={`flex items-center justify-center gap-1 text-xs font-black ${
+                        <div className={`flex items-center justify-center gap-0.5 sm:gap-1 text-[11px] sm:text-xs font-black ${
                           isDarkMode ? 'text-emerald-400' : 'text-emerald-700'
                         }`}>
-                          <BatteryCharging className="w-3.5 h-3.5" />
+                          <BatteryCharging className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
                           {variant.driving_range_km || 140} km
                         </div>
-                        <span className={`text-[10px] uppercase font-bold ${
+                        <span className={`text-[9px] sm:text-[10px] uppercase font-bold ${
                           isDarkMode ? 'text-slate-400' : 'text-neutral-500'
                         }`}>True Range</span>
                       </div>
 
                       <div className={`border-x ${isDarkMode ? 'border-emerald-950' : 'border-neutral-300'}`}>
-                        <div className={`flex items-center justify-center gap-1 text-xs font-black ${
+                        <div className={`flex items-center justify-center gap-0.5 sm:gap-1 text-[11px] sm:text-xs font-black ${
                           isDarkMode ? 'text-white' : 'text-neutral-950'
                         }`}>
-                          <Gauge className="w-3.5 h-3.5" />
+                          <Gauge className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
                           {variant.top_speed_kmh || 90} km/h
                         </div>
-                        <span className={`text-[10px] uppercase font-bold ${
+                        <span className={`text-[9px] sm:text-[10px] uppercase font-bold ${
                           isDarkMode ? 'text-slate-400' : 'text-neutral-500'
                         }`}>Top Speed</span>
                       </div>
 
                       <div>
-                        <div className={`text-xs font-black truncate px-1 ${
+                        <div className={`text-[11px] sm:text-xs font-black truncate px-0.5 sm:px-1 ${
                           isDarkMode ? 'text-slate-200' : 'text-neutral-900'
                         }`}>
                           {variant.battery_type || 'LiFePO4'}
                         </div>
-                        <span className={`text-[10px] uppercase font-bold ${
+                        <span className={`text-[9px] sm:text-[10px] uppercase font-bold ${
                           isDarkMode ? 'text-slate-400' : 'text-neutral-500'
-                        }`}>Chemistry</span>
+                        }`}>Battery</span>
                       </div>
                     </>
                   )}
@@ -615,7 +667,7 @@ export default function VehicleCatalogue() {
                       }`}>
                         Ex-Showroom Price
                       </span>
-                      <span className={`text-2xl font-display font-black ${
+                      <span className={`text-xl sm:text-2xl font-display font-black ${
                         isDarkMode ? 'text-white' : 'text-neutral-950'
                       }`}>
                         {formatINR(variant.base_price)}
@@ -631,10 +683,10 @@ export default function VehicleCatalogue() {
                   </div>
 
                   {/* Actions */}
-                  <div className="flex flex-col gap-2 pt-1">
+                  <div className="grid grid-cols-2 gap-2 pt-1">
                     <Link
                       to={`/vehicles/${variant.id}`}
-                      className={`w-full flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-full border text-xs font-bold transition-colors shadow-xs ${
+                      className={`flex items-center justify-center gap-1.5 py-2.5 px-2 rounded-full border text-xs font-bold transition-colors shadow-xs ${
                         isDarkMode
                           ? 'bg-[#06180f] hover:bg-[#030d08] border-emerald-950 text-white'
                           : 'bg-white hover:bg-neutral-100 border-neutral-300 text-neutral-900'
@@ -646,7 +698,7 @@ export default function VehicleCatalogue() {
 
                     <Link
                       to={`/customizer?variant=${variant.id}`}
-                      className={`flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-full border text-xs font-bold transition-colors shadow-xs ${
+                      className={`flex items-center justify-center gap-1.5 py-2.5 px-2 rounded-full border text-xs font-bold transition-colors shadow-xs ${
                         isDarkMode
                           ? 'bg-[#06180f] hover:bg-[#030d08] border-emerald-950 text-white'
                           : 'bg-white hover:bg-neutral-100 border-neutral-300 text-neutral-900'
@@ -659,7 +711,7 @@ export default function VehicleCatalogue() {
 
                   <Link
                     to={`/book-test-ride?variant=${variant.id}`}
-                    className={`w-full flex items-center justify-center gap-2 py-3 rounded-full font-bold text-xs uppercase tracking-wider shadow-md active:scale-98 transition-all ${
+                    className={`w-full flex items-center justify-center gap-2 py-2.5 sm:py-3 rounded-full font-bold text-xs uppercase tracking-wider shadow-md active:scale-98 transition-all ${
                       isDarkMode
                         ? 'bg-emerald-500 hover:bg-emerald-400 text-black shadow-emerald-500/20'
                         : 'bg-neutral-950 hover:bg-neutral-800 text-white shadow-neutral-900/20'
