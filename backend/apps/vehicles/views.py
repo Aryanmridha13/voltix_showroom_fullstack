@@ -4,6 +4,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
 from django_filters.rest_framework import DjangoFilterBackend
 from drf_spectacular.utils import extend_schema, extend_schema_view
+from rest_framework.parsers import MultiPartParser, FormParser
 
 from apps.accounts.permissions import IsAdminUserRole
 from .models import VehicleCategory, VehicleModel, VehicleVariant
@@ -31,6 +32,7 @@ class VehicleCategoryViewSet(viewsets.ModelViewSet):
     queryset = VehicleCategory.objects.all()
     serializer_class = VehicleCategorySerializer
     lookup_field = 'slug'
+    parser_classes = [MultiPartParser, FormParser]
 
     def get_permissions(self):
         if self.action in ['list', 'retrieve']:
