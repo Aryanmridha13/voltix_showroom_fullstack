@@ -46,6 +46,8 @@ DJANGO_APPS = [
 ]
 
 THIRD_PARTY_APPS = [
+    'cloudinary_storage',
+    'cloudinary',
     'rest_framework',
     'rest_framework_simplejwt',
     'corsheaders',
@@ -197,8 +199,19 @@ SIMPLE_JWT = {
 # ------------------------------------------------------------------------------
 # CORS CONFIGURATION
 # ------------------------------------------------------------------------------
-cors_allowed = os.getenv('CORS_ALLOWED_ORIGINS', 'http://localhost:5173,http://127.0.0.1:5173')
-CORS_ALLOWED_ORIGINS = [origin.strip() for origin in cors_allowed.split(',') if origin.strip()]
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5173",
+    "https://voltix-showroom-fullstack.vercel.app",
+]
+
+# Allow additional origins via environment variable if defined
+_env_cors = os.getenv('CORS_ALLOWED_ORIGINS', '')
+if _env_cors:
+    for _origin in _env_cors.split(','):
+        _cleaned = _origin.strip()
+        if _cleaned and _cleaned not in CORS_ALLOWED_ORIGINS:
+            CORS_ALLOWED_ORIGINS.append(_cleaned)
+
 CORS_ALLOW_CREDENTIALS = True
 
 # ------------------------------------------------------------------------------
@@ -229,3 +242,22 @@ SPECTACULAR_SETTINGS = {
         {'name': 'System Health', 'description': 'Service readiness, database latency probes, and operational diagnostics.'},
     ],
 }
+
+# ------------------------------------------------------------------------------
+# CLOUDINARY & MEDIA STORAGE CONFIGURATION
+# ------------------------------------------------------------------------------
+CLOUDINARY_STORAGE = {
+    "CLOUD_NAME": os.environ.get("CLOUDINARY_CLOUD_NAME"),
+    "API_KEY": os.environ.get("CLOUDINARY_API_KEY"),
+    "API_SECRET": os.environ.get("CLOUDINARY_API_SECRET"),
+}
+
+STORAGES = {
+    "default": {
+        "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+    },
+}
+
