@@ -13,3 +13,5 @@ sqlparse==0.6.0
 PyYAML==6.0.3
 gunicorn
 whitenoise
+cloudinary==1.46.3
+django-cloudinary-storage==0.3.0

@@ -45,6 +45,19 @@ class VehicleColourOptionSerializer(serializers.ModelSerializer):
     primary_colour = ColourSerializer(source='combination.primary_colour', read_only=True)
     secondary_colour = ColourSerializer(source='combination.secondary_colour', read_only=True)
     total_price = serializers.DecimalField(max_digits=12, decimal_places=2, read_only=True)
+    image = serializers.SerializerMethodField()
+
+    def get_image(self, obj):
+        if not obj.image:
+            return None
+
+        filename = obj.image.name.split('/')[-1]
+
+        return (
+            f"https://res.cloudinary.com/"
+            f"{__import__('os').environ.get('CLOUDINARY_CLOUD_NAME')}"
+            f"/image/upload/{filename}"
+        )
 
     class Meta:
         model = VehicleColourConfig
