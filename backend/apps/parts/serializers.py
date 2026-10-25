@@ -18,38 +18,115 @@ class PartCategorySerializer(serializers.ModelSerializer):
         read_only_fields = ['id', 'slug', 'created_at']
 
 
+# ==============================================================================
+# OLD CODE (SparePartListSerializer):
+# ==============================================================================
+# class SparePartListSerializer(serializers.ModelSerializer):
+#     """
+#     List representation exposing the dynamically computed stock_status
+#     and stock availability badge without manual calculation.
+#     """
+#     category_name = serializers.CharField(source='category.name', read_only=True)
+#     category_slug = serializers.CharField(source='category.slug', read_only=True)
+#     stock_status = serializers.CharField(read_only=True)
+#     is_in_stock = serializers.BooleanField(read_only=True)
+# 
+#     class Meta:
+#         model = SparePart
+#         fields = [
+#             'id',
+#             'category',
+#             'category_name',
+#             'category_slug',
+#             'part_number',
+#             'name',
+#             'slug',
+#             'price',
+#             'image',
+#             'stock_quantity',
+#             'low_stock_threshold',
+#             'stock_status',
+#             'is_in_stock',
+#             'is_active',
+#             'created_at',
+#         ]
+#         read_only_fields = ['id', 'slug', 'stock_status', 'is_in_stock', 'created_at']
+
+# ==============================================================================
+# NEW CODE (SparePartListSerializer):
+# ==============================================================================
 class SparePartListSerializer(serializers.ModelSerializer):
-    """
-    List representation exposing the dynamically computed stock_status
-    and stock availability badge without manual calculation.
-    """
-    category_name = serializers.CharField(source='category.name', read_only=True)
-    category_slug = serializers.CharField(source='category.slug', read_only=True)
+    category_name = serializers.CharField(
+        source='category.name', read_only=True
+    )
+    category_slug = serializers.CharField(
+        source='category.slug', read_only=True
+    )
     stock_status = serializers.CharField(read_only=True)
     is_in_stock = serializers.BooleanField(read_only=True)
+
+    image = serializers.SerializerMethodField()
+
+    def get_image(self, obj):
+        if not obj.image:
+            return None
+
+        image_name = obj.image.name
+
+        if image_name.startswith(('https://', 'http://')):
+            return image_name
+
+        return obj.image.url
 
     class Meta:
         model = SparePart
         fields = [
-            'id',
-            'category',
-            'category_name',
-            'category_slug',
-            'part_number',
-            'name',
-            'slug',
-            'price',
-            'image',
-            'stock_quantity',
-            'low_stock_threshold',
-            'stock_status',
-            'is_in_stock',
-            'is_active',
-            'created_at',
+            'id', 'category', 'category_name', 'category_slug',
+            'part_number', 'name', 'slug', 'price', 'image',
+            'stock_quantity', 'low_stock_threshold',
+            'stock_status', 'is_in_stock', 'is_active', 'created_at',
         ]
-        read_only_fields = ['id', 'slug', 'stock_status', 'is_in_stock', 'created_at']
+        read_only_fields = [
+            'id', 'slug', 'stock_status', 'is_in_stock', 'created_at'
+        ]
 
 
+# ==============================================================================
+# OLD CODE (SparePartDetailSerializer):
+# ==============================================================================
+# class SparePartDetailSerializer(serializers.ModelSerializer):
+#     """
+#     Full detail representation for single spare part view.
+#     """
+#     category_details = PartCategorySerializer(source='category', read_only=True)
+#     stock_status = serializers.CharField(read_only=True)
+#     is_in_stock = serializers.BooleanField(read_only=True)
+# 
+#     class Meta:
+#         model = SparePart
+#         fields = [
+#             'id',
+#             'category',
+#             'category_details',
+#             'part_number',
+#             'name',
+#             'slug',
+#             'description',
+#             'price',
+#             'image',
+#             'stock_quantity',
+#             'low_stock_threshold',
+#             'stock_status',
+#             'is_in_stock',
+#             'is_active',
+#             'created_at',
+#             'updated_at',
+#         ]
+#         read_only_fields = ['id', 'slug', 'stock_status', 'is_in_stock', 'created_at', 'updated_at']
+
+# ==============================================================================
+# NEW CODE (SparePartDetailSerializer):
+# ==============================================================================
 class SparePartDetailSerializer(serializers.ModelSerializer):
     """
     Full detail representation for single spare part view.
@@ -57,6 +134,19 @@ class SparePartDetailSerializer(serializers.ModelSerializer):
     category_details = PartCategorySerializer(source='category', read_only=True)
     stock_status = serializers.CharField(read_only=True)
     is_in_stock = serializers.BooleanField(read_only=True)
+
+    image = serializers.SerializerMethodField()
+
+    def get_image(self, obj):
+        if not obj.image:
+            return None
+
+        image_name = obj.image.name
+
+        if image_name.startswith(('https://', 'http://')):
+            return image_name
+
+        return obj.image.url
 
     class Meta:
         model = SparePart
