@@ -5,6 +5,7 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from django.http import JsonResponse
 from drf_spectacular.views import (
     SpectacularAPIView,
     SpectacularSwaggerView,
@@ -12,6 +13,15 @@ from drf_spectacular.views import (
 )
 
 urlpatterns = [
+    # Root Health Check
+    path(
+        "",
+        lambda request: JsonResponse({
+            "success": True,
+            "message": "Voltix EV Showroom API is running"
+        }),
+        name="root",
+    ),
     # Admin Panel
     path('admin/', admin.site.urls),
 
